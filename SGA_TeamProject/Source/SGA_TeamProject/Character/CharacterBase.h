@@ -69,4 +69,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float _attackRange = 400.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	class UWidgetComponent* _hpBarWidget;
 };
