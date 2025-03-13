@@ -26,6 +26,7 @@
 
 #include "../CGameInstance.h"
 #include "../Controller/CPlayerController.h"
+#include "StatComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -78,10 +79,12 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::Move(const FInputActionValue& value)
 {
-	if (_isAttack || _isUnable)
+	if ( _statComponent->IsDead())
 		return;
 
 	FVector2D moveVector = value.Get<FVector2D>();
+		UE_LOG(LogTemp, Log, TEXT(" TryMove"));
+
 	if (Controller != nullptr)
 	{
 		if (moveVector.Length() > 0.01f)
