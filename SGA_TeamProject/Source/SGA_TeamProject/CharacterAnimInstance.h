@@ -36,7 +36,11 @@ public:
 	void JumpToSection(int32 sectionIndex);
 
 	AttackHitDelegate _attackHitDelegate;
+<<<<<<< Updated upstream
 	DeadEvent _deadEvent;
+=======
+	DeadEvent _animDeadEvent;
+>>>>>>> Stashed changes
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = "true"))
