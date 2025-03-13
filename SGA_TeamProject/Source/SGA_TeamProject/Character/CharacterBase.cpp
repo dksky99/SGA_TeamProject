@@ -11,6 +11,9 @@
 #include "Camera/CameraComponent.h"
 #include "Camera/CameraActor.h"
 
+#include "Components/WidgetComponent.h"
+#include "../UI/HpBar.h"
+
 #include "Engine/DamageEvents.h"
 
 #include "StatComponent.h"
@@ -27,6 +30,10 @@ ACharacterBase::ACharacterBase()
 
 	_statComponent = CreateDefaultSubobject<UStatComponent>(TEXT("Stat"));
 
+	_hpBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
+	_hpBarWidget->SetupAttachment(GetMesh());
+	_hpBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+
 }
 
 // Called when the game starts or when spawned
@@ -40,12 +47,35 @@ void ACharacterBase::BeginPlay()
 
 
 	_statComponent->_deadEvent.AddUObject(this, &ACharacterBase::Dead);
+
+	auto hpBar = Cast<UHpBar>(_hpBarWidget->GetWidget());
+	if (hpBar)
+		_statComponent->_hpChanged.AddUObject(hpBar, &UHpBar::SetHpBarValue);
+
 }
 
 // Called every frame
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// 일정 거리 이상 멀어지면 hpBar 안 보임
+	auto playerController = GetWorld()->GetFirstPlayerController();
+	if (playerController)
+	{
+		auto playerCameraManager = playerController->PlayerCameraManager;
+		if (playerCameraManager)
+		{
+			FVector cameraLocation = playerCameraManager->GetCameraLocation();
+			float distance = FVector::Distance(GetActorLocation(), cameraLocation);
+
+			if (distance > 1000.0f)
+				_hpBarWidget->SetVisibility(false);
+			else
+				_hpBarWidget->SetVisibility(true);
+		}
+	}
+
 
 }
 
