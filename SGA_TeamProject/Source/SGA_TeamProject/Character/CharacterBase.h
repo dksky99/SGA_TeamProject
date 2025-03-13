@@ -40,6 +40,10 @@ public:
 
 	UFUNCTION()
 	void DeadActionEnd();
+
+	UFUNCTION()
+	void TryAttack();
+
 	UFUNCTION()
 	void AttackEnd(class UAnimMontage* Montage, bool bInterrupted);
 
@@ -57,12 +61,16 @@ public:
 
 protected:
 
+	//UPROPERTY()
+	//class UMyAnimInstance* _animInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = "true"))
 	class UStatComponent* _statComponent;
 
 	bool _isAttack = false;
 	bool _isUnable = false;
 
+	UPROPERTY(EditAnywhere)
+	int32 _maxCombo=1;
 	int32 _curAttackSection = 0;
 
 	float _vertical = 0;

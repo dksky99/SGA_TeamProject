@@ -129,17 +129,7 @@ void APlayerCharacter::Attack(const FInputActionValue& value)
 	bool isPress = value.Get<bool>();
 	if (isPress)
 	{
-
-
-		_isAttack = true;
-		UE_LOG(LogTemp, Log, TEXT(" curAttack %d"), _curAttackSection);
-		//if (_animInstance)
-		//{
-		//
-		//	_animInstance->PlayAnimMontage();
-		//	_curAttackSection = (_curAttackSection + 1) % 5;
-		//	_animInstance->JumpToSection(_curAttackSection);
-		//}
+		TryAttack();
 
 	}
 }
