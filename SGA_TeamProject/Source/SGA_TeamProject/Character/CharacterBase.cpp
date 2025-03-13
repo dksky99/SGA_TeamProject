@@ -33,6 +33,7 @@ ACharacterBase::ACharacterBase()
 	_hpBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
 	_hpBarWidget->SetupAttachment(GetMesh());
 	_hpBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	_hpBarWidget->SetRelativeLocation(FVector(0, 0, 230.0f));
 
 }
 
@@ -91,6 +92,7 @@ void ACharacterBase::UpDown(float value)
 
 	if (abs(value) < 0.01f)
 	{
+		_vertical = 0.0f;
 		return;
 	}
 	_vertical = value;
@@ -102,6 +104,7 @@ void ACharacterBase::RightLeft(float value)
 {
 	if (abs(value) < 0.01f)
 	{
+		_horizontal = 0.0f;
 		return;
 	}
 	_horizontal = value;
