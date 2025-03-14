@@ -95,6 +95,9 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ACharacterBase::UpDown(float value)
 {
+	if (_isAttack)
+		return;
+
 
 	if (abs(value) < 0.01f)
 	{
@@ -108,6 +111,9 @@ void ACharacterBase::UpDown(float value)
 
 void ACharacterBase::RightLeft(float value)
 {
+	if (_isAttack)
+		return;
+
 	if (abs(value) < 0.01f)
 	{
 		_horizontal = 0.0f;
@@ -142,17 +148,14 @@ void ACharacterBase::TryAttack()
 	
 	_isAttack = true;
 	UE_LOG(LogTemp, Log, TEXT(" curAttack %d"), _curAttackSection);
-	//if (_animInstance)
-	//{
-	//
-	//	_animInstance->PlayAnimMontage();
-	//	_curAttackSection = (_curAttackSection + 1) % _maxCombo;
-	//	_animInstance->JumpToSection(_curAttackSection);
-	//}
+	if (_animInstance)
+	{
+		_animInstance->PlayAnimMontage(_attackAnimMontage);
+		_curAttackSection = (_curAttackSection + 1) % _maxCombo;
+		_animInstance->JumpToSection(_curAttackSection);
+	}
 
 }
-
-
 
 void ACharacterBase::AttackEnd(UAnimMontage* Montage, bool bInterrupted)
 {
