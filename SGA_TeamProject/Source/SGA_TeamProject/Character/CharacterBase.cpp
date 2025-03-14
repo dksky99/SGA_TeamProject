@@ -192,13 +192,12 @@ void ACharacterBase::AttackHit()
 	{
 		drawColor = FColor::Red;
 
-		ACharacterBase* victim = Cast<ACharacterBase>(hitResult.GetActor());
-		if (victim)
+		if (CheckEnemy(hitResult.GetActor()))
 		{
 
 			FDamageEvent damageEvent;
 
-			victim->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
+			hitResult.GetActor()->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
 		}
 
 	}
