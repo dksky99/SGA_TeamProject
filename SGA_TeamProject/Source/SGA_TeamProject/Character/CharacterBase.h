@@ -70,7 +70,9 @@ public:
 
 	bool IsAttack() { return _isAttack; }
 	float GetAttackRange() { return _attackRange; }
-
+	float GetDetectRange() { return _detectionRange; }
+	ECollisionChannel GetChannel() { return _channel; }
+	ECamp GetCamp() { return _camp; }
 	void SetCamp(ECamp camp);
 	void SetCamp_None();
 	void SetCamp_Player();
@@ -105,6 +107,11 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float _attackRange = 400.0f;
+
+
+	UPROPERTY(EditAnywhere)
+	float _detectionRange = 800.0f;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* _hpBarWidget;

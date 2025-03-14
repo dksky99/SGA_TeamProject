@@ -302,7 +302,7 @@ void ACharacterBase::SetCamp_Player()
 	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Player")));
 
 	_camp = ECamp::Player;
-	_channel = ECC_GameTraceChannel8;
+	_channel = ECC_GameTraceChannel7;
 	UE_LOG(LogTemp, Log, TEXT(" SetCamp_Player %d"),(int32)(_channel));
 	
 }
@@ -311,7 +311,7 @@ void ACharacterBase::SetCamp_Ally()
 {
 	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Ally")));
 	_camp = ECamp::Ally;
-	_channel = ECC_GameTraceChannel8;
+	_channel = ECC_GameTraceChannel7;
 	UE_LOG(LogTemp, Log, TEXT(" SetCamp_Ally %d"),(int32)(_channel));
 }
 
@@ -319,7 +319,7 @@ void ACharacterBase::SetCamp_Enemy()
 {
 	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Enemy")));
 	_camp = ECamp::Enemy;
-	_channel = ECC_GameTraceChannel9;
+	_channel = ECC_GameTraceChannel8;
 	UE_LOG(LogTemp, Log, TEXT(" ECC_GameTraceChannel9 %d"),(int32)(_channel));
 }
 
