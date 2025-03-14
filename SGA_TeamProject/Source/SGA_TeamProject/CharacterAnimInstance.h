@@ -25,7 +25,7 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds);
 
 	UFUNCTION()
-	void PlayAnimMontage();
+	void PlayAnimMontage(UAnimMontage* animMontage);
 
 	UFUNCTION()
 	void AnimNotify_Attack_Hit();
@@ -46,14 +46,8 @@ private:
 	bool _isFalling;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
-	class UAnimMontage* _animMontage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
 	float _vertical;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
 	float _horizontal;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
-	bool _isDead = false;
 };

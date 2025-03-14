@@ -13,27 +13,28 @@ UCharacterAnimInstance::UCharacterAnimInstance()
 
 void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
-	auto pawn = TryGetPawnOwner();
-	ACharacterBase* character = Cast<ACharacterBase>(pawn); // dynamicCast
-	if (character != nullptr)
-	{
-		_speed = character->GetVelocity().Size();
-		_isFalling = character->GetMovementComponent()->IsFalling();
+	Super::NativeUpdateAnimation(DeltaSeconds);
 
-		_vertical = character->MyVertical();
-		_horizontal = character->MyHorizontal();
-		//_isDead = character->IsDead();
+	auto pawn = TryGetPawnOwner();
+	if (pawn)
+	{
+		ACharacterBase* character = Cast<ACharacterBase>(pawn);
+		if (character != nullptr)
+		{
+			_speed = character->GetVelocity().Size();
+			_isFalling = character->GetMovementComponent()->IsFalling();
+
+			_vertical = character->MyVertical();
+			_horizontal = character->MyHorizontal();
+		}
 	}
 }
 
-void UCharacterAnimInstance::PlayAnimMontage()
+void UCharacterAnimInstance::PlayAnimMontage(UAnimMontage* animMontage)
 {
-	if (_animMontage == nullptr)
-		return;
-
-	if (!Montage_IsPlaying(_animMontage))
+	if (!Montage_IsPlaying(animMontage))
 	{
-		Montage_Play(_animMontage);
+		Montage_Play(animMontage);
 	}
 }
 

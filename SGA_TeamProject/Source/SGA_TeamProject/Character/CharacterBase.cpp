@@ -14,6 +14,8 @@
 #include "Components/WidgetComponent.h"
 #include "../UI/HpBar.h"
 
+#include "../CharacterAnimInstance.h"
+
 #include "Engine/DamageEvents.h"
 
 #include "StatComponent.h"
@@ -42,9 +44,13 @@ void ACharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 
-	auto animInstance = GetMesh()->GetAnimInstance();
-	//Todo:  Get AnimInstance & Delegate Bind
+	_animInstance = Cast<UCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (_animInstance == nullptr)
+		UE_LOG(LogTemp, Error, TEXT("AnimInstace did not Set"));
 
+	_animInstance->OnMontageEnded.AddDynamic(this, &ACharacterBase::AttackEnd);
+	_animInstance->_attackHitDelegate.AddUObject(this, &ACharacterBase::AttackHit);
+	_animInstance->_animDeadEvent.AddUObject(this, &ACharacterBase::DeadActionEnd);
 
 	_statComponent->_deadEvent.AddUObject(this, &ACharacterBase::Dead);
 
@@ -111,15 +117,17 @@ void ACharacterBase::RightLeft(float value)
 
 void ACharacterBase::Dead()
 {
+	_animInstance->PlayAnimMontage(_deadAnimMontage);
 
 	_isUnable = true;
 	Controller->UnPossess();
 	this->SetActorEnableCollision(false);
 }
 
+
+
 void ACharacterBase::DeadActionEnd()
 {
-
 	this->SetActorHiddenInGame(true);
 	this->SetActorTickEnabled(false);
 }
