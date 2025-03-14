@@ -41,6 +41,9 @@ public:
 	void DeadActionEnd();
 
 	UFUNCTION()
+	void TryAttack();
+
+	UFUNCTION()
 	void AttackEnd(class UAnimMontage* Montage, bool bInterrupted);
 
 	float MyVertical() { return _vertical; }
@@ -57,6 +60,8 @@ public:
 
 protected:
 
+	//UPROPERTY()
+	//class UMyAnimInstance* _animInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = "true"))
 	class UStatComponent* _statComponent;
 
@@ -69,6 +74,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* _attackAnimMontage;
 	
+	UPROPERTY(EditAnywhere)
+	int32 _maxCombo=1;
 	int32 _curAttackSection = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
