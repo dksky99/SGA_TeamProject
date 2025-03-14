@@ -51,10 +51,7 @@ void AItem::OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		auto player = Cast<ACPlayerController>(character->GetController());
 		if (player)
 		{
-			//character->AddItem(this);
-
-			this->SetActorHiddenInGame(true);
-			this->SetActorEnableCollision(false);
+			character->AddItem(this);
 		}
 	}
 }

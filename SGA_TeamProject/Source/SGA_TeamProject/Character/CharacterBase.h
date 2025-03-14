@@ -68,6 +68,8 @@ public:
 	void AddHp(int32 value);
 	void AddExp(int32 value);
 
+	void DropItem(class AItem* item);
+
 	bool IsAttack() { return _isAttack; }
 	float GetAttackRange() { return _attackRange; }
 
