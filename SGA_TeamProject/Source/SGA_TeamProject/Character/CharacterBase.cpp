@@ -14,6 +14,8 @@
 #include "Components/WidgetComponent.h"
 #include "../UI/HpBar.h"
 
+#include "../CharacterAnimInstance.h"
+
 #include "Engine/DamageEvents.h"
 
 #include "StatComponent.h"
@@ -44,9 +46,13 @@ void ACharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 
-	auto animInstance = GetMesh()->GetAnimInstance();
-	//Todo:  Get AnimInstance & Delegate Bind
+	_animInstance = Cast<UCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (_animInstance == nullptr)
+		UE_LOG(LogTemp, Error, TEXT("AnimInstace did not Set"));
 
+	_animInstance->OnMontageEnded.AddDynamic(this, &ACharacterBase::AttackEnd);
+	_animInstance->_attackHitDelegate.AddUObject(this, &ACharacterBase::AttackHit);
+	_animInstance->_animDeadEvent.AddUObject(this, &ACharacterBase::DeadActionEnd);
 
 	_statComponent->_deadEvent.AddUObject(this, &ACharacterBase::Dead);
 
@@ -90,6 +96,9 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ACharacterBase::UpDown(float value)
 {
+	if (_isAttack)
+		return;
+
 
 	if (abs(value) < 0.01f)
 	{
@@ -103,6 +112,9 @@ void ACharacterBase::UpDown(float value)
 
 void ACharacterBase::RightLeft(float value)
 {
+	if (_isAttack)
+		return;
+
 	if (abs(value) < 0.01f)
 	{
 		_horizontal = 0.0f;
@@ -115,15 +127,17 @@ void ACharacterBase::RightLeft(float value)
 
 void ACharacterBase::Dead()
 {
+	_animInstance->PlayAnimMontage(_deadAnimMontage);
 
 	_isUnable = true;
 	Controller->UnPossess();
 	this->SetActorEnableCollision(false);
 }
 
+
+
 void ACharacterBase::DeadActionEnd()
 {
-
 	this->SetActorHiddenInGame(true);
 	this->SetActorTickEnabled(false);
 }
@@ -135,17 +149,14 @@ void ACharacterBase::TryAttack()
 	
 	_isAttack = true;
 	UE_LOG(LogTemp, Log, TEXT(" curAttack %d"), _curAttackSection);
-	//if (_animInstance)
-	//{
-	//
-	//	_animInstance->PlayAnimMontage();
-	//	_curAttackSection = (_curAttackSection + 1) % _maxCombo;
-	//	_animInstance->JumpToSection(_curAttackSection);
-	//}
+	if (_animInstance)
+	{
+		_animInstance->PlayAnimMontage(_attackAnimMontage);
+		_curAttackSection = (_curAttackSection + 1) % _maxCombo;
+		_animInstance->JumpToSection(_curAttackSection);
+	}
 
 }
-
-
 
 void ACharacterBase::AttackEnd(UAnimMontage* Montage, bool bInterrupted)
 {

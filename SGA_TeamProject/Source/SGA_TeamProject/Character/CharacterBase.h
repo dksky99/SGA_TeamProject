@@ -37,7 +37,6 @@ public:
 
 	UFUNCTION()
 	void Dead();
-
 	UFUNCTION()
 	void DeadActionEnd();
 
@@ -71,9 +70,18 @@ protected:
 	bool _isAttack = false;
 	bool _isUnable = false;
 
+	UPROPERTY()
+	class UCharacterAnimInstance* _animInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
+	class UAnimMontage* _attackAnimMontage;
+	
 	UPROPERTY(EditAnywhere)
 	int32 _maxCombo=1;
 	int32 _curAttackSection = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* _deadAnimMontage;
 
 	float _vertical = 0;
 	float _horizontal = 0;

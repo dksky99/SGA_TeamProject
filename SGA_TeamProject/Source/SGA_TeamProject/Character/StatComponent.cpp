@@ -45,7 +45,12 @@ int32 UStatComponent::AddCurHp(float amount, AActor* causer)
 
 
 	if (_curHp < 0)
+	{
 		_curHp = 0;
+
+		if (_deadEvent.IsBound())
+			_deadEvent.Broadcast();
+	}
 	if (_curHp > _maxHp)
 		_curHp = _maxHp;
 
