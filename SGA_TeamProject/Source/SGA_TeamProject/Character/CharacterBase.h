@@ -5,12 +5,23 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 
-
 #include "CharacterBase.generated.h"
 
 class UInputAction;
 
 struct FInputActionValue;
+
+UENUM()
+enum class ECamp
+{
+	None,
+	Player,
+	Ally,
+	Enemy,
+	Max
+};
+
+
 
 UCLASS()
 class SGA_TEAMPROJECT_API ACharacterBase : public ACharacter
@@ -60,6 +71,12 @@ public:
 	bool IsAttack() { return _isAttack; }
 	float GetAttackRange() { return _attackRange; }
 
+	void SetCamp(ECamp camp);
+	void SetCamp_None();
+	void SetCamp_Player();
+	void SetCamp_Ally();
+	void SetCamp_Enemy();
+
 protected:
 
 	//UPROPERTY()
@@ -91,4 +108,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* _hpBarWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category ="Camp",meta=(AllowPrivateAccess ="true"))
+	ECamp _camp = ECamp::None;
+
+	ECollisionChannel _channel = ECC_GameTraceChannel2;
+
+
 };

@@ -30,7 +30,6 @@ ACharacterBase::ACharacterBase()
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -88.0f), FRotator(0, -90, 0));
 	GetMesh()->SetCollisionProfileName(FName(TEXT("NoCollision")));
-	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Character")));
 	_statComponent = CreateDefaultSubobject<UStatComponent>(TEXT("Stat"));
 
 	_hpBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
@@ -38,6 +37,9 @@ ACharacterBase::ACharacterBase()
 	_hpBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	_hpBarWidget->SetRelativeLocation(FVector(0, 0, 230.0f));
 
+	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Character")));
+	_camp = ECamp::None;
+	//_channel = ECollisionChannel::ECC_GameTraceChannel2;
 }
 
 // Called when the game starts or when spawned
@@ -60,6 +62,7 @@ void ACharacterBase::BeginPlay()
 	if (hpBar)
 		_statComponent->_hpChanged.AddUObject(hpBar, &UHpBar::SetHpBarValue);
 
+	SetCamp(_camp);
 }
 
 // Called every frame
@@ -193,7 +196,7 @@ void ACharacterBase::AttackHit()
 		start,
 		end,
 		FQuat::Identity,
-		ECC_GameTraceChannel2,
+		_channel,
 		FCollisionShape::MakeCapsule(attackRadius, attackRange * 0.5f),
 		params
 	);
@@ -203,13 +206,12 @@ void ACharacterBase::AttackHit()
 	{
 		drawColor = FColor::Red;
 
-		if (CheckEnemy(hitResult.GetActor()))
-		{
+		
 
-			FDamageEvent damageEvent;
+		FDamageEvent damageEvent;
 
-			hitResult.GetActor()->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
-		}
+		hitResult.GetActor()->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
+		
 
 	}
 
@@ -256,5 +258,68 @@ void ACharacterBase::AddExp(int32 value)
 {
 
 	_statComponent->AddExp(value);
+}
+
+void ACharacterBase::SetCamp(ECamp camp)
+{
+	switch (camp)
+	{
+	case ECamp::None:
+		SetCamp_None();
+		break;
+	case ECamp::Player:
+		SetCamp_Player();
+		break;
+	case ECamp::Ally:
+		SetCamp_Ally();
+		break;
+	case ECamp::Enemy:
+		SetCamp_Enemy();
+		break;
+	case ECamp::Max:
+		break;
+	default:
+		break;
+	}
+}
+
+void ACharacterBase::SetCamp_None()
+{
+
+
+	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Character")));
+	_camp = ECamp::None;
+	_channel = ECC_GameTraceChannel2;
+	UE_LOG(LogTemp, Log, TEXT(" SetCamp_None %d"),(int32)(_channel));
+}
+
+void ACharacterBase::SetCamp_Player()
+{
+	auto con = Cast<APlayerController>(GetController());
+	if (con == nullptr)
+		return;
+
+	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Player")));
+
+	_camp = ECamp::Player;
+	_channel = ECC_GameTraceChannel8;
+	UE_LOG(LogTemp, Log, TEXT(" SetCamp_Player %d"),(int32)(_channel));
+	
+}
+
+void ACharacterBase::SetCamp_Ally()
+{
+	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Ally")));
+	_camp = ECamp::Ally;
+	_channel = ECC_GameTraceChannel8;
+	UE_LOG(LogTemp, Log, TEXT(" SetCamp_Ally %d"),(int32)(_channel));
+}
+
+void ACharacterBase::SetCamp_Enemy()
+{
+	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Enemy")));
+	_camp = ECamp::Enemy;
+	_channel = ECC_GameTraceChannel9;
+	UE_LOG(LogTemp, Log, TEXT(" ECC_GameTraceChannel9 %d"),(int32)(_channel));
 }
 

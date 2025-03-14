@@ -6,9 +6,7 @@
 #include "CharacterBase.h"
 #include "PlayerCharacter.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class SGA_TEAMPROJECT_API APlayerCharacter : public ACharacterBase
 {
