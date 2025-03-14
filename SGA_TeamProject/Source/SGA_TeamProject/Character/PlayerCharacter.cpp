@@ -53,6 +53,8 @@ void APlayerCharacter::PostInitializeComponents()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
