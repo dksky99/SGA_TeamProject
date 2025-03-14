@@ -27,7 +27,8 @@ ACharacterBase::ACharacterBase()
 
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -88.0f), FRotator(0, -90, 0));
-
+	GetMesh()->SetCollisionProfileName(FName(TEXT("NoCollision")));
+	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Character")));
 	_statComponent = CreateDefaultSubobject<UStatComponent>(TEXT("Stat"));
 
 	_hpBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
@@ -151,6 +152,15 @@ void ACharacterBase::AttackEnd(UAnimMontage* Montage, bool bInterrupted)
 
 
 	_isAttack = false;
+}
+
+bool ACharacterBase::CheckEnemy(AActor* target)
+{
+	auto temp = Cast<ACharacterBase>(target);
+	if (temp)
+		return true;
+
+	return false;
 }
 
 void ACharacterBase::AttackHit()

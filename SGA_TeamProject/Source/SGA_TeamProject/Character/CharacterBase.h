@@ -50,6 +50,8 @@ public:
 	float MyVertical() { return _vertical; }
 	float MyHorizontal() { return _horizontal; }
 
+	virtual bool CheckEnemy(AActor* target);
+
 	virtual void AttackHit();
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 

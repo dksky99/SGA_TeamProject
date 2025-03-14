@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "CharacterBase.h"
+#include "AllyCharacter.h"
 #include "PlayerCharacter.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SGA_TEAMPROJECT_API APlayerCharacter : public ACharacterBase
+class SGA_TEAMPROJECT_API APlayerCharacter : public AAllyCharacter
 {
 	GENERATED_BODY()
 
