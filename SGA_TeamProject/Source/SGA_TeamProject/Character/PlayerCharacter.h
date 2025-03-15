@@ -47,6 +47,9 @@ public:
 	void InvenOpen(const  FInputActionValue& value);
 
 	UFUNCTION()
+	void NPCInteract(const  FInputActionValue& value);
+
+	UFUNCTION()
 	void DropItemByClick();
 
 	void AddItem(class AItem* item);
@@ -65,6 +68,8 @@ private:
 	UInputAction* _itemDropAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* _invenAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* _NPCAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* _camera;

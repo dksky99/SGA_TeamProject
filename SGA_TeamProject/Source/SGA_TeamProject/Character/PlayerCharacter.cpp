@@ -21,6 +21,7 @@
 
 
 #include "Engine/DamageEvents.h"
+#include "Engine/OverlapResult.h"
 
 #include "Blueprint/UserWidget.h"
 
@@ -30,6 +31,8 @@
 
 #include "InvenComponent.h"
 #include "../UI/InvenUI.h"
+
+#include "NPCBase.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -98,6 +101,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		enhancedInputComponent->BindAction(_attackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Attack);
 		enhancedInputComponent->BindAction(_itemDropAction, ETriggerEvent::Triggered, this, &APlayerCharacter::DropItemByKey);
 		enhancedInputComponent->BindAction(_invenAction, ETriggerEvent::Triggered, this, &APlayerCharacter::InvenOpen);
+		enhancedInputComponent->BindAction(_NPCAction, ETriggerEvent::Triggered, this, &APlayerCharacter::NPCInteract);
 	}
 }
 
@@ -201,6 +205,54 @@ void APlayerCharacter::InvenOpen(const FInputActionValue& value)
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("Inven Open"));
+}
+
+void APlayerCharacter::NPCInteract(const FInputActionValue& value)
+{
+	if (_isAttack)
+		return;
+
+	if (_isUnable)
+		return;
+
+	bool isPress = value.Get<bool>();
+	if (isPress)
+	{
+		float sphereRadius = 500.0f;
+		FVector pos = GetActorLocation();
+
+		TArray<FOverlapResult> overlapResults;
+		FCollisionQueryParams params(NAME_None, false, this);
+		bool result = GetWorld()->OverlapMultiByChannel(
+			overlapResults,
+			pos,
+			FQuat::Identity,
+			ECC_Pawn,
+			FCollisionShape::MakeSphere(sphereRadius),
+			params
+		);
+
+		if (result == false)
+		{
+			DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
+			return;
+		}
+
+		for (auto& overlapResult : overlapResults)
+		{
+			auto NPC = Cast<ANPCBase>(overlapResult.GetActor());
+			if (NPC && NPC->IsValidLowLevel())
+			{
+				//shop->Interact(this);
+				DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Green, false, 0.3f);
+				UE_LOG(LogTemp, Log, TEXT("NPC"));
+				return;
+			}
+		}
+
+		DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
+		return;
+	}
 }
 
 void APlayerCharacter::DropItemByClick()
