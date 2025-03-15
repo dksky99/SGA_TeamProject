@@ -243,7 +243,7 @@ void APlayerCharacter::NPCInteract(const FInputActionValue& value)
 			auto NPC = Cast<ANPCBase>(overlapResult.GetActor());
 			if (NPC && NPC->IsValidLowLevel())
 			{
-				//shop->Interact(this);
+				NPC->Interact();
 				DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Green, false, 0.3f);
 				UE_LOG(LogTemp, Log, TEXT("NPC"));
 				return;

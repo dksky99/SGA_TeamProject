@@ -3,7 +3,12 @@
 
 #include "NPCBase.h"
 
+#include "Blueprint/UserWidget.h"
+
 #include "../CharacterAnimInstance.h"
+#include "InvenComponent.h"
+#include "../Controller/CPlayerController.h"
+#include "../UI/ShopUI.h"
 
 // Sets default values
 ANPCBase::ANPCBase()
@@ -12,6 +17,28 @@ ANPCBase::ANPCBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
+	
+	_shopComponent = CreateDefaultSubobject<UInvenComponent>(TEXT("InvenComponent"));
+}
+
+void ANPCBase::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (_shopWidgetClass)
+	{
+		_shopWidget = CreateWidget<UUserWidget>(GetWorld(), _shopWidgetClass);
+		UE_LOG(LogTemp, Log, TEXT("Inven Widget Created"));
+	}
+
+	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	{
+		ACPlayerController* MyController = Cast<ACPlayerController>(PlayerController);
+		if (MyController && MyController->GetInvenComponent())
+		{
+			_invenComponent = MyController->GetInvenComponent();
+		}
+	}
 }
 
 // Called when the game starts or when spawned
@@ -36,5 +63,44 @@ void ANPCBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ANPCBase::Interact()
+{
+	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	{
+		ACPlayerController* MyController = Cast<ACPlayerController>(PlayerController);
+		if (MyController && MyController->GetInvenComponent())
+		{
+			_invenComponent = MyController->GetInvenComponent();
+
+			OpenUI(MyController);
+		}
+	}
+
+	return;
+}
+
+void ANPCBase::OpenUI(ACPlayerController* controller)
+{
+	if (_isShopOpen)
+	{
+		if (controller)
+			controller->HideUI();
+		_shopWidget->RemoveFromViewport();
+	}
+	else
+	{
+		if (controller)
+			controller->ShowUI();
+
+		auto shopWidget = Cast<UShopUI>(_shopWidget);
+		if (shopWidget)
+			shopWidget->UpdateShop(_invenComponent, _shopComponent);
+
+		_shopWidget->AddToViewport();
+	}
+
+	_isShopOpen = !_isShopOpen;
 }
 

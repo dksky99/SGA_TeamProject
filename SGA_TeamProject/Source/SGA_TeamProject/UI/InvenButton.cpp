@@ -7,8 +7,13 @@
 
 void UInvenButton::SetButtonIndex()
 {
-	if (_invenUI == nullptr)
+	if (_widget == nullptr)
 		return;
 
-	_invenUI->_curIndex = _buttonIndex;
+	auto widget = Cast<UInvenUI>(_widget);
+	if (widget)
+	{
+		widget->_curIndex = _buttonIndex;
+		return;
+	}
 }

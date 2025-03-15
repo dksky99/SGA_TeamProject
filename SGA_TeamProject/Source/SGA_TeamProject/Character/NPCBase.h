@@ -15,6 +15,8 @@ public:
 	// Sets default values for this character's properties
 	ANPCBase();
 
+	void PostInitializeComponents() override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -26,7 +28,25 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void Interact();
+
+	void OpenUI(class ACPlayerController* controller);
+
 protected:
 	UPROPERTY()
 	class UCharacterAnimInstance* _animInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> _shopWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	class UUserWidget* _shopWidget;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	class UInvenComponent* _shopComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	class UInvenComponent* _invenComponent;
+
+	bool _isShopOpen = false;
 };

@@ -18,7 +18,7 @@ public:
 	UFUNCTION()
 	void SetButtonIndex();
 
-	class UInvenUI* _invenUI;
+	class UUserWidget* _widget;
 
 	int32 _buttonIndex;
 };

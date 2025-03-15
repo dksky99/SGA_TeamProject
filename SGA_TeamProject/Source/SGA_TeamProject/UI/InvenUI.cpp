@@ -21,7 +21,7 @@ bool UInvenUI::Initialize()
 		if (button)
 		{
 			button->OnClicked.AddDynamic(button, &UInvenButton::SetButtonIndex);
-			button->_invenUI = this;
+			button->_widget = this;
 			button->_buttonIndex = index;
 
 			_buttons.Add(button);
