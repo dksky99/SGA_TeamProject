@@ -28,6 +28,9 @@
 #include "../Controller/CPlayerController.h"
 #include "StatComponent.h"
 
+#include "InvenComponent.h"
+#include "../UI/InvenUI.h"
+
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -43,11 +46,25 @@ APlayerCharacter::APlayerCharacter()
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 	_springArm->bUsePawnControlRotation = true;
 
+	_invenComponent = CreateDefaultSubobject<UInvenComponent>(TEXT("InvenComponent"));
 }
 
 void APlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	if (_invenWidgetClass)
+	{
+		_invenWidget = CreateWidget<UUserWidget>(GetWorld(), _invenWidgetClass);
+		UE_LOG(LogTemp, Log, TEXT("Inven Widget Created"));
+	}
+
+	auto invenUI = Cast<UInvenUI>(_invenWidget);
+	if (invenUI)
+	{
+		_invenComponent->_itemChangeEvent.AddUObject(invenUI, &UInvenUI::SetItem_Index);
+		invenUI->Drop->OnClicked.AddDynamic(this, &APlayerCharacter::DropItemByClick);
+	}
 }
 
 void APlayerCharacter::BeginPlay()
@@ -74,7 +91,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		enhancedInputComponent->BindAction(_lookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 		enhancedInputComponent->BindAction(_jumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::TryJump);
 		enhancedInputComponent->BindAction(_attackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Attack);
-		enhancedInputComponent->BindAction(_itemDropAction, ETriggerEvent::Triggered, this, &APlayerCharacter::DropItem);
+		enhancedInputComponent->BindAction(_itemDropAction, ETriggerEvent::Triggered, this, &APlayerCharacter::DropItemByKey);
 		enhancedInputComponent->BindAction(_invenAction, ETriggerEvent::Triggered, this, &APlayerCharacter::InvenOpen);
 	}
 }
@@ -136,17 +153,78 @@ void APlayerCharacter::Attack(const FInputActionValue& value)
 }
 
 
-void APlayerCharacter::DropItem(const FInputActionValue& value)
+void APlayerCharacter::DropItemByKey(const FInputActionValue& value)
 {
+	if (_isUnable)
+		return;
+
+	bool isPress = value.Get<bool>();
+
+	if (isPress)
+	{
+		auto dropItem = _invenComponent->DropItem();
+		DropItem(dropItem);
+	}
+
 	UE_LOG(LogTemp, Log, TEXT("Drop Empty Space"));
 }
 
 void APlayerCharacter::InvenOpen(const FInputActionValue& value)
 {
-	UE_LOG(LogTemp, Log, TEXT("Inven Empty Space"));
+	if (_isUnable)
+		return;
+
+	bool isPress = value.Get<bool>();
+
+	if (isPress)
+	{
+		auto controller = Cast<ACPlayerController>(GetController());
+
+		if (_isInvenOpen)
+		{
+			if (controller)
+				controller->HideUI();
+			_invenWidget->RemoveFromViewport();
+		}
+		else
+		{
+			if (controller)
+				controller->ShowUI();
+			_invenWidget->AddToViewport();
+		}
+
+		_isInvenOpen = !_isInvenOpen;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Inven Open"));
 }
 
-void APlayerCharacter::Drop()
+void APlayerCharacter::DropItemByClick()
 {
+	if (_isUnable)
+		return;
+
+	int32 index = -1;
+	auto invenUI = Cast<UInvenUI>(_invenWidget);
+	if (invenUI)
+		index = invenUI->_curIndex;
+
+	auto dropItem = _invenComponent->DropItem(index);
+	DropItem(dropItem);
+
 	UE_LOG(LogTemp, Log, TEXT("Empty Space"));
+}
+
+void APlayerCharacter::AddItem(AItem* item)
+{
+	if (item && _invenComponent)
+	{
+		if (_invenComponent->IsFull())
+			return;
+
+		_invenComponent->AddItem(item);
+
+		item->SetActorHiddenInGame(true);
+		item->SetActorEnableCollision(false);
+	}
 }

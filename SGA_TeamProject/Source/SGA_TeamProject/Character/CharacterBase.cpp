@@ -21,6 +21,8 @@
 #include "StatComponent.h"
 #include "../Controller/CPlayerController.h"
 
+#include "../Item/Item.h"
+
 // Sets default values
 ACharacterBase::ACharacterBase()
 {
@@ -258,6 +260,29 @@ void ACharacterBase::AddExp(int32 value)
 {
 
 	_statComponent->AddExp(value);
+}
+
+void ACharacterBase::DropItem(AItem* item)
+{
+	if (item == nullptr)
+		return;
+
+	FVector playerLocation = GetActorLocation();
+
+	float dropRadius = 200.0f;
+	FVector randomOffset = FMath::VRand() * FMath::FRandRange(100.0f, dropRadius);
+	FVector dropLocation = playerLocation + randomOffset;
+
+	UCapsuleComponent* CapsuleComp = Cast<UCapsuleComponent>(item->GetRootComponent());
+	if (CapsuleComp)
+	{
+		float CapsuleHalfHeight = CapsuleComp->GetScaledCapsuleHalfHeight();
+		dropLocation.Z = CapsuleHalfHeight;
+	}
+
+	item->SetActorLocation(dropLocation);
+	item->SetActorHiddenInGame(false);
+	item->SetActorEnableCollision(true);
 }
 
 void ACharacterBase::SetCamp(ECamp camp)

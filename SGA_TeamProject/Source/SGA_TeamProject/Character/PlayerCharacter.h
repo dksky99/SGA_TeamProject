@@ -42,14 +42,14 @@ public:
 
 
 	UFUNCTION()
-	void DropItem(const  FInputActionValue& value);
+	void DropItemByKey(const  FInputActionValue& value);
 	UFUNCTION()
 	void InvenOpen(const  FInputActionValue& value);
 
 	UFUNCTION()
-	void Drop();
+	void DropItemByClick();
 
-
+	void AddItem(class AItem* item);
 
 private:
 
@@ -73,6 +73,14 @@ private:
 	class USpringArmComponent* _springArm;
 
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> _invenWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	class UUserWidget* _invenWidget;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	class UInvenComponent* _invenComponent;
 
 
 	bool _isInvenOpen = false;
