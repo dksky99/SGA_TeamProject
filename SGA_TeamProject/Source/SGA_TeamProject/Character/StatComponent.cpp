@@ -3,7 +3,7 @@
 
 #include "StatComponent.h"
 #include "CharacterBase.h"
-
+#include "../CGameInstance.h"
 // Sets default values for this component's properties
 UStatComponent::UStatComponent()
 {
@@ -35,7 +35,13 @@ void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 void UStatComponent::GetData(int value)
 {
+	auto gameInstance = Cast<UCGameInstance>(GetWorld()->GetGameInstance());
+	auto statInfo = gameInstance->GetStat_Level(value);
 
+	_maxHp = statInfo.hp;
+	_curHp = _maxHp;
+	_atk = statInfo.atk;
+	_maxExp = statInfo.exp;
 }
 
 int32 UStatComponent::AddCurHp(float amount, AActor* causer)
