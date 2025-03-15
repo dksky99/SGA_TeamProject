@@ -5,6 +5,13 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 
+#include "../Character/InvenComponent.h"
+
+ACPlayerController::ACPlayerController()
+{
+	_invenComponent = CreateDefaultSubobject<UInvenComponent>(TEXT("InvenComponent"));
+}
+
 void ACPlayerController::BeginPlay()
 {
 	//부모의 BeginPlay 호출. 상속구조의 이벤트는 부모의 이벤트를 호출해줘야함

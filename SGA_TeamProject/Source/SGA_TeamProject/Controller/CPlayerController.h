@@ -15,13 +15,19 @@ class SGA_TEAMPROJECT_API ACPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	ACPlayerController();
+
 	virtual void BeginPlay()override;
 
 	void ShowUI();
 	void HideUI();
 
+	class UInvenComponent* GetInvenComponent() { return _invenComponent; }
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	class UInvenComponent* _invenComponent;
 };

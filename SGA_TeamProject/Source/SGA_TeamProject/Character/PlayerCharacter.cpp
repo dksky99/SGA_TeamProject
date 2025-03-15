@@ -45,8 +45,6 @@ APlayerCharacter::APlayerCharacter()
 	_springArm->TargetArmLength = 500.0f;
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 	_springArm->bUsePawnControlRotation = true;
-
-	_invenComponent = CreateDefaultSubobject<UInvenComponent>(TEXT("InvenComponent"));
 }
 
 void APlayerCharacter::PostInitializeComponents()
@@ -59,11 +57,13 @@ void APlayerCharacter::PostInitializeComponents()
 		UE_LOG(LogTemp, Log, TEXT("Inven Widget Created"));
 	}
 
-	auto invenUI = Cast<UInvenUI>(_invenWidget);
-	if (invenUI)
+	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
 	{
-		_invenComponent->_itemChangeEvent.AddUObject(invenUI, &UInvenUI::SetItem_Index);
-		invenUI->Drop->OnClicked.AddDynamic(this, &APlayerCharacter::DropItemByClick);
+		ACPlayerController* MyController = Cast<ACPlayerController>(PlayerController);
+		if (MyController && MyController->GetInvenComponent())
+		{
+			_invenComponent = MyController->GetInvenComponent();
+		}
 	}
 }
 
@@ -71,7 +71,12 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	auto invenUI = Cast<UInvenUI>(_invenWidget);
+	if (invenUI)
+	{
+		_invenComponent->_itemChangeEvent.AddUObject(invenUI, &UInvenUI::SetItem_Index);
+		invenUI->Drop->OnClicked.AddDynamic(this, &APlayerCharacter::DropItemByClick);
+	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -138,7 +143,6 @@ void APlayerCharacter::TryJump(const FInputActionValue& value)
 
 void APlayerCharacter::Attack(const FInputActionValue& value)
 {
-
 	if (_isAttack)
 		return;
 
