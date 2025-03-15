@@ -272,7 +272,13 @@ void ACharacterBase::DropItem(AItem* item)
 	float dropRadius = 200.0f;
 	FVector randomOffset = FMath::VRand() * FMath::FRandRange(100.0f, dropRadius);
 	FVector dropLocation = playerLocation + randomOffset;
-	dropLocation.Z = 40.0f;
+
+	UCapsuleComponent* CapsuleComp = Cast<UCapsuleComponent>(item->GetRootComponent());
+	if (CapsuleComp)
+	{
+		float CapsuleHalfHeight = CapsuleComp->GetScaledCapsuleHalfHeight();
+		dropLocation.Z = CapsuleHalfHeight;
+	}
 
 	item->SetActorLocation(dropLocation);
 	item->SetActorHiddenInGame(false);
