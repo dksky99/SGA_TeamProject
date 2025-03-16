@@ -16,7 +16,14 @@ class SGA_TEAMPROJECT_API UInvenButton : public UButton
 	
 public:
 	UFUNCTION()
-	void SetButtonIndex();
+	// 플레이어 인벤토리
+	void SetInvenIndex();
+
+	// 상점
+	UFUNCTION()
+	void SetShop_ShopIndex();
+	UFUNCTION()
+	void SetShop_InvenIndex();
 
 	class UUserWidget* _widget;
 

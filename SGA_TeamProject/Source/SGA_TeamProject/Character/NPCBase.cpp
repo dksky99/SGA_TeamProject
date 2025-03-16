@@ -49,6 +49,13 @@ void ANPCBase::BeginPlay()
 	_animInstance = Cast<UCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 	if (_animInstance == nullptr)
 		UE_LOG(LogTemp, Error, TEXT("AnimInstace did not Set"));
+
+	auto shopUI = Cast<UShopUI>(_shopWidget);
+	if (shopUI)
+	{
+		shopUI->_getInvenItemInfo.BindUObject(_invenComponent, &UInvenComponent::GetItemInfo_Index);
+		shopUI->_getShopItemInfo.BindUObject(_shopComponent, &UInvenComponent::GetItemInfo_Index);
+	}
 }
 
 // Called every frame
@@ -86,13 +93,17 @@ void ANPCBase::OpenUI(ACPlayerController* controller)
 	if (_isShopOpen)
 	{
 		if (controller)
+		{
 			controller->HideUI();
+		}
 		_shopWidget->RemoveFromViewport();
 	}
 	else
 	{
 		if (controller)
+		{
 			controller->ShowUI();
+		}
 
 		auto shopWidget = Cast<UShopUI>(_shopWidget);
 		if (shopWidget)

@@ -10,6 +10,10 @@
 /**
  * 
  */
+
+DECLARE_DELEGATE_RetVal_OneParam(FCItemInfo, FGetInvenItemInfo, int32);
+DECLARE_DELEGATE_RetVal_OneParam(FCItemInfo, FGetShopItemInfo, int32);
+
 UCLASS()
 class SGA_TEAMPROJECT_API UShopUI : public UUserWidget
 {
@@ -20,8 +24,15 @@ public:
 
 	void UpdateShop(class UInvenComponent* inven, class UInvenComponent* shop);
 
-	void SetShopItem_Index(int32 index, FCItemInfo info);
-	void SetInvenItem_Index(int32 index, FCItemInfo info);
+	void SetShopSlot(int32 index, FCItemInfo info);
+	void SetInvenSlot(int32 index, FCItemInfo info);
+	void SetSlot(TArray<class UImage*>& imageArray, int32 index, FCItemInfo info);
+
+	UFUNCTION()
+	void SetShopInfo();
+	UFUNCTION()
+	void SetInvenInfo();
+	void SetInfo(class UTextBlock* textBlock, class UImage* imageBlock, FCItemInfo info);
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -63,6 +74,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* InvenItemImage;
+
+	FGetInvenItemInfo _getInvenItemInfo;
+	FGetShopItemInfo _getShopItemInfo;
+
+	float _curInvenIndex;
+	float _curShopIndex;
 
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))

@@ -20,7 +20,7 @@ bool UInvenUI::Initialize()
 		auto button = Cast<UInvenButton>(widget);
 		if (button)
 		{
-			button->OnClicked.AddDynamic(button, &UInvenButton::SetButtonIndex);
+			button->OnClicked.AddDynamic(button, &UInvenButton::SetInvenIndex);
 			button->_widget = this;
 			button->_buttonIndex = index;
 
