@@ -78,8 +78,8 @@ public:
 	FGetInvenItemInfo _getInvenItemInfo;
 	FGetShopItemInfo _getShopItemInfo;
 
-	float _curInvenIndex;
-	float _curShopIndex;
+	float _curInvenIndex = -1;
+	float _curShopIndex = -1;
 
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
