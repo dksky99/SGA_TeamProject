@@ -32,6 +32,11 @@ public:
 
 	void OpenUI(class ACPlayerController* controller);
 
+	UFUNCTION()
+	void ItemBuy();
+	UFUNCTION()
+	void ItemSell();
+
 protected:
 	UPROPERTY()
 	class UCharacterAnimInstance* _animInstance;
