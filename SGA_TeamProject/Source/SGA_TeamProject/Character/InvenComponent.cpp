@@ -43,6 +43,17 @@ FCItemInfo UInvenComponent::GetItemInfo_Index(int32 index)
 	return _items[index]->GetInfo();
 }
 
+AItem* UInvenComponent::GetItem_Index(int32 index)
+{
+	if (index < 0 || index >= _items.Num())
+		return nullptr;
+
+	if (_items[index] == nullptr)
+		return nullptr;
+
+	return _items[index];
+}
+
 void UInvenComponent::AddItem(AItem* item)
 {
 	auto target = _items.IndexOfByPredicate([](AItem* item)->bool

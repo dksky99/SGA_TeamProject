@@ -3,12 +3,13 @@
 
 #include "NPCBase.h"
 
+#include "Components/Button.h"
 #include "Blueprint/UserWidget.h"
 
 #include "../CharacterAnimInstance.h"
-#include "InvenComponent.h"
 #include "../Controller/CPlayerController.h"
 #include "../UI/ShopUI.h"
+#include "InvenComponent.h"
 
 // Sets default values
 ANPCBase::ANPCBase()
@@ -55,6 +56,8 @@ void ANPCBase::BeginPlay()
 	{
 		shopUI->_getInvenItemInfo.BindUObject(_invenComponent, &UInvenComponent::GetItemInfo_Index);
 		shopUI->_getShopItemInfo.BindUObject(_shopComponent, &UInvenComponent::GetItemInfo_Index);
+		shopUI->Sell->OnClicked.AddDynamic(this, &ANPCBase::ItemSell);
+		shopUI->Buy->OnClicked.AddDynamic(this, &ANPCBase::ItemBuy);
 	}
 }
 
@@ -113,5 +116,47 @@ void ANPCBase::OpenUI(ACPlayerController* controller)
 	}
 
 	_isShopOpen = !_isShopOpen;
+}
+
+void ANPCBase::ItemBuy()
+{
+	if (!_invenComponent || !_shopComponent)
+		return;
+
+	auto shopUI = Cast<UShopUI>(_shopWidget);
+	if (shopUI)
+	{
+		auto index = shopUI->_curShopIndex;
+		AItem* item = _shopComponent->GetItem_Index(index);
+
+		if (item == nullptr)
+			return;
+
+		_shopComponent->DropItem(index);
+		_invenComponent->AddItem(item);
+
+		shopUI->UpdateShop(_invenComponent, _shopComponent);
+	}
+}
+
+void ANPCBase::ItemSell()
+{
+	if (!_invenComponent || !_shopComponent)
+		return;
+
+	auto shopUI = Cast<UShopUI>(_shopWidget);
+	if (shopUI)
+	{
+		auto index = shopUI->_curInvenIndex;
+		AItem* item = _invenComponent->GetItem_Index(index);
+
+		if (item == nullptr)
+			return;
+
+		_invenComponent->DropItem(index);
+		_shopComponent->AddItem(item);
+
+		shopUI->UpdateShop(_invenComponent, _shopComponent);
+	}
 }
 
