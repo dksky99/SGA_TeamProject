@@ -4,17 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTService.h"
-#include "BT_Service_FindTarget.generated.h"
+#include "BT_Service_WaitFinish.generated.h"
 
-
-
-
-
+/**
+ * 
+ */
 UCLASS()
-class SGA_TEAMPROJECT_API UBT_Service_FindTarget : public UBTService
+class SGA_TEAMPROJECT_API UBT_Service_WaitFinish : public UBTService
 {
 	GENERATED_BODY()
+
 public:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
-	
 };

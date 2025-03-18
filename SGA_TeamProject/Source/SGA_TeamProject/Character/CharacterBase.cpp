@@ -285,6 +285,11 @@ void ACharacterBase::DropItem(AItem* item)
 	item->SetActorEnableCollision(true);
 }
 
+int32 ACharacterBase::GetCurHP()
+{
+	return _statComponent->GetCurHp();
+}
+
 void ACharacterBase::SetCamp(ECamp camp)
 {
 	switch (camp)

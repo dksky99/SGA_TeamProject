@@ -11,8 +11,9 @@
 
 #include "DrawDebugHelpers.h"
 #include "Engine/OverlapResult.h"
-
+#include "Algo/Sort.h"
 #include "../CharacterBase.h"
+#include "../../Helper/H_Targetting.h"
 
 void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
@@ -45,20 +46,39 @@ void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 
 		return;
 	}
-
+	AActor* remain = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
+	bool reset=true;
+	if (remain)
+		reset = false;
+	TArray<AActor*> arr;
 	for (auto& col : overlapResults)
 	{
 		if (col.GetActor()->IsValidLowLevel())
 		{
-			OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), col.GetActor());
-			DrawDebugSphere(GetWorld(), pos, detectRadius, 12, FColor::Red, false, 0.3f);
-			return;
+			if (remain == col.GetActor())
+			{
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), col.GetActor());
+
+				DrawDebugSphere(GetWorld(), pos, detectRadius, 12, FColor::Red, false, 0.3f);
+				return;
+			}
+			else
+				arr.Add(col.GetActor());
 
 		}
 	}
 
-	DrawDebugSphere(GetWorld(), pos, detectRadius, 12, FColor::Green, false, 0.3f);
-	OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), nullptr);
+	remain=H_Targetting::MostNearByTarget(arr, remain, curPawn);
+	
+	OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), remain);
+
+	DrawDebugSphere(GetWorld(), pos, detectRadius, 12, FColor::Red, false, 0.3f);
+
+	if(reset)
+		OwnerComp.RestartTree();
+
 	return;
 
 }
+
+

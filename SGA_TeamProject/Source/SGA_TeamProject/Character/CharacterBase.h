@@ -75,6 +75,7 @@ public:
 	float GetDetectRange() { return _detectionRange; }
 	ECollisionChannel GetChannel() { return _channel; }
 	ECamp GetCamp() { return _camp; }
+	int32 GetCurHP();
 	void SetCamp(ECamp camp);
 	void SetCamp_None();
 	void SetCamp_Player();
