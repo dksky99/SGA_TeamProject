@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerDeadEvent);
+
 UCLASS()
 class SGA_TEAMPROJECT_API ACPlayerController : public APlayerController
 {
@@ -22,7 +25,14 @@ public:
 	void ShowUI();
 	void HideUI();
 
+	UFUNCTION()
+	void CharacterChange();
+
+	class ACharacterBase* FindNewCharacterForPlayer();
+
 	class UInvenComponent* GetInvenComponent() { return _invenComponent; }
+
+	FPlayerDeadEvent _playerDeadEvent;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")

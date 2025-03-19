@@ -60,6 +60,12 @@ void ACharacterBase::BeginPlay()
 
 	_statComponent->_deadEvent.AddUObject(this, &ACharacterBase::Dead);
 
+	ACPlayerController* playerController = Cast<ACPlayerController>(Controller);
+	if (playerController)
+	{
+		playerController->_playerDeadEvent.AddDynamic(playerController, &ACPlayerController::CharacterChange);
+	}
+
 	auto hpBar = Cast<UHpBar>(_hpBarWidget->GetWidget());
 	if (hpBar)
 		_statComponent->_hpChanged.AddUObject(hpBar, &UHpBar::SetHpBarValue);
@@ -135,6 +141,13 @@ void ACharacterBase::Dead()
 	_animInstance->PlayAnimMontage(_deadAnimMontage);
 
 	_isUnable = true;
+	ACPlayerController* playerController = Cast<ACPlayerController>(Controller);
+	if (playerController)
+	{
+		playerController->_playerDeadEvent.Broadcast();
+		this->SetActorEnableCollision(false);
+		return;
+	}
 	Controller->UnPossess();
 	this->SetActorEnableCollision(false);
 }
@@ -283,6 +296,11 @@ void ACharacterBase::DropItem(AItem* item)
 	item->SetActorLocation(dropLocation);
 	item->SetActorHiddenInGame(false);
 	item->SetActorEnableCollision(true);
+}
+
+bool ACharacterBase::IsAlive()
+{
+	return !_statComponent->IsDead();
 }
 
 int32 ACharacterBase::GetCurHP()
