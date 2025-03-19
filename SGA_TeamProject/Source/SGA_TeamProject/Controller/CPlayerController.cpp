@@ -26,6 +26,20 @@ void ACPlayerController::BeginPlay()
 	}
 }
 
+void ACPlayerController::OnPossess(APawn* pawn)
+{
+	Super::OnPossess(pawn);
+
+
+}
+
+void ACPlayerController::OnUnPossess()
+{
+	Super::OnUnPossess();
+
+
+}
+
 void ACPlayerController::ShowUI()
 {
 

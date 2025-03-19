@@ -19,6 +19,10 @@ public:
 
 	virtual void BeginPlay()override;
 
+	virtual void OnPossess(APawn* pawn) override;
+	virtual void OnUnPossess() override;
+
+
 	void ShowUI();
 	void HideUI();
 
@@ -27,6 +31,9 @@ public:
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
+
+
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	class UInvenComponent* _invenComponent;
