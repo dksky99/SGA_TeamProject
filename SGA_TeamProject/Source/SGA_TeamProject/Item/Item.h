@@ -44,6 +44,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void Activate();
+	void Deactivate();
+
+	bool IsActive();
+
 	UFUNCTION()
 	void OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 

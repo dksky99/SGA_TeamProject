@@ -30,8 +30,8 @@ public:
 	AItem* GetItem_Index(int32 index);
 
 	void AddItem(AItem* item);
-	AItem* DropItem();
-	AItem* DropItem(int32 index);
+	AItem* RemoveItem();
+	AItem* RemoveItem(int32 index);
 
 	bool IsFull();
 

@@ -2,17 +2,24 @@
 
 
 #include "CGameInstance.h"
-#include "Character/StatComponent.h"
 #include "Engine/DataTable.h"
+#include "Character/StatComponent.h"
+#include "Item/ItemDataTable.h"
 
 UCGameInstance::UCGameInstance()
 {
-	static::ConstructorHelpers::FObjectFinder<UDataTable> dataTable(TEXT("/Script/Engine.DataTable'/Game/Data/CharacterStatTable.CharacterStatTable'"));
+	static::ConstructorHelpers::FObjectFinder<UDataTable> statTable(TEXT("/Script/Engine.DataTable'/Game/Data/CharacterStatTable.CharacterStatTable'"));
 
-	if (dataTable.Succeeded())
+	if (statTable.Succeeded())
 	{
-		_statTable = dataTable.Object;
+		_statTable = statTable.Object;
+	}
 
+	static::ConstructorHelpers::FObjectFinder<UDataTable> itemTable(TEXT("/Script/Engine.DataTable'/Game/Data/ItemDataTable.ItemDataTable'"));
+
+	if (itemTable.Succeeded())
+	{
+		_itemTable = itemTable.Object;
 	}
 }
 
@@ -25,5 +32,12 @@ FCharacterStatData UCGameInstance::GetStat_Level(int32 level)
 {
 	FString rowName = "Level_" + FString::FromInt(level);
 	auto row = _statTable->FindRow<FCharacterStatData>(*rowName, TEXT(""));
+	return *row;
+}
+
+FItemData UCGameInstance::GetItemData_ID(int32 id)
+{
+	FString rowName = FString::FromInt(id);
+	auto row = _itemTable->FindRow<FItemData>(*rowName, TEXT(""));
 	return *row;
 }

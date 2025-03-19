@@ -132,7 +132,7 @@ void ANPCBase::ItemBuy()
 		if (item == nullptr)
 			return;
 
-		_shopComponent->DropItem(index);
+		_shopComponent->RemoveItem(index);
 		_invenComponent->AddItem(item);
 
 		shopUI->UpdateShop(_invenComponent, _shopComponent);
@@ -153,7 +153,7 @@ void ANPCBase::ItemSell()
 		if (item == nullptr)
 			return;
 
-		_invenComponent->DropItem(index);
+		_invenComponent->RemoveItem(index);
 		_shopComponent->AddItem(item);
 
 		shopUI->UpdateShop(_invenComponent, _shopComponent);
