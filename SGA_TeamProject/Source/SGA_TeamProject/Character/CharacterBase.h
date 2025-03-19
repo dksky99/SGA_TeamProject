@@ -70,6 +70,7 @@ public:
 
 	void DropItem(class AItem* item);
 
+	bool IsAlive();
 	bool IsAttack() { return _isAttack; }
 	float GetAttackRange() { return _attackRange; }
 	float GetDetectRange() { return _detectionRange; }

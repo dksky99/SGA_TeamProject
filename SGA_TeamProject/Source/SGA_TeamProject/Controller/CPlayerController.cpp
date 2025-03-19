@@ -5,6 +5,9 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 
+#include "EngineUtils.h"
+
+#include "../Character/CharacterBase.h"
 #include "../Character/InvenComponent.h"
 
 ACPlayerController::ACPlayerController()
@@ -36,4 +39,30 @@ void ACPlayerController::HideUI()
 {
 
 	bShowMouseCursor = false;
+}
+
+void ACPlayerController::CharacterChange()
+{
+	UE_LOG(LogTemp, Warning, TEXT("CharacterChange"));
+
+	ACharacterBase* character = FindNewCharacterForPlayer();
+	character->GetController()->UnPossess();
+
+	Possess(character);
+}
+
+ACharacterBase* ACPlayerController::FindNewCharacterForPlayer()
+{
+	for (TActorIterator<ACharacterBase> iter(GetWorld()); iter; ++iter)
+	{
+		ACharacterBase* character = *iter;
+
+		if (character != GetPawn() && character->IsAlive())
+		{
+			return character;
+		}
+	}
+
+	UE_LOG(LogTemp, Error, TEXT("There are no living characters!"));
+	return nullptr;
 }

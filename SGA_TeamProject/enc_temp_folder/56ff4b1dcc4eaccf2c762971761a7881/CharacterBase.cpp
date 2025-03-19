@@ -60,6 +60,12 @@ void ACharacterBase::BeginPlay()
 
 	_statComponent->_deadEvent.AddUObject(this, &ACharacterBase::Dead);
 
+	ACPlayerController* playerController = Cast<ACPlayerController>(Controller);
+	if (playerController)
+	{
+		playerController->_playerDeadEvent.AddDynamic(playerController, &ACPlayerController::CharacterChange);
+	}
+
 	auto hpBar = Cast<UHpBar>(_hpBarWidget->GetWidget());
 	if (hpBar)
 		_statComponent->_hpChanged.AddUObject(hpBar, &UHpBar::SetHpBarValue);
@@ -138,7 +144,7 @@ void ACharacterBase::Dead()
 	ACPlayerController* playerController = Cast<ACPlayerController>(Controller);
 	if (playerController)
 	{
-		playerController->CharacterChange();
+		playerController->_playerDeadEvent.Broadcast();
 		this->SetActorEnableCollision(false);
 		return;
 	}
