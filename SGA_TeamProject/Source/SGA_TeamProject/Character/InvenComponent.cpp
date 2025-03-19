@@ -70,7 +70,7 @@ void UInvenComponent::AddItem(AItem* item)
 		_itemChangeEvent.Broadcast(target, item->GetInfo());
 }
 
-AItem* UInvenComponent::DropItem()
+AItem* UInvenComponent::RemoveItem()
 {
 	auto target = _items.FindLastByPredicate([](AItem* item)->bool
 		{
@@ -89,7 +89,7 @@ AItem* UInvenComponent::DropItem()
 	return dropItemInfo;
 }
 
-AItem* UInvenComponent::DropItem(int32 index)
+AItem* UInvenComponent::RemoveItem(int32 index)
 {
 	if (index >= _items.Num() || index < 0)
 		return nullptr;

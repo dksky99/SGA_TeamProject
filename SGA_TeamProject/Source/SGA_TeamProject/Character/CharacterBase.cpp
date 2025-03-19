@@ -152,8 +152,6 @@ void ACharacterBase::Tick(float DeltaTime)
 				_hpBarWidget->SetVisibility(true);
 		}
 	}
-
-
 }
 
 // Called to bind functionality to input
@@ -364,8 +362,7 @@ void ACharacterBase::DropItem(AItem* item)
 	}
 
 	item->SetActorLocation(dropLocation);
-	item->SetActorHiddenInGame(false);
-	item->SetActorEnableCollision(true);
+	item->Activate();
 }
 
 bool ACharacterBase::IsAlive()
@@ -507,7 +504,7 @@ void ACharacterBase::DropItemByKey(const FInputActionValue& value)
 
 	if (isPress)
 	{
-		auto dropItem = _invenComponent->DropItem();
+		auto dropItem = _invenComponent->RemoveItem();
 		DropItem(dropItem);
 	}
 
@@ -602,7 +599,7 @@ void ACharacterBase::DropItemByClick()
 	if (invenUI)
 		index = invenUI->_curIndex;
 
-	auto dropItem = _invenComponent->DropItem(index);
+	auto dropItem = _invenComponent->RemoveItem(index);
 	DropItem(dropItem);
 
 	UE_LOG(LogTemp, Log, TEXT("Empty Space"));

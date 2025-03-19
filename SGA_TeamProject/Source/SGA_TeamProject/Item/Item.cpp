@@ -43,6 +43,23 @@ void AItem::Tick(float DeltaTime)
 
 }
 
+void AItem::Activate()
+{
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
+}
+
+void AItem::Deactivate()
+{
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+}
+
+bool AItem::IsActive()
+{
+	return !IsHidden() && GetActorEnableCollision();
+}
+
 void AItem::OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult)
 {
 	auto character = Cast<APlayerCharacter>(OtherActor);
