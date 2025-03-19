@@ -7,6 +7,7 @@
 #include "InputActionValue.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Components/Button.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Camera/CameraActor.h"
@@ -17,10 +18,16 @@
 #include "../CharacterAnimInstance.h"
 
 #include "Engine/DamageEvents.h"
+#include "Engine/OverlapResult.h"
 
 #include "StatComponent.h"
 #include "../Controller/CPlayerController.h"
+#include "Blueprint/UserWidget.h"
 
+#include "InvenComponent.h"
+#include "../UI/InvenUI.h"
+
+#include "NPCBase.h"
 #include "../Item/Item.h"
 
 // Sets default values
@@ -42,6 +49,41 @@ ACharacterBase::ACharacterBase()
 	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Character")));
 	_camp = ECamp::None;
 	//_channel = ECollisionChannel::ECC_GameTraceChannel2;
+
+
+
+	_springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+
+
+	_springArm->SetupAttachment(GetCapsuleComponent());
+	_camera->SetupAttachment(_springArm);
+
+	_springArm->TargetArmLength = 500.0f;
+	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
+	_springArm->bUsePawnControlRotation = true;
+
+
+}
+
+void ACharacterBase::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (_invenWidgetClass)
+	{
+		_invenWidget = CreateWidget<UUserWidget>(GetWorld(), _invenWidgetClass);
+		UE_LOG(LogTemp, Log, TEXT("Inven Widget Created"));
+	}
+
+	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	{
+		ACPlayerController* MyController = Cast<ACPlayerController>(PlayerController);
+		if (MyController && MyController->GetInvenComponent())
+		{
+			_invenComponent = MyController->GetInvenComponent();
+		}
+	}
 }
 
 // Called when the game starts or when spawned
@@ -65,6 +107,28 @@ void ACharacterBase::BeginPlay()
 		_statComponent->_hpChanged.AddUObject(hpBar, &UHpBar::SetHpBarValue);
 
 	SetCamp(_camp);
+
+
+
+	auto invenUI = Cast<UInvenUI>(_invenWidget);
+	if (invenUI)
+	{
+		_invenComponent->_itemChangeEvent.AddUObject(invenUI, &UInvenUI::SetItem_Index);
+		invenUI->Drop->OnClicked.AddDynamic(this, &ACharacterBase::DropItemByClick);
+	}
+
+}
+
+void ACharacterBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+}
+
+void ACharacterBase::UnPossessed()
+{
+	Super::UnPossessed();
+
 }
 
 // Called every frame
@@ -97,7 +161,19 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (enhancedInputComponent)
+	{
+		enhancedInputComponent->BindAction(_moveAction, ETriggerEvent::Triggered, this, &ACharacterBase::Move);
+		enhancedInputComponent->BindAction(_lookAction, ETriggerEvent::Triggered, this, &ACharacterBase::Look);
+		enhancedInputComponent->BindAction(_jumpAction, ETriggerEvent::Triggered, this, &ACharacterBase::TryJump);
+		enhancedInputComponent->BindAction(_attackAction, ETriggerEvent::Triggered, this, &ACharacterBase::Attack);
+		enhancedInputComponent->BindAction(_itemDropAction, ETriggerEvent::Triggered, this, &ACharacterBase::DropItemByKey);
+		enhancedInputComponent->BindAction(_invenAction, ETriggerEvent::Triggered, this, &ACharacterBase::InvenOpen);
+		enhancedInputComponent->BindAction(_NPCAction, ETriggerEvent::Triggered, this, &ACharacterBase::NPCInteract);
+	}
 }
+
 
 void ACharacterBase::UpDown(float value)
 {
@@ -363,5 +439,186 @@ void ACharacterBase::SetCamp_Enemy()
 	_camp = ECamp::Enemy;
 	_channel = ECC_GameTraceChannel8;
 	UE_LOG(LogTemp, Log, TEXT(" ECC_GameTraceChannel9 %d"),(int32)(_channel));
+}
+
+
+void ACharacterBase::Move(const FInputActionValue& value)
+{
+	if (_statComponent->IsDead())
+		return;
+
+	FVector2D moveVector = value.Get<FVector2D>();
+
+	if (Controller != nullptr)
+	{
+		if (moveVector.Length() > 0.01f)
+		{
+
+			UpDown(moveVector.Y);
+			RightLeft(moveVector.X);
+
+		}
+	}
+}
+
+void ACharacterBase::Look(const FInputActionValue& value)
+{
+	FVector2D lookAxisVector = value.Get<FVector2D>();
+	if (Controller != nullptr)
+	{
+		AddControllerYawInput(lookAxisVector.X);
+		AddControllerPitchInput(-lookAxisVector.Y);
+	}
+}
+
+void ACharacterBase::TryJump(const FInputActionValue& value)
+{
+	if (_isUnable)
+		return;
+	if (value.Get<bool>())
+	{
+		UE_LOG(LogTemp, Log, TEXT(" Jump Test"));
+		Jump();
+	}
+}
+
+void ACharacterBase::Attack(const FInputActionValue& value)
+{
+	if (_isAttack)
+		return;
+
+	if (_isUnable)
+		return;
+	bool isPress = value.Get<bool>();
+	if (isPress)
+	{
+		TryAttack();
+
+	}
+}
+
+
+void ACharacterBase::DropItemByKey(const FInputActionValue& value)
+{
+	if (_isUnable)
+		return;
+
+	bool isPress = value.Get<bool>();
+
+	if (isPress)
+	{
+		auto dropItem = _invenComponent->DropItem();
+		DropItem(dropItem);
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Drop Empty Space"));
+}
+
+void ACharacterBase::InvenOpen(const FInputActionValue& value)
+{
+	if (_isUnable)
+		return;
+
+	bool isPress = value.Get<bool>();
+
+	if (isPress)
+	{
+		auto controller = Cast<ACPlayerController>(GetController());
+
+		if (_isInvenOpen)
+		{
+			if (controller)
+				controller->HideUI();
+			_invenWidget->RemoveFromViewport();
+		}
+		else
+		{
+			if (controller)
+				controller->ShowUI();
+			_invenWidget->AddToViewport();
+		}
+
+		_isInvenOpen = !_isInvenOpen;
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("Inven Open"));
+}
+
+void ACharacterBase::NPCInteract(const FInputActionValue& value)
+{
+	if (_isAttack)
+		return;
+
+	if (_isUnable)
+		return;
+
+	bool isPress = value.Get<bool>();
+	if (isPress)
+	{
+		float sphereRadius = 500.0f;
+		FVector pos = GetActorLocation();
+
+		TArray<FOverlapResult> overlapResults;
+		FCollisionQueryParams params(NAME_None, false, this);
+		bool result = GetWorld()->OverlapMultiByChannel(
+			overlapResults,
+			pos,
+			FQuat::Identity,
+			ECC_Pawn,
+			FCollisionShape::MakeSphere(sphereRadius),
+			params
+		);
+
+		if (result == false)
+		{
+			DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
+			return;
+		}
+
+		for (auto& overlapResult : overlapResults)
+		{
+			auto NPC = Cast<ANPCBase>(overlapResult.GetActor());
+			if (NPC && NPC->IsValidLowLevel())
+			{
+				NPC->Interact();
+				DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Green, false, 0.3f);
+				UE_LOG(LogTemp, Log, TEXT("NPC"));
+				return;
+			}
+		}
+
+		DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
+		return;
+	}
+}
+
+void ACharacterBase::DropItemByClick()
+{
+	if (_isUnable)
+		return;
+
+	int32 index = -1;
+	auto invenUI = Cast<UInvenUI>(_invenWidget);
+	if (invenUI)
+		index = invenUI->_curIndex;
+
+	auto dropItem = _invenComponent->DropItem(index);
+	DropItem(dropItem);
+
+	UE_LOG(LogTemp, Log, TEXT("Empty Space"));
+}
+
+void ACharacterBase::AddItem(AItem* item)
+{
+	if (item && _invenComponent)
+	{
+		if (_invenComponent->IsFull())
+			return;
+
+		_invenComponent->AddItem(item);
+
+		item->SetActorHiddenInGame(true);
+		item->SetActorEnableCollision(false);
+	}
 }
 
