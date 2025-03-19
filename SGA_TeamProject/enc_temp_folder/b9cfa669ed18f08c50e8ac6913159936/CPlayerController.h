@@ -10,6 +10,7 @@
  * 
  */
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerDeadEvent);
 
 UCLASS()
 class SGA_TEAMPROJECT_API ACPlayerController : public APlayerController
@@ -21,10 +22,6 @@ public:
 
 	virtual void BeginPlay()override;
 
-	virtual void OnPossess(APawn* pawn) override;
-	virtual void OnUnPossess() override;
-
-
 	void ShowUI();
 	void HideUI();
 
@@ -35,12 +32,11 @@ public:
 
 	class UInvenComponent* GetInvenComponent() { return _invenComponent; }
 
+	FPlayerDeadEvent _playerDeadEvent;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
-
-
-
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	class UInvenComponent* _invenComponent;
