@@ -18,7 +18,7 @@ class SGA_TEAMPROJECT_API UCGameInstance : public UGameInstance
 public:
 	UCGameInstance();
 
-	virtual void Init()override;
+	virtual void Init() override;
 
 	struct FCharacterStatData GetStat_Level(int32 level);
 
@@ -27,9 +27,11 @@ public:
 	class AItemManager* ItemManager() { return _itemManager; }
 
 private:
+	// Stat
 	UPROPERTY()
 	class UDataTable* _statTable;
 
+	// Item
 	UPROPERTY()
 	class UDataTable* _itemTable;
 

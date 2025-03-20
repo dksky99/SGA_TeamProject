@@ -15,7 +15,7 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
-	void PostInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 
 	virtual void BeginPlay() override;
 

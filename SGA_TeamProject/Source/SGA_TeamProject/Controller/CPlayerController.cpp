@@ -6,13 +6,26 @@
 #include "Engine/LocalPlayer.h"
 
 #include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "../Character/CharacterBase.h"
 #include "../Character/InvenComponent.h"
 
+#include "../UI/PartyListUI.h"
+
 ACPlayerController::ACPlayerController()
 {
 	_invenComponent = CreateDefaultSubobject<UInvenComponent>(TEXT("InvenComponent"));
+}
+
+void ACPlayerController::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (_partyListClass)
+	{
+		_partyListWidget = CreateWidget<UPartyListUI>(GetWorld(), _partyListClass);
+	}
 }
 
 void ACPlayerController::BeginPlay()
@@ -26,6 +39,11 @@ void ACPlayerController::BeginPlay()
 	if (subSystem)
 	{
 		subSystem->AddMappingContext(_inputMappingContext, 0);
+	}
+
+	if (_partyListWidget)
+	{
+		_partyListWidget->AddToViewport();
 	}
 }
 

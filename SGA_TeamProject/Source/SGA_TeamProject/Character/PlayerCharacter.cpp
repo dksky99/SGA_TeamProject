@@ -60,12 +60,12 @@ void APlayerCharacter::PostInitializeComponents()
 		UE_LOG(LogTemp, Log, TEXT("Inven Widget Created"));
 	}
 
-	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	if (APlayerController* playerController = GetWorld()->GetFirstPlayerController())
 	{
-		ACPlayerController* MyController = Cast<ACPlayerController>(PlayerController);
-		if (MyController && MyController->GetInvenComponent())
+		ACPlayerController* myController = Cast<ACPlayerController>(playerController);
+		if (myController && myController->GetInvenComponent())
 		{
-			_invenComponent = MyController->GetInvenComponent();
+			_invenComponent = myController->GetInvenComponent();
 		}
 	}
 }

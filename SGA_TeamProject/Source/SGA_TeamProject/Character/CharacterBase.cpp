@@ -35,7 +35,7 @@
 
 #include "../Helper/H_Targetting.h"
 
-#include "../Helper/H_Targetting.h"
+#include "../UI/PartyListUI.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -93,9 +93,21 @@ void ACharacterBase::BeginPlay()
 
 	SetCamp(_camp);
 
-
-
-
+	if (_camp == ECamp::Player || _camp == ECamp::Ally)
+	{
+		if (auto playerController = GetWorld()->GetFirstPlayerController())
+		{
+			ACPlayerController* myController = Cast<ACPlayerController>(playerController);
+			if (myController && myController->GetPartyListWidget())
+			{
+				auto partyListWidget = Cast<UPartyListUI>(myController->GetPartyListWidget());
+				if (partyListWidget)
+				{
+					partyListWidget->AddPartySlot(this);
+				}
+			}
+		}
+	}
 }
 
 void ACharacterBase::PossessedBy(AController* NewController)

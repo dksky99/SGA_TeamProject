@@ -19,7 +19,9 @@ class SGA_TEAMPROJECT_API ACPlayerController : public APlayerController
 public:
 	ACPlayerController();
 
-	virtual void BeginPlay()override;
+	virtual void PostInitializeComponents() override;
+
+	virtual void BeginPlay() override;
 
 	virtual void OnPossess(APawn* pawn) override;
 	virtual void OnUnPossess() override;
@@ -35,13 +37,18 @@ public:
 
 	class UInvenComponent* GetInvenComponent() { return _invenComponent; }
 
+	class UUserWidget* GetPartyListWidget() { return _partyListWidget; }
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
 
-
-
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	class UInvenComponent* _invenComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PartyList", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> _partyListClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PartyList", meta = (AllowPrivateAccess = "true"))
+	class UUserWidget* _partyListWidget;
 };

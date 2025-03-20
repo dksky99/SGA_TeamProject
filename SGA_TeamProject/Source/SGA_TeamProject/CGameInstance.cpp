@@ -2,8 +2,10 @@
 
 
 #include "CGameInstance.h"
+
 #include "Engine/DataTable.h"
 #include "Character/StatComponent.h"
+
 #include "Item/ItemDataTable.h"
 #include "Item/ItemManager.h"
 
@@ -29,6 +31,7 @@ void UCGameInstance::Init()
 	Super::Init();
 
 	_itemManager = GetWorld()->SpawnActor<AItemManager>(FVector::ZeroVector, FRotator::ZeroRotator);
+
 }
 
 FCharacterStatData UCGameInstance::GetStat_Level(int32 level)

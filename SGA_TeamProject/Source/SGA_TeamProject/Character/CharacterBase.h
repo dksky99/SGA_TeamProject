@@ -79,6 +79,7 @@ public:
 
 	void AddHp(int32 value);
 	void AddExp(int32 value);
+	class UStatComponent* GetStatComponent() { return _statComponent; }
 
 	void DropItem(class AItem* item);
 
