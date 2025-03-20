@@ -59,8 +59,8 @@ void AItemManager::SpawnItem(int32 key, FVector pos)
 
 	if (iter)
 	{
-		(*iter)->SetActorLocation(pos);
 		(*iter)->Activate();
+		(*iter)->SetActorLocation(pos);
 	}
 }
 

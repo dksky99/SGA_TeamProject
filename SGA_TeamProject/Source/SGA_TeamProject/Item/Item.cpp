@@ -47,12 +47,16 @@ void AItem::Activate()
 {
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
+	_collider->SetSimulatePhysics(true);
+	_collider->SetEnableGravity(true);
 }
 
 void AItem::Deactivate()
 {
 	SetActorHiddenInGame(true);
 	SetActorEnableCollision(false);
+	_collider->SetSimulatePhysics(false);
+	_collider->SetEnableGravity(false);
 }
 
 bool AItem::IsActive()
