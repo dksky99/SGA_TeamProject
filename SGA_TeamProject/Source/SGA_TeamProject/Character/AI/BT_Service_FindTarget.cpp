@@ -39,36 +39,51 @@ void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 		params
 	);
 
+	//만약 발견하지 못헀을때 가지고있던 타겟이있다면. 타겟을 지우고 행동트리 리셋.
+	AActor* remain = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
+	bool reset = false;
 	if (result == false)
 	{
 		DrawDebugSphere(GetWorld(), pos, detectRadius, 12, FColor::Green, false, 0.3f);
+		if (remain)
+			reset = true;
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), nullptr);
 
+		if (reset)
+			OwnerComp.RestartTree();
 		return;
 	}
-	AActor* remain = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
-	bool reset=true;
+	//발견했다면 가지고있던 타겟이 없다가 생겼으면 타겟을 추가하고 리셋.
+	reset = true;
+	TArray<AActor*> arr;
 	if (remain)
 		reset = false;
-	TArray<AActor*> arr;
 	for (auto& col : overlapResults)
 	{
 		if (col.GetActor()->IsValidLowLevel())
 		{
 			if (remain == col.GetActor())
 			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), col.GetActor());
+				if (curPawn->GetTargetChangeFrequently() == false)
+				{
+					OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), col.GetActor());
 
-				DrawDebugSphere(GetWorld(), pos, detectRadius, 12, FColor::Red, false, 0.3f);
-				return;
+					DrawDebugSphere(GetWorld(), pos, detectRadius, 12, FColor::Red, false, 0.3f);
+					return;
+				}
+
+			
+
+				
 			}
-			else
-				arr.Add(col.GetActor());
+			
+			arr.Add(col.GetActor());
 
 		}
 	}
 
-	remain=H_Targetting::MostNearByTarget(arr, remain, curPawn);
+
+	remain=H_Targetting::Targetting(curPawn->GetTargetType(), curPawn->GetDefaultTargetType(), arr, remain, curPawn);
 	
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), remain);
 
