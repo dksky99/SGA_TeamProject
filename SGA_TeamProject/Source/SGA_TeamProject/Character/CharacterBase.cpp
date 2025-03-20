@@ -22,6 +22,7 @@
 #include "Engine/OverlapResult.h"
 
 #include "StatComponent.h"
+#include "DamageLoggingComponent.h"
 #include "../Controller/CPlayerController.h"
 #include "Blueprint/UserWidget.h"
 
@@ -31,6 +32,8 @@
 #include "NPCBase.h"
 #include "../Item/Item.h"
 #include "../Item/ItemManager.h"
+
+#include "../Helper/H_Targetting.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -42,6 +45,7 @@ ACharacterBase::ACharacterBase()
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -88.0f), FRotator(0, -90, 0));
 	GetMesh()->SetCollisionProfileName(FName(TEXT("NoCollision")));
 	_statComponent = CreateDefaultSubobject<UStatComponent>(TEXT("Stat"));
+	_dmgLogComponent = CreateDefaultSubobject<UDamageLoggingComponent>(TEXT("DmgLog"));
 
 	_hpBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
 	_hpBarWidget->SetupAttachment(GetMesh());
@@ -51,8 +55,10 @@ ACharacterBase::ACharacterBase()
 	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Character")));
 	_camp = ECamp::None;
 	//_channel = ECollisionChannel::ECC_GameTraceChannel2;
-
-
+	_targetType = ETargettingType::Revenge;
+	_defaultTargetType = ETargettingType::MostNear;
+	_targetChangeFrequently = false;
+	
 
 
 }
@@ -267,6 +273,9 @@ void ACharacterBase::AttackHit()
 float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	int32 dmg = _statComponent->AddCurHp(-Damage, DamageCauser);
+	auto causer = Cast<ACharacterBase>(DamageCauser);
+	if (DamageCauser)
+		_dmgLogComponent->Logging(causer, dmg);
 	if (_statComponent->IsDead())
 	{
 		_statComponent->_deadEvent.Broadcast();
@@ -392,6 +401,11 @@ void ACharacterBase::SetCamp_Enemy()
 	_camp = ECamp::Enemy;
 	_channel = ECC_GameTraceChannel8;
 	UE_LOG(LogTemp, Log, TEXT(" ECC_GameTraceChannel9 %d"),(int32)(_channel));
+}
+
+UDamageLoggingComponent* ACharacterBase::GetLogComponent()
+{
+	return _dmgLogComponent;
 }
 
 

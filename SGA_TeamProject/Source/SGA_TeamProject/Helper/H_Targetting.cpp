@@ -3,31 +3,139 @@
 
 #include "H_Targetting.h"
 #include "../Character/CharacterBase.h"
+#include "../Character/DamageLoggingComponent.h"
+#include "Algo/MaxElement.h"
+#include "Algo/MinElement.h"
+#include "Algo/Sort.h"
 
-AActor* H_Targetting::MostNearByTarget(TArray<AActor*>& arr, const AActor* existing, const AActor* curPawn)
+AActor* H_Targetting::Targetting(ETargettingType targettype, ETargettingType defaultTargetType, TArray<AActor*>& arr, const AActor* existing, AActor* curPawn)
 {
-	Algo::Sort(arr, [curPawn](const AActor* A1, const AActor* A2) {
-		return curPawn->GetDistanceTo(A1) < curPawn->GetDistanceTo(A2);
-		});
+	AActor* target=nullptr;
+	switch (targettype)
+	{
+	case ETargettingType::MostNear:
+		target=MostNearByTarget(arr, existing, curPawn);
+		break;
+	case ETargettingType::MostFar:
+		target = MostFarByTarget(arr, existing, curPawn);
+		break;
+	case ETargettingType::MostLowHP:
+		target = MostLowHpTarget(arr, existing, curPawn);
+		break;
+	case ETargettingType::MostHighHP:
+		target = MostHighHpTarget(arr, existing, curPawn);
+		break;
+	case ETargettingType::Revenge:
+		target = RevengeTarget(arr, existing, curPawn);
+		break;
+	default:
+		target = MostNearByTarget(arr, existing, curPawn);
+		break;
+	}
+	if (target)
+		return target;
+	switch (defaultTargetType)
+	{
+	case ETargettingType::MostNear:
+		target = MostNearByTarget(arr, existing, curPawn);
+		break;
+	case ETargettingType::MostFar:
+		target = MostFarByTarget(arr, existing, curPawn);
+		break;
+	case ETargettingType::MostLowHP:
+		target = MostLowHpTarget(arr, existing, curPawn);
+		break;
+	case ETargettingType::MostHighHP:
+		target = MostHighHpTarget(arr, existing, curPawn);
+		break;
+	case ETargettingType::Revenge:
+		target = RevengeTarget(arr, existing, curPawn);
+		break;
+	default:
+		target = MostNearByTarget(arr, existing, curPawn);
+		break;
+	}
 
 
-	return arr[0];
+	return target;
 }
 
-AActor* H_Targetting::MostLowHpTarget(TArray<AActor*>& arr, const AActor* existing, const AActor* curPawn)
+AActor* H_Targetting::MostNearByTarget(TArray<AActor*>& arr, const AActor* existing,  AActor* curPawn)
 {
-	Algo::Sort(arr, [](AActor* a1, AActor* a2)->bool {
-		auto c1 = Cast<ACharacterBase>(a1);
-		auto c2 = Cast<ACharacterBase>(a2);
+	if (arr.IsEmpty())
+		return nullptr;
 
-		return c1->GetCurHP() < c2->GetCurHP();
-
+	auto temp=Algo::MinElementBy(arr, [curPawn](const AActor* A) {
+		return curPawn->GetDistanceTo(A);
 		});
 
-	return arr[0];
-}
-
-AActor* H_Targetting::RevengeTarget(TArray<AActor*>& arr, const AActor* existing, const AActor* curPawn)
-{
+	if(temp)
+		return *temp;
 	return nullptr;
+}
+
+AActor* H_Targetting::MostFarByTarget(TArray<AActor*>& arr, const AActor* existing, AActor* curPawn)
+{
+	if (arr.IsEmpty())
+		return nullptr;
+
+	auto temp = Algo::MaxElementBy(arr, [curPawn](const AActor* A) {
+		return curPawn->GetDistanceTo(A);
+		});
+
+	if (temp)
+		return *temp;
+	return nullptr;
+}
+
+AActor* H_Targetting::MostLowHpTarget(TArray<AActor*>& arr, const AActor* existing,  AActor* curPawn)
+{
+	if (arr.IsEmpty())
+		return nullptr;
+	auto temp=Algo::MinElementBy(arr, [](AActor* a) {
+		auto c1 = Cast<ACharacterBase>(a);
+		
+
+		return c1->GetCurHP();
+
+		});
+
+	if(temp)
+		return *temp;
+	
+	return nullptr;
+}
+
+AActor* H_Targetting::MostHighHpTarget(TArray<AActor*>& arr, const AActor* existing, AActor* curPawn)
+{
+	if (arr.IsEmpty())
+		return nullptr;
+	auto temp = Algo::MaxElementBy(arr, [](AActor* a) {
+		auto c1 = Cast<ACharacterBase>(a);
+
+
+		return c1->GetCurHP();
+
+		});
+
+	if (temp)
+		return *temp;
+
+	return nullptr;
+}
+
+AActor* H_Targetting::RevengeTarget(TArray<AActor*>& arr, const AActor* existing, AActor* curPawn)
+{
+	auto owner = Cast<ACharacterBase>(curPawn);
+	if (owner == nullptr)
+		return nullptr;
+
+	auto list= (owner->GetLogComponent()->GetValidList());
+
+
+	if (list.IsEmpty())
+		return nullptr;
+	
+
+	return list[0].Key;
 }

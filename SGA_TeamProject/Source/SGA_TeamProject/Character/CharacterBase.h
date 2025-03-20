@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 
+#include "../Helper/H_Targetting.h"
 #include "CharacterBase.generated.h"
 
 class UInputAction;
@@ -50,7 +51,7 @@ public:
 
 
 
-
+	
 
 
 
@@ -94,12 +95,20 @@ public:
 	void SetCamp_Ally();
 	void SetCamp_Enemy();
 
+	class UDamageLoggingComponent* GetLogComponent();
+	ETargettingType GetTargetType() { return _targetType; }
+	ETargettingType GetDefaultTargetType() { return _defaultTargetType; }
+	bool GetTargetChangeFrequently() { return _targetChangeFrequently; }
+
 protected:
 
 	//UPROPERTY()
 	//class UMyAnimInstance* _animInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = "true"))
 	class UStatComponent* _statComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = "true"))
+	class UDamageLoggingComponent* _dmgLogComponent;
 
 	bool _isAttack = false;
 	bool _isUnable = false;
@@ -137,6 +146,14 @@ protected:
 	ECollisionChannel _channel = ECC_GameTraceChannel2;
 
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting", meta = (AllowPrivateAccess = "true"))
+	 ETargettingType _targetType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting", meta = (AllowPrivateAccess = "true"))
+	 ETargettingType _defaultTargetType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting", meta = (AllowPrivateAccess = "true"))
+	bool _targetChangeFrequently=false;
 
 
 

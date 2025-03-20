@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../Item/Item.h"
+#include "../Item/item.h"
+#include "../Item/ItemDataTable.h"
 #include "InvenComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FItemChangeEvent, int32, FCItemInfo);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FItemChangeEvent, int32, FItemData);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SGA_TEAMPROJECT_API UInvenComponent : public UActorComponent
@@ -26,7 +27,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	FCItemInfo GetItemInfo_Index(int32 index);
+	FItemData GetItemData_Index(int32 index);
 	AItem* GetItem_Index(int32 index);
 
 	void AddItem(AItem* item);
@@ -40,4 +41,7 @@ public:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TArray<AItem*> _items;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 _money = 0;
 };

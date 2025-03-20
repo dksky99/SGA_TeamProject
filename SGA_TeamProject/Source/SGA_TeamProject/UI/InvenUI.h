@@ -18,7 +18,7 @@ class SGA_TEAMPROJECT_API UInvenUI : public UUserWidget
 public:
 	virtual bool Initialize() override;
 
-	void SetItem_Index(int32 index, FCItemInfo info);
+	void SetItem_Index(int32 index, FItemData data);
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))

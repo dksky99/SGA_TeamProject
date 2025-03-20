@@ -9,7 +9,9 @@ UENUM(BlueprintType)
 enum class ETargettingType :uint8
 {
 	MostNear  UMETA(DisplayName = "MostNear"),
+	MostFar  UMETA(DisplayName = "MostFar"),
 	MostLowHP UMETA(DisplayName = "MostLowHP"),
+	MostHighHP UMETA(DisplayName = "MostHighHP"),
 	Revenge UMETA(DisplayName = "Revenge"),
 	Max
 };
@@ -19,8 +21,12 @@ enum class ETargettingType :uint8
 class SGA_TEAMPROJECT_API H_Targetting
 {
 public:
+	static AActor* Targetting(ETargettingType targettype, ETargettingType defaultTargetType, TArray<AActor*>& arr, const AActor* existing, AActor* curPawn);
 
-	static AActor* MostNearByTarget(TArray<AActor*>& arr, const AActor* existing, const AActor* curPawn);
-	static AActor* MostLowHpTarget(TArray<AActor*>& arr, const AActor* existing, const AActor* curPawn);
-	static AActor* RevengeTarget(TArray<AActor*>& arr, const AActor* existing, const AActor* curPawn);
+	static AActor* MostNearByTarget(TArray<AActor*>& arr, const AActor* existing,  AActor* curPawn);
+	static AActor* MostFarByTarget(TArray<AActor*>& arr, const AActor* existing,  AActor* curPawn);
+	static AActor* MostLowHpTarget(TArray<AActor*>& arr, const AActor* existing, AActor* curPawn);
+	static AActor* MostHighHpTarget(TArray<AActor*>& arr, const AActor* existing, AActor* curPawn);
+	static AActor* RevengeTarget(TArray<AActor*>& arr, const AActor* existing,  AActor* curPawn) ;
+	
 };
