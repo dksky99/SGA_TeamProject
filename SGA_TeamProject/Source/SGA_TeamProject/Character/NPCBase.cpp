@@ -54,8 +54,8 @@ void ANPCBase::BeginPlay()
 	auto shopUI = Cast<UShopUI>(_shopWidget);
 	if (shopUI)
 	{
-		shopUI->_getInvenItemInfo.BindUObject(_invenComponent, &UInvenComponent::GetItemData_Index);
-		shopUI->_getShopItemInfo.BindUObject(_shopComponent, &UInvenComponent::GetItemData_Index);
+		shopUI->_getInvenItemData.BindUObject(_invenComponent, &UInvenComponent::GetItemData_Index);
+		shopUI->_getShopItemData.BindUObject(_shopComponent, &UInvenComponent::GetItemData_Index);
 		shopUI->Sell->OnClicked.AddDynamic(this, &ANPCBase::ItemSell);
 		shopUI->Buy->OnClicked.AddDynamic(this, &ANPCBase::ItemBuy);
 	}
