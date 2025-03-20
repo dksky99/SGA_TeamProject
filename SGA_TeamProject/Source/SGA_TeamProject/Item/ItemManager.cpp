@@ -21,14 +21,14 @@ void AItemManager::BeginPlay()
 {
 	Super::BeginPlay();
 	auto gameInstance = Cast<UCGameInstance>(GetWorld()->GetGameInstance());
-	for (int32 i = 1; i <= 9; i++)
+	for (int32 i = 1; i <= itemIDCount; i++)
 	{
 		int32 id = i;
 		_itemTable.Add(id);
 		auto itemData = gameInstance->GetItemData_ID(id);
 		auto itemClass = itemData.itemClass;
 
-		for (int j = 0; j < 5; j++)
+		for (int j = 0; j < itemPoolCount; j++)
 		{
 			auto item = GetWorld()->SpawnActor<AItem>(itemClass, FVector::ZeroVector, FRotator::ZeroRotator);
 			item->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
