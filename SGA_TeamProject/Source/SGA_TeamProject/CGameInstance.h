@@ -24,6 +24,7 @@ public:
 
 	struct FItemData GetItemData_ID(int32 id);
 
+	class AItemManager* ItemManager() { return _itemManager; }
 
 private:
 	UPROPERTY()
@@ -31,4 +32,7 @@ private:
 
 	UPROPERTY()
 	class UDataTable* _itemTable;
+
+	UPROPERTY()
+	class AItemManager* _itemManager;
 };

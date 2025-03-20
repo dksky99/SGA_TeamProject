@@ -4,26 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ItemDataTable.h"
 #include "Item.generated.h"
-
-UENUM()
-enum class ItemType
-{
-	NONE,
-	POTION
-};
-
-USTRUCT(BluePrintType)
-struct FCItemInfo
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 itemId = -1;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ItemType type = ItemType::NONE;
-};
 
 UCLASS()
 class SGA_TEAMPROJECT_API AItem : public AActor
@@ -52,7 +34,7 @@ public:
 	UFUNCTION()
 	void OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 
-	const FCItemInfo& GetInfo() { return _itemInfo; }
+	const FItemData& GetData() { return _itemData; }
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
@@ -61,6 +43,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Collision", meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* _collider;
 
-	UPROPERTY(EditAnywhere, Category = "ItemInfo")
-	FCItemInfo _itemInfo;
+	UPROPERTY(EditAnywhere, Category = "ItemData")
+	FItemData _itemData;
 };

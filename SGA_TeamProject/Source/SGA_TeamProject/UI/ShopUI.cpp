@@ -25,7 +25,7 @@ bool UShopUI::Initialize()
 		if (button)
 		{
 			button->OnClicked.AddDynamic(button, &UInvenButton::SetShop_ShopIndex);
-			button->OnClicked.AddDynamic(this, &UShopUI::SetShopInfo);
+			button->OnClicked.AddDynamic(this, &UShopUI::SetShopData);
 			button->_widget = this;
 			button->_buttonIndex = index;
 
@@ -50,7 +50,7 @@ bool UShopUI::Initialize()
 		if (button)
 		{
 			button->OnClicked.AddDynamic(button, &UInvenButton::SetShop_InvenIndex);
-			button->OnClicked.AddDynamic(this, &UShopUI::SetInvenInfo);
+			button->OnClicked.AddDynamic(this, &UShopUI::SetInvenData);
 			button->_widget = this;
 			button->_buttonIndex = index;
 
@@ -72,65 +72,65 @@ void UShopUI::UpdateShop(UInvenComponent* inven, UInvenComponent* shop)
 {
 	for (int i = 0; i < 9; i++)
 	{
-		auto invenItem = inven->GetItemInfo_Index(i);
+		auto invenItem = inven->GetItemData_Index(i);
 		SetInvenSlot(i, invenItem);
 
-		auto shopItem = shop->GetItemInfo_Index(i);
+		auto shopItem = shop->GetItemData_Index(i);
 		SetShopSlot(i, shopItem);
 	}
 }
 
 
-void UShopUI::SetShopSlot(int32 index, FCItemInfo info)
+void UShopUI::SetShopSlot(int32 index, FItemData data)
 {
-	SetSlot(_shopImages, index, info);
+	SetSlot(_shopImages, index, data);
 }
 
-void UShopUI::SetInvenSlot(int32 index, FCItemInfo info)
+void UShopUI::SetInvenSlot(int32 index, FItemData data)
 {
-	SetSlot(_invenImages, index, info);
+	SetSlot(_invenImages, index, data);
 }
 
-void UShopUI::SetSlot(TArray<UImage*>& imageArray, int32 index, FCItemInfo info)
+void UShopUI::SetSlot(TArray<UImage*>& imageArray, int32 index, FItemData data)
 {
-	if (info.itemId == -1 && info.type == ItemType::NONE)
+	if (data.id == -1 && data.type == ItemType::NONE)
 	{
 		imageArray[index]->SetBrushFromTexture(_defaultTexture);
 	}
-	else if (info.itemId == 1 && info.type == ItemType::POTION)
+	else if (data.id == 1 && data.type == ItemType::POTION)
 	{
 		imageArray[index]->SetBrushFromTexture(_potionTexture);
 	}
 }
 
-void UShopUI::SetShopInfo()
+void UShopUI::SetShopData()
 {
-	if (_getShopItemInfo.IsBound() == false)
+	if (_getShopItemData.IsBound() == false)
 		return;
 
-	auto info = _getShopItemInfo.Execute(_curShopIndex);
+	auto data = _getShopItemData.Execute(_curShopIndex);
 
-	SetInfo(ShopItemInfo, ShopItemImage, info);
+	SetData(ShopItemData, ShopItemImage, data);
 }
 
-void UShopUI::SetInvenInfo()
+void UShopUI::SetInvenData()
 {
-	if (_getInvenItemInfo.IsBound() == false)
+	if (_getInvenItemData.IsBound() == false)
 		return;
 
-	auto info = _getInvenItemInfo.Execute(_curInvenIndex);
+	auto data = _getInvenItemData.Execute(_curInvenIndex);
 
-	SetInfo(InvenItemInfo, InvenItemImage, info);
+	SetData(InvenItemData, InvenItemImage, data);
 }
 
-void UShopUI::SetInfo(UTextBlock* textBlock, UImage* imageBlock, FCItemInfo info)
+void UShopUI::SetData(UTextBlock* textBlock, UImage* imageBlock, FItemData data)
 {
-	if (info.itemId == -1 && info.type == ItemType::NONE)
+	if (data.id == -1 && data.type == ItemType::NONE)
 	{
 		textBlock->SetText(FText::FromString(TEXT("ItemType : NONE \nItemID : -1")));
 		imageBlock->SetBrushFromTexture(_defaultTexture);
 	}
-	else if (info.itemId == 1 && info.type == ItemType::POTION)
+	else if (data.id == 1 && data.type == ItemType::POTION)
 	{
 		textBlock->SetText(FText::FromString(TEXT("ItemType : POTION \nItemID : 1")));
 		imageBlock->SetBrushFromTexture(_potionTexture);

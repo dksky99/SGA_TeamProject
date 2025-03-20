@@ -15,6 +15,7 @@
 #include "Components/WidgetComponent.h"
 #include "../UI/HpBar.h"
 
+#include "../CGameInstance.h"
 #include "../CharacterAnimInstance.h"
 
 #include "Engine/DamageEvents.h"
@@ -30,6 +31,9 @@
 
 #include "NPCBase.h"
 #include "../Item/Item.h"
+#include "../Item/ItemManager.h"
+
+#include "../Helper/H_Targetting.h"
 
 #include "../Helper/H_Targetting.h"
 
@@ -173,6 +177,15 @@ void ACharacterBase::Dead()
 		this->SetActorEnableCollision(false);
 		return;
 	}
+
+	if (_camp == ECamp::Enemy)
+	{
+		auto itemManager = Cast<UCGameInstance>(GetGameInstance())->ItemManager();
+		if (itemManager)
+		{
+			itemManager->SpawnItem(1, GetActorLocation());
+		}
+	}
 	Controller->UnPossess();
 	this->SetActorEnableCollision(false);
 }
@@ -313,13 +326,7 @@ void ACharacterBase::DropItem(AItem* item)
 	float dropRadius = 200.0f;
 	FVector randomOffset = FMath::VRand() * FMath::FRandRange(100.0f, dropRadius);
 	FVector dropLocation = playerLocation + randomOffset;
-
-	UCapsuleComponent* CapsuleComp = Cast<UCapsuleComponent>(item->GetRootComponent());
-	if (CapsuleComp)
-	{
-		float CapsuleHalfHeight = CapsuleComp->GetScaledCapsuleHalfHeight();
-		dropLocation.Z = CapsuleHalfHeight;
-	}
+	dropLocation.Z = playerLocation.Z;
 
 	item->SetActorLocation(dropLocation);
 	item->Activate();

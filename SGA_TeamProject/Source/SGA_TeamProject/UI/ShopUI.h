@@ -11,8 +11,8 @@
  * 
  */
 
-DECLARE_DELEGATE_RetVal_OneParam(FCItemInfo, FGetInvenItemInfo, int32);
-DECLARE_DELEGATE_RetVal_OneParam(FCItemInfo, FGetShopItemInfo, int32);
+DECLARE_DELEGATE_RetVal_OneParam(FItemData, FGetInvenItemData, int32);
+DECLARE_DELEGATE_RetVal_OneParam(FItemData, FGetShopItemData, int32);
 
 UCLASS()
 class SGA_TEAMPROJECT_API UShopUI : public UUserWidget
@@ -24,15 +24,15 @@ public:
 
 	void UpdateShop(class UInvenComponent* inven, class UInvenComponent* shop);
 
-	void SetShopSlot(int32 index, FCItemInfo info);
-	void SetInvenSlot(int32 index, FCItemInfo info);
-	void SetSlot(TArray<class UImage*>& imageArray, int32 index, FCItemInfo info);
+	void SetShopSlot(int32 index, FItemData data);
+	void SetInvenSlot(int32 index, FItemData data);
+	void SetSlot(TArray<class UImage*>& imageArray, int32 index, FItemData data);
 
 	UFUNCTION()
-	void SetShopInfo();
+	void SetShopData();
 	UFUNCTION()
-	void SetInvenInfo();
-	void SetInfo(class UTextBlock* textBlock, class UImage* imageBlock, FCItemInfo info);
+	void SetInvenData();
+	void SetData(class UTextBlock* textBlock, class UImage* imageBlock, FItemData data);
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -64,10 +64,10 @@ public:
 
 	// 아이템 정보
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* ShopItemInfo;
+	class UTextBlock* ShopItemData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* InvenItemInfo;
+	class UTextBlock* InvenItemData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* ShopItemImage;
@@ -75,8 +75,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* InvenItemImage;
 
-	FGetInvenItemInfo _getInvenItemInfo;
-	FGetShopItemInfo _getShopItemInfo;
+	FGetInvenItemData _getInvenItemData;
+	FGetShopItemData _getShopItemData;
 
 	float _curInvenIndex = -1;
 	float _curShopIndex = -1;

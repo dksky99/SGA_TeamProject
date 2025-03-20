@@ -32,15 +32,15 @@ void UInvenComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
-FCItemInfo UInvenComponent::GetItemInfo_Index(int32 index)
+FItemData UInvenComponent::GetItemData_Index(int32 index)
 {
 	if (index < 0 || index >= _items.Num())
-		return FCItemInfo();
+		return FItemData();
 
 	if (_items[index] == nullptr)
-		return FCItemInfo();
+		return FItemData();
 
-	return _items[index]->GetInfo();
+	return _items[index]->GetData();
 }
 
 AItem* UInvenComponent::GetItem_Index(int32 index)
@@ -67,7 +67,7 @@ void UInvenComponent::AddItem(AItem* item)
 	_items[target] = item;
 
 	if (_itemChangeEvent.IsBound())
-		_itemChangeEvent.Broadcast(target, item->GetInfo());
+		_itemChangeEvent.Broadcast(target, item->GetData());
 }
 
 AItem* UInvenComponent::RemoveItem()
@@ -80,13 +80,13 @@ AItem* UInvenComponent::RemoveItem()
 	if (target == INDEX_NONE)
 		return nullptr;
 
-	AItem* dropItemInfo = _items[target];
+	AItem* dropItem = _items[target];
 	_items[target] = nullptr;
 
 	if (_itemChangeEvent.IsBound())
-		_itemChangeEvent.Broadcast(target, FCItemInfo());
+		_itemChangeEvent.Broadcast(target, FItemData());
 
-	return dropItemInfo;
+	return dropItem;
 }
 
 AItem* UInvenComponent::RemoveItem(int32 index)
@@ -97,13 +97,13 @@ AItem* UInvenComponent::RemoveItem(int32 index)
 	if (_items[index] == nullptr)
 		return nullptr;
 
-	AItem* dropItemInfo = _items[index];
+	AItem* dropItem = _items[index];
 	_items[index] = nullptr;
 
 	if (_itemChangeEvent.IsBound())
-		_itemChangeEvent.Broadcast(index, FCItemInfo());
+		_itemChangeEvent.Broadcast(index, FItemData());
 
-	return dropItemInfo;
+	return dropItem;
 }
 
 bool UInvenComponent::IsFull()

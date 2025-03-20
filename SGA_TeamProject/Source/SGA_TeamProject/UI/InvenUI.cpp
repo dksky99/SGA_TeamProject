@@ -38,14 +38,14 @@ bool UInvenUI::Initialize()
 	return true;
 }
 
-void UInvenUI::SetItem_Index(int32 index, FCItemInfo info)
+void UInvenUI::SetItem_Index(int32 index, FItemData data)
 {
-	if (info.itemId == -1 && info.type == ItemType::NONE)
+	if (data.id == -1 && data.type == ItemType::NONE)
 	{
 		_slotImages[index]->SetBrushFromTexture(_defaultTexture);
 	}
 
-	if (info.itemId == 1 && info.type == ItemType::POTION)
+	if (data.id == 1 && data.type == ItemType::POTION)
 	{
 		_slotImages[index]->SetBrushFromTexture(_potionTexture);
 	}

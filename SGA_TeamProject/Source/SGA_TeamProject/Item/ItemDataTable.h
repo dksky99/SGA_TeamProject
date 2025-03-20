@@ -9,7 +9,7 @@
 #include "ItemDataTable.generated.h"
 
 UENUM()
-enum class EItemType
+enum class ItemType
 {
 	NONE,
 	POTION,
@@ -28,7 +28,7 @@ struct FItemData : public FTableRowBase
 	FName name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EItemType type = EItemType::NONE;
+	ItemType type = ItemType::NONE;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 price = 0;
@@ -42,5 +42,4 @@ class SGA_TEAMPROJECT_API UItemDataTable : public UObject
 {
 	GENERATED_BODY()
 	
-	FString FindItemPathByID(int32 id);
 };
