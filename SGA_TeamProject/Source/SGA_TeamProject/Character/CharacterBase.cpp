@@ -198,7 +198,9 @@ void ACharacterBase::Dead()
 			itemManager->SpawnItem(1, GetActorLocation());
 		}
 	}
-	Controller->UnPossess();
+
+	if (Controller)
+		Controller->UnPossess();
 	this->SetActorEnableCollision(false);
 }
 
