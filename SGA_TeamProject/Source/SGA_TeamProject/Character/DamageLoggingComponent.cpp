@@ -29,6 +29,8 @@ void UDamageLoggingComponent::Logging(ACharacterBase* causer, int32 damage)
 	{
 		_damageLog.Add(causer, damage);  // 처음 추가하는 경우
 	}
+
+	_dmgLogChanged.Broadcast();
 }
 
 ACharacterBase* UDamageLoggingComponent::GetBestDamageCauser()

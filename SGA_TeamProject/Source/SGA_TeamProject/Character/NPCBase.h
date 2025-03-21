@@ -15,7 +15,7 @@ public:
 	// Sets default values for this character's properties
 	ANPCBase();
 
-	void PostInitializeComponents() override;
+	virtual void PostInitializeComponents() override;
 
 protected:
 	// Called when the game starts or when spawned

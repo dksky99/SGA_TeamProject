@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "DamageLoggingComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FDamageLogChanged);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SGA_TEAMPROJECT_API UDamageLoggingComponent : public UActorComponent
@@ -30,6 +31,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	FDamageLogChanged _dmgLogChanged;
 
 private:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Log", meta = (AllowPrivateAccess = "true"))
