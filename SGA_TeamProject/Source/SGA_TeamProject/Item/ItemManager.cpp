@@ -46,9 +46,9 @@ void AItemManager::Tick(float DeltaTime)
 
 }
 
-void AItemManager::SpawnItem(int32 key, FVector pos)
+void AItemManager::SpawnItem(int32 id, FVector pos)
 {
-	auto items = _itemTable.Find(key);
+	auto items = _itemTable.Find(id);
 	if (!items)
 		return;
 

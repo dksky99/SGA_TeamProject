@@ -5,8 +5,10 @@
 
 #include "Components/UniformGridPanel.h"
 #include "Components/Image.h"
+#include "Components/TextBlock.h"
 
 #include "InvenButton.h"
+#include "../Character/InvenComponent.h"
 
 bool UInvenUI::Initialize()
 {
@@ -38,15 +40,19 @@ bool UInvenUI::Initialize()
 	return true;
 }
 
-void UInvenUI::SetItem_Index(int32 index, FItemData data)
+void UInvenUI::SetItem_Index(int32 index, const FItemSlotData& item)
 {
-	if (data.id == -1 && data.type == ItemType::NONE)
+	if (item.count == 0)
 	{
+		//_buttons[index]->Count->SetText(FText::FromString(TEXT("")));
 		_slotImages[index]->SetBrushFromTexture(_defaultTexture);
 	}
-
-	if (data.id == 1 && data.type == ItemType::POTION)
+	else
 	{
-		_slotImages[index]->SetBrushFromTexture(_potionTexture);
+		FString count = FString::Printf(TEXT("%d"), item.count);
+		//_buttons[index]->Count->SetText(FText::FromString(count));
+
+		UTexture2D* itemIcon = item.itemData.icon.LoadSynchronous();
+		_slotImages[index]->SetBrushFromTexture(itemIcon);
 	}
 }

@@ -25,6 +25,9 @@ public:
 	UFUNCTION()
 	void SetShop_InvenIndex();
 
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	//class UTextBlock* Count;
+
 	class UUserWidget* _widget;
 
 	int32 _buttonIndex;

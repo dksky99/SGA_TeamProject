@@ -127,9 +127,9 @@ void ANPCBase::ItemBuy()
 	if (shopUI)
 	{
 		auto index = shopUI->_curShopIndex;
-		AItem* item = _shopComponent->GetItem_Index(index);
+		FItemData item = _shopComponent->GetItemData_Index(index);
 
-		if (item == nullptr)
+		if (item.id == -1)
 			return;
 
 		_shopComponent->RemoveItem(index);
@@ -148,9 +148,9 @@ void ANPCBase::ItemSell()
 	if (shopUI)
 	{
 		auto index = shopUI->_curInvenIndex;
-		AItem* item = _invenComponent->GetItem_Index(index);
+		FItemData item = _invenComponent->GetItemData_Index(index);
 
-		if (item == nullptr)
+		if (item.id == -1)
 			return;
 
 		_invenComponent->RemoveItem(index);

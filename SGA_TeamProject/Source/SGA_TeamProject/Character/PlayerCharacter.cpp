@@ -278,10 +278,8 @@ void APlayerCharacter::AddItem(AItem* item)
 		if (_invenComponent->IsFull())
 			return;
 
-		_invenComponent->AddItem(item);
+		_invenComponent->AddItem(item->GetData());
 
-		item->SetActorHiddenInGame(true);
-		item->SetActorEnableCollision(false);
+		item->Deactivate();
 	}
-	
 }

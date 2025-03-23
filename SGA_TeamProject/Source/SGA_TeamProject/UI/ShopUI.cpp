@@ -72,34 +72,39 @@ void UShopUI::UpdateShop(UInvenComponent* inven, UInvenComponent* shop)
 {
 	for (int i = 0; i < 9; i++)
 	{
-		auto invenItem = inven->GetItemData_Index(i);
+		auto invenItem = inven->GetItemSlot_Index(i);
 		SetInvenSlot(i, invenItem);
 
-		auto shopItem = shop->GetItemData_Index(i);
+		auto shopItem = shop->GetItemSlot_Index(i);
 		SetShopSlot(i, shopItem);
 	}
 }
 
 
-void UShopUI::SetShopSlot(int32 index, FItemData data)
+void UShopUI::SetShopSlot(int32 index, FItemSlotData item)
 {
-	SetSlot(_shopImages, index, data);
+	SetSlot(_shopButtons, _shopImages, index, item);
 }
 
-void UShopUI::SetInvenSlot(int32 index, FItemData data)
+void UShopUI::SetInvenSlot(int32 index, FItemSlotData item)
 {
-	SetSlot(_invenImages, index, data);
+	SetSlot(_invenButtons, _invenImages, index, item);
 }
 
-void UShopUI::SetSlot(TArray<UImage*>& imageArray, int32 index, FItemData data)
+void UShopUI::SetSlot(TArray<class UInvenButton*> buttons, TArray<UImage*>& images, int32 index, FItemSlotData item)
 {
-	if (data.id == -1 && data.type == ItemType::NONE)
+	if (item.count == 0)
 	{
-		imageArray[index]->SetBrushFromTexture(_defaultTexture);
+		//buttons[index]->Count->SetText(FText::FromString(TEXT("")));
+		images[index]->SetBrushFromTexture(_defaultTexture);
 	}
-	else if (data.id == 1 && data.type == ItemType::POTION)
+	else
 	{
-		imageArray[index]->SetBrushFromTexture(_potionTexture);
+		FString count = FString::Printf(TEXT("%d"), item.count);
+		//buttons[index]->Count->SetText(FText::FromString(count));
+
+		UTexture2D* itemIcon = item.itemData.icon.LoadSynchronous();
+		images[index]->SetBrushFromTexture(itemIcon);
 	}
 }
 
@@ -125,14 +130,16 @@ void UShopUI::SetInvenData()
 
 void UShopUI::SetData(UTextBlock* textBlock, UImage* imageBlock, FItemData data)
 {
-	if (data.id == -1 && data.type == ItemType::NONE)
+	if (data.id == -1)
 	{
-		textBlock->SetText(FText::FromString(TEXT("ItemType : NONE \nItemID : -1")));
+		textBlock->SetText(FText::FromString(TEXT("")));
 		imageBlock->SetBrushFromTexture(_defaultTexture);
 	}
-	else if (data.id == 1 && data.type == ItemType::POTION)
+	else
 	{
 		textBlock->SetText(FText::FromString(TEXT("ItemType : POTION \nItemID : 1")));
-		imageBlock->SetBrushFromTexture(_potionTexture);
+
+		UTexture2D* itemIcon = data.icon.LoadSynchronous();
+		imageBlock->SetBrushFromTexture(itemIcon);
 	}
 }

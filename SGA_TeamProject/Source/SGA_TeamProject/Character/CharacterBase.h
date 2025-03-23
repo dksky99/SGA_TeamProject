@@ -81,7 +81,7 @@ public:
 	void AddExp(int32 value);
 	class UStatComponent* GetStatComponent() { return _statComponent; }
 
-	void DropItem(class AItem* item);
+	void DropItem(struct FItemData item);
 
 	bool IsAlive();
 	bool IsAttack() { return _isAttack; }

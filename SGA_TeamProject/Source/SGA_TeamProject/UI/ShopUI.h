@@ -24,10 +24,12 @@ public:
 
 	void UpdateShop(class UInvenComponent* inven, class UInvenComponent* shop);
 
-	void SetShopSlot(int32 index, FItemData data);
-	void SetInvenSlot(int32 index, FItemData data);
-	void SetSlot(TArray<class UImage*>& imageArray, int32 index, FItemData data);
+	// 상점, 인벤토리 칸 표시
+	void SetShopSlot(int32 index, struct FItemSlotData data);
+	void SetInvenSlot(int32 index, struct FItemSlotData data);
+	void SetSlot(TArray<class UInvenButton*> buttons, TArray<class UImage*>& images, int32 index, FItemSlotData data);
 
+	// 선택한 아이템 정보 표시
 	UFUNCTION()
 	void SetShopData();
 	UFUNCTION()

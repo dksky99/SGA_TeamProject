@@ -11,6 +11,7 @@ UInvenComponent::UInvenComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	_items.SetNum(9);
+	_money = 0;
 }
 
 
@@ -32,87 +33,108 @@ void UInvenComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
+FItemSlotData UInvenComponent::GetItemSlot_Index(int32 index)
+{
+	if (index < 0 || index >= _items.Num())
+		return FItemSlotData();
+
+	if (_items[index].count == 0)
+		return FItemSlotData();
+
+	return _items[index];
+}
+
 FItemData UInvenComponent::GetItemData_Index(int32 index)
 {
 	if (index < 0 || index >= _items.Num())
 		return FItemData();
 
-	if (_items[index] == nullptr)
+	if (_items[index].count == 0)
 		return FItemData();
 
-	return _items[index]->GetData();
+	return _items[index].itemData;
 }
 
-AItem* UInvenComponent::GetItem_Index(int32 index)
+void UInvenComponent::AddItem(FItemData item)
 {
-	if (index < 0 || index >= _items.Num())
-		return nullptr;
-
-	if (_items[index] == nullptr)
-		return nullptr;
-
-	return _items[index];
-}
-
-void UInvenComponent::AddItem(AItem* item)
-{
-	auto target = _items.IndexOfByPredicate([](AItem* item)->bool
+	auto index = _items.IndexOfByPredicate([item](const FItemSlotData& slot) -> bool
 		{
-			return item == nullptr;
+			return slot.itemData.id == item.id;
 		});
 
-	if (target == INDEX_NONE)
+	// 인벤에 해당 아이템 없을 경우
+	if (index == INDEX_NONE)
+	{
+		index = _items.IndexOfByPredicate([](const FItemSlotData& slot) -> bool
+			{
+				return slot.count == 0;
+			});
+	}
+
+	// 인벤에 빈 슬롯이 없을 경우
+	if (index == INDEX_NONE)
 		return;
 
-	_items[target] = item;
+	_items[index].itemData = item;
+	_items[index].count++;
+	
 
 	if (_itemChangeEvent.IsBound())
-		_itemChangeEvent.Broadcast(target, item->GetData());
+		_itemChangeEvent.Broadcast(index, _items[index]);
 }
 
-AItem* UInvenComponent::RemoveItem()
+FItemData UInvenComponent::RemoveItem()
 {
-	auto target = _items.FindLastByPredicate([](AItem* item)->bool
+	auto index = _items.FindLastByPredicate([](const FItemSlotData& slot)->bool
 		{
-			return item != nullptr;
+			return slot.count != 0;
 		});
 
-	if (target == INDEX_NONE)
-		return nullptr;
+	if (index == INDEX_NONE)
+		return FItemData();
 
-	AItem* dropItem = _items[target];
-	_items[target] = nullptr;
+	FItemData dropItem = _items[index].itemData;
+
+	_items[index].count--;
+	if (_items[index].count == 0)
+	{
+		_items[index].itemData = FItemData();
+	}
 
 	if (_itemChangeEvent.IsBound())
-		_itemChangeEvent.Broadcast(target, FItemData());
+		_itemChangeEvent.Broadcast(index, _items[index]);
 
 	return dropItem;
 }
 
-AItem* UInvenComponent::RemoveItem(int32 index)
+FItemData UInvenComponent::RemoveItem(int32 index)
 {
 	if (index >= _items.Num() || index < 0)
-		return nullptr;
+		return FItemData();
 
-	if (_items[index] == nullptr)
-		return nullptr;
+	if (_items[index].count == 0)
+		return FItemData();
 
-	AItem* dropItem = _items[index];
-	_items[index] = nullptr;
+	FItemData dropItem = _items[index].itemData;
+	_items[index].count--;
+	if (_items[index].count == 0)
+	{
+		_items[index].itemData = FItemData();
+	}
 
 	if (_itemChangeEvent.IsBound())
-		_itemChangeEvent.Broadcast(index, FItemData());
+		_itemChangeEvent.Broadcast(index, _items[index]);
 
 	return dropItem;
 }
 
 bool UInvenComponent::IsFull()
 {
-	auto target = _items.IndexOfByPredicate([](AItem* item)->bool
+	auto index = _items.IndexOfByPredicate([](const FItemSlotData& slot)->bool
 		{
-			return item == nullptr;
+			return slot.count == 0;
 		});
 
-	return target == INDEX_NONE;
+	return index == INDEX_NONE;
 }
 
