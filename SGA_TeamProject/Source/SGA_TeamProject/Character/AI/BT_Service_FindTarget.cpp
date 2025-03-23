@@ -72,9 +72,6 @@ void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 					return;
 				}
 
-			
-
-				
 			}
 			
 			arr.Add(col.GetActor());

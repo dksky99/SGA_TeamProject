@@ -42,19 +42,9 @@ protected:
 
 	virtual void UnPossessed() override;
 
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-
-
-
-
-	
-
-
-
 	void UpDown(float value);
 	void RightLeft(float value);
 
@@ -136,7 +126,6 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float _detectionRange = 800.0f;
-	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* _hpBarWidget;
@@ -146,7 +135,6 @@ protected:
 
 	ECollisionChannel _channel = ECC_GameTraceChannel2;
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting", meta = (AllowPrivateAccess = "true"))
 	 ETargettingType _targetType;
 
@@ -155,7 +143,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting", meta = (AllowPrivateAccess = "true"))
 	bool _targetChangeFrequently=false;
-
-
-
 };

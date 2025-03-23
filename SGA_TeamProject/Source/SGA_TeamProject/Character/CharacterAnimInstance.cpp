@@ -3,7 +3,7 @@
 
 #include "CharacterAnimInstance.h"
 
-#include "Character/CharacterBase.h"
+#include "CharacterBase.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Animation/AnimMontage.h"
 
@@ -52,7 +52,6 @@ void UCharacterAnimInstance::AnimNotify_Dead()
 
 void UCharacterAnimInstance::JumpToSection(int32 sectionIndex)
 {
-	UE_LOG(LogTemp, Error, TEXT("c num %d"), sectionIndex);
 	FName sectionName = FName(*FString::Printf(TEXT("Section%d"), sectionIndex));
 	Montage_JumpToSection(sectionName);
 }

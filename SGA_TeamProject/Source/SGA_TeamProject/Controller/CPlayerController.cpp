@@ -12,10 +12,12 @@
 #include "../Character/InvenComponent.h"
 
 #include "../UI/PartyListUI.h"
+#include "../TeamManager.h"
 
 ACPlayerController::ACPlayerController()
 {
 	_invenComponent = CreateDefaultSubobject<UInvenComponent>(TEXT("InvenComponent"));
+	_curCamp = CreateDefaultSubobject<UTeamManager>(TEXT("CampManager"));
 }
 
 void ACPlayerController::PostInitializeComponents()
@@ -75,26 +77,32 @@ void ACPlayerController::HideUI()
 
 void ACPlayerController::CharacterChange()
 {
-	UE_LOG(LogTemp, Warning, TEXT("CharacterChange"));
+	UE_LOG(LogTemp, Warning, TEXT("CharacterChange : %d"), _curPlayerIndex);
 
-	ACharacterBase* character = FindNewCharacterForPlayer();
-	character->GetController()->UnPossess();
-
-	Possess(character);
-}
-
-ACharacterBase* ACPlayerController::FindNewCharacterForPlayer()
-{
-	for (TActorIterator<ACharacterBase> iter(GetWorld()); iter; ++iter)
+	ACharacterBase* playerCharacter = Cast<ACharacterBase>(GetPawn());
+	ACharacterBase* targetCharacter = _curCamp->GetTeamMembers()[_curPlayerIndex];
+	if (targetCharacter)
 	{
-		ACharacterBase* character = *iter;
-
-		if (character != GetPawn() && character->IsAlive())
+		if (targetCharacter->IsAlive())
 		{
-			return character;
+			// 두 컨트롤러 가져오기
+			AController* playerController = this; // 현재 PlayerController
+			AController* aiController = targetCharacter->GetController(); // 타겟의 AI 컨트롤러
+
+			// 각각 UnPossess
+			if (playerController) playerController->UnPossess();
+			if (aiController) aiController->UnPossess();
+
+			// 컨트롤러 교체 
+			playerController->Possess(targetCharacter);
+			aiController->Possess(playerCharacter);
+
+			// cmap 교체
+			playerCharacter->SetCamp_Ally();
+			targetCharacter->SetCamp_Player();
+
+			// 인덱스 업데이트
+			_curPlayerIndex = (_curPlayerIndex + 1) % _curCamp->GetTeamMembers().Num();
 		}
 	}
-
-	UE_LOG(LogTemp, Error, TEXT("There are no living characters!"));
-	return nullptr;
 }

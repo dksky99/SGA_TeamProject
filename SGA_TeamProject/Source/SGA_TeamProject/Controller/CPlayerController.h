@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+
+
 #include "CPlayerController.generated.h"
 
 /**
@@ -33,7 +35,6 @@ public:
 	UFUNCTION()
 	void CharacterChange();
 
-	class ACharacterBase* FindNewCharacterForPlayer();
 
 	class UInvenComponent* GetInvenComponent() { return _invenComponent; }
 
@@ -51,4 +52,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PartyList", meta = (AllowPrivateAccess = "true"))
 	class UUserWidget* _partyListWidget;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camp", meta = (AllowPrivateAccess = "true"))
+	class UTeamManager* _curCamp;
+
+	int32 _curPlayerIndex = 0;
 };
