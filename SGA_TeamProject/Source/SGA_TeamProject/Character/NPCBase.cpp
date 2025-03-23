@@ -110,7 +110,7 @@ void ANPCBase::OpenUI(ACPlayerController* controller)
 
 		auto shopWidget = Cast<UShopUI>(_shopWidget);
 		if (shopWidget)
-			shopWidget->UpdateShop(_invenComponent, _shopComponent);
+			shopWidget->ResetUI(_invenComponent, _shopComponent);
 
 		_shopWidget->AddToViewport();
 	}
@@ -136,6 +136,7 @@ void ANPCBase::ItemBuy()
 		_invenComponent->AddItem(item);
 
 		shopUI->UpdateShop(_invenComponent, _shopComponent);
+		shopUI->SetShopData();
 	}
 }
 
@@ -157,5 +158,6 @@ void ANPCBase::ItemSell()
 		_shopComponent->AddItem(item);
 
 		shopUI->UpdateShop(_invenComponent, _shopComponent);
+		shopUI->SetShopData();
 	}
 }

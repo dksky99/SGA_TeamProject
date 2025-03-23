@@ -6,10 +6,11 @@
 #include "Components/UniformGridPanel.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
+#include "Components/Button.h"
 
 #include "../Character/InvenComponent.h"
 
-#include "InvenButton.h"
+#include "ItemSlotUI.h"
 
 bool UShopUI::Initialize()
 {
@@ -21,51 +22,47 @@ bool UShopUI::Initialize()
 	int32 index = 0;
 	for (auto widget : array)
 	{
-		auto button = Cast<UInvenButton>(widget);
-		if (button)
+		auto slot = Cast<UItemSlotUI>(widget);
+		if (slot)
 		{
-			button->OnClicked.AddDynamic(button, &UInvenButton::SetShop_ShopIndex);
-			button->OnClicked.AddDynamic(this, &UShopUI::SetShopData);
-			button->_widget = this;
-			button->_buttonIndex = index;
+			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetShop_ShopIndex);
+			slot->Button->OnClicked.AddDynamic(this, &UShopUI::SetShopData);
+			slot->_widget = this;
+			slot->_buttonIndex = index;
 
-			_shopButtons.Add(button);
+			_shopSlots.Add(slot);
 			index++;
-		}
-
-		auto image = Cast<UImage>(button->GetChildAt(0));
-		if (image)
-		{
-			_shopImages.Add(image);
 		}
 	}
 
-	// inven slot
+	// Inven slot
 	array = InvenGrid->GetAllChildren();
 
 	index = 0;
 	for (auto widget : array)
 	{
-		auto button = Cast<UInvenButton>(widget);
-		if (button)
+		auto slot = Cast<UItemSlotUI>(widget);
+		if (slot)
 		{
-			button->OnClicked.AddDynamic(button, &UInvenButton::SetShop_InvenIndex);
-			button->OnClicked.AddDynamic(this, &UShopUI::SetInvenData);
-			button->_widget = this;
-			button->_buttonIndex = index;
+			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetShop_InvenIndex);
+			slot->Button->OnClicked.AddDynamic(this, &UShopUI::SetInvenData);
+			slot->_widget = this;
+			slot->_buttonIndex = index;
 
-			_invenButtons.Add(button);
+			_invenSlots.Add(slot);
 			index++;
-		}
-
-		auto image = Cast<UImage>(button->GetChildAt(0));
-		if (image)
-		{
-			_invenImages.Add(image);
 		}
 	}
 
 	return true;
+}
+
+void UShopUI::ResetUI(UInvenComponent* inven, UInvenComponent* shop)
+{
+	_curShopIndex = -1;
+	_curInvenIndex = -1;
+
+	UpdateShop(inven, shop);
 }
 
 void UShopUI::UpdateShop(UInvenComponent* inven, UInvenComponent* shop)
@@ -78,33 +75,31 @@ void UShopUI::UpdateShop(UInvenComponent* inven, UInvenComponent* shop)
 		auto shopItem = shop->GetItemSlot_Index(i);
 		SetShopSlot(i, shopItem);
 	}
+
+	SetShopData();
+	SetInvenData();
 }
 
 
 void UShopUI::SetShopSlot(int32 index, FItemSlotData item)
 {
-	SetSlot(_shopButtons, _shopImages, index, item);
+	SetSlot(_shopSlots, index, item);
 }
 
 void UShopUI::SetInvenSlot(int32 index, FItemSlotData item)
 {
-	SetSlot(_invenButtons, _invenImages, index, item);
+	SetSlot(_invenSlots, index, item);
 }
 
-void UShopUI::SetSlot(TArray<class UInvenButton*> buttons, TArray<UImage*>& images, int32 index, FItemSlotData item)
+void UShopUI::SetSlot(TArray<class UItemSlotUI*> slots, int32 index, FItemSlotData item)
 {
 	if (item.count == 0)
 	{
-		//buttons[index]->Count->SetText(FText::FromString(TEXT("")));
-		images[index]->SetBrushFromTexture(_defaultTexture);
+		slots[index]->SetDefault();
 	}
 	else
 	{
-		FString count = FString::Printf(TEXT("%d"), item.count);
-		//buttons[index]->Count->SetText(FText::FromString(count));
-
-		UTexture2D* itemIcon = item.itemData.icon.LoadSynchronous();
-		images[index]->SetBrushFromTexture(itemIcon);
+		slots[index]->SetItem(item.count, item.itemData.icon);
 	}
 }
 
@@ -137,7 +132,12 @@ void UShopUI::SetData(UTextBlock* textBlock, UImage* imageBlock, FItemData data)
 	}
 	else
 	{
-		textBlock->SetText(FText::FromString(TEXT("ItemType : POTION \nItemID : 1")));
+		UEnum* enumType = FindObject<UEnum>(ANY_PACKAGE, TEXT("ItemType"), true);
+		FString itemType = enumType->GetNameStringByIndex((int32)data.type);
+		FString itemName = data.name.ToString();
+
+		FString text = FString::Printf(TEXT("%s\nItemType : %s\nItemID : %d"), *itemName, *itemType, data.id);
+		textBlock->SetText(FText::FromString(text));
 
 		UTexture2D* itemIcon = data.icon.LoadSynchronous();
 		imageBlock->SetBrushFromTexture(itemIcon);

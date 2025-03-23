@@ -15,27 +15,34 @@ class SGA_TEAMPROJECT_API UItemSlotUI : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	// TODO
-	// 
-	//UFUNCTION()
-	//void SetInvenIndex();
+	void SetDefault();
+	void SetItem(int32 count, TSoftObjectPtr<UTexture2D> itemIcon);
 
-	//// 상점
-	//UFUNCTION()
-	//void SetShop_ShopIndex();
-	//UFUNCTION()
-	//void SetShop_InvenIndex();
+	// 인벤토리
+	UFUNCTION()
+	void SetInvenIndex();
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	//class UTextBlock* Count;
+	// 상점
+	UFUNCTION()
+	void SetShop_ShopIndex();
+	UFUNCTION()
+	void SetShop_InvenIndex();
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	//class UButton* Button;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	//class UImage* Image;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Button;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* Count;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UImage* Image;
 
 	class UUserWidget* _widget;
 
 	int32 _buttonIndex;
+
+private:
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* _defaultTexture;
 };

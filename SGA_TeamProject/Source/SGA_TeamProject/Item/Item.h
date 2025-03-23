@@ -35,6 +35,7 @@ public:
 	void OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 
 	const FItemData& GetData() { return _itemData; }
+	void SetData(const FItemData& itemData) { _itemData = itemData; }
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")

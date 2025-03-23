@@ -32,6 +32,7 @@ void AItemManager::BeginPlay()
 		{
 			auto item = GetWorld()->SpawnActor<AItem>(itemClass, FVector::ZeroVector, FRotator::ZeroRotator);
 			item->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+			item->SetData(itemData);
 			item->Deactivate();
 			
 			_itemTable[id]._items.Add(item);

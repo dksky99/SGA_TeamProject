@@ -6,8 +6,9 @@
 #include "Components/UniformGridPanel.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Components/Button.h"
 
-#include "InvenButton.h"
+#include "ItemSlotUI.h"
 #include "../Character/InvenComponent.h"
 
 bool UInvenUI::Initialize()
@@ -19,21 +20,15 @@ bool UInvenUI::Initialize()
 	int32 index = 0;
 	for (auto widget : array)
 	{
-		auto button = Cast<UInvenButton>(widget);
-		if (button)
+		auto slot = Cast<UItemSlotUI>(widget);
+		if (slot)
 		{
-			button->OnClicked.AddDynamic(button, &UInvenButton::SetInvenIndex);
-			button->_widget = this;
-			button->_buttonIndex = index;
+			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetInvenIndex);
+			slot->_widget = this;
+			slot->_buttonIndex = index;
 
-			_buttons.Add(button);
+			_itemSlots.Add(slot);
 			index++;
-		}
-
-		auto image = Cast<UImage>(button->GetChildAt(0));
-		if (image)
-		{
-			_slotImages.Add(image);
 		}
 	}
 
@@ -44,15 +39,10 @@ void UInvenUI::SetItem_Index(int32 index, const FItemSlotData& item)
 {
 	if (item.count == 0)
 	{
-		//_buttons[index]->Count->SetText(FText::FromString(TEXT("")));
-		_slotImages[index]->SetBrushFromTexture(_defaultTexture);
+		_itemSlots[index]->SetDefault();
 	}
 	else
 	{
-		FString count = FString::Printf(TEXT("%d"), item.count);
-		//_buttons[index]->Count->SetText(FText::FromString(count));
-
-		UTexture2D* itemIcon = item.itemData.icon.LoadSynchronous();
-		_slotImages[index]->SetBrushFromTexture(itemIcon);
+		_itemSlots[index]->SetItem(item.count, item.itemData.icon);
 	}
 }

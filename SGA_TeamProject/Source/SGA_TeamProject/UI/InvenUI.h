@@ -28,17 +28,7 @@ public:
 	class UButton* Drop;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<class UImage*> _slotImages;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<class UInvenButton*> _buttons;
+	TArray<class UItemSlotUI*> _itemSlots;
 
 	int32 _curIndex = -1;
-
-private:
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	UTexture2D* _defaultTexture;
-
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	UTexture2D* _potionTexture;
 };
