@@ -22,12 +22,15 @@ class SGA_TEAMPROJECT_API UShopUI : public UUserWidget
 public:
 	virtual bool Initialize() override;
 
+	void ResetUI(class UInvenComponent* inven, class UInvenComponent* shop);
 	void UpdateShop(class UInvenComponent* inven, class UInvenComponent* shop);
 
-	void SetShopSlot(int32 index, FItemData data);
-	void SetInvenSlot(int32 index, FItemData data);
-	void SetSlot(TArray<class UImage*>& imageArray, int32 index, FItemData data);
+	// 상점, 인벤토리 칸 표시
+	void SetShopSlot(int32 index, struct FItemSlotData data);
+	void SetInvenSlot(int32 index, struct FItemSlotData data);
+	void SetSlot(TArray<class UItemSlotUI*> slots, int32 index, FItemSlotData item);
 
+	// 선택한 아이템 정보 표시
 	UFUNCTION()
 	void SetShopData();
 	UFUNCTION()
@@ -50,17 +53,10 @@ public:
 
 	// 슬롯
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<class UImage*> _shopImages;
+	TArray<class UItemSlotUI*> _shopSlots;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<class UImage*> _invenImages;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<class UInvenButton*> _shopButtons;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<class UInvenButton*> _invenButtons;
-
+	TArray<class UItemSlotUI*> _invenSlots;
 
 	// 아이템 정보
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -84,7 +80,4 @@ public:
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	UTexture2D* _defaultTexture;
-
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	UTexture2D* _potionTexture;
 };

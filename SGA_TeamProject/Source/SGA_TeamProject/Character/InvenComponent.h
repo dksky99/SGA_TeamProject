@@ -8,7 +8,19 @@
 #include "../Item/ItemDataTable.h"
 #include "InvenComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FItemChangeEvent, int32, FItemData);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FItemChangeEvent, int32, const FItemSlotData&);
+
+USTRUCT(BlueprintType)
+struct FItemSlotData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FItemData itemData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 count = 0;
+};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SGA_TEAMPROJECT_API UInvenComponent : public UActorComponent
@@ -27,12 +39,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	FItemSlotData GetItemSlot_Index(int32 index);
 	FItemData GetItemData_Index(int32 index);
-	AItem* GetItem_Index(int32 index);
 
-	void AddItem(AItem* item);
-	AItem* RemoveItem();
-	AItem* RemoveItem(int32 index);
+	void AddItem(FItemData itemdata);
+	FItemData RemoveItem();
+	FItemData RemoveItem(int32 index);
 
 	bool IsFull();
 
@@ -40,7 +52,7 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
-	TArray<AItem*> _items;
+	TArray<FItemSlotData> _items;
 
 	UPROPERTY(VisibleAnywhere)
 	int32 _money = 0;

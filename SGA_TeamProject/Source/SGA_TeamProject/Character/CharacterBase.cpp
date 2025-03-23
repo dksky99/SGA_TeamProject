@@ -330,9 +330,9 @@ void ACharacterBase::AddExp(int32 value)
 	_statComponent->AddExp(value);
 }
 
-void ACharacterBase::DropItem(AItem* item)
+void ACharacterBase::DropItem(FItemData item)
 {
-	if (item == nullptr)
+	if (item.id == -1)
 		return;
 
 	FVector playerLocation = GetActorLocation();
@@ -342,8 +342,11 @@ void ACharacterBase::DropItem(AItem* item)
 	FVector dropLocation = playerLocation + randomOffset;
 	dropLocation.Z = playerLocation.Z;
 
-	item->SetActorLocation(dropLocation);
-	item->Activate();
+	auto itemManager = Cast<UCGameInstance>(GetGameInstance())->ItemManager();
+	if (itemManager)
+	{
+		itemManager->SpawnItem(item.id, dropLocation);
+	}
 }
 
 bool ACharacterBase::IsAlive()
