@@ -16,7 +16,7 @@
 #include "../UI/HpBar.h"
 
 #include "../CGameInstance.h"
-#include "../CharacterAnimInstance.h"
+#include "CharacterAnimInstance.h"
 
 #include "Engine/DamageEvents.h"
 #include "Engine/OverlapResult.h"
@@ -92,22 +92,6 @@ void ACharacterBase::BeginPlay()
 		_statComponent->_hpChanged.AddUObject(hpBar, &UHpBar::SetHpBarValue);
 
 	SetCamp(_camp);
-
-	if (_camp == ECamp::Player || _camp == ECamp::Ally)
-	{
-		if (auto playerController = GetWorld()->GetFirstPlayerController())
-		{
-			ACPlayerController* myController = Cast<ACPlayerController>(playerController);
-			if (myController && myController->GetPartyListWidget())
-			{
-				auto partyListWidget = Cast<UPartyListUI>(myController->GetPartyListWidget());
-				if (partyListWidget)
-				{
-					partyListWidget->AddPartySlot(this);
-				}
-			}
-		}
-	}
 }
 
 void ACharacterBase::PossessedBy(AController* NewController)

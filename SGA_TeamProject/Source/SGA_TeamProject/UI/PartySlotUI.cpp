@@ -5,6 +5,8 @@
 
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
+
 #include "../Character/CharacterBase.h"
 #include "../Character/StatComponent.h"
 
@@ -13,13 +15,25 @@ void UPartySlotUI::Setup(ACharacterBase* character)
 	if (!character)
 		return;
 
+	_character = character;
 	Name->SetText(FText::FromString(character->GetName()));
 
 	if (character->GetStatComponent())
 	{
 		character->GetStatComponent()->_hpChanged.AddUObject(this, &UPartySlotUI::SetHpBarValue);
 	}
-	// ¾ÆÀÌÄÜ
+}
+
+void UPartySlotUI::UpdateSlot(bool isPlayer)
+{
+	if (isPlayer)
+	{
+		Icon->SetBrushFromTexture(_playerTexture);
+	}
+	else
+	{
+		Icon->SetBrushFromTexture(_defaultTexture);
+	}
 }
 
 void UPartySlotUI::SetHpBarValue(float ratio)
