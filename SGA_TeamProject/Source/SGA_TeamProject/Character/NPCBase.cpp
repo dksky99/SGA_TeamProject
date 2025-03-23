@@ -6,7 +6,7 @@
 #include "Components/Button.h"
 #include "Blueprint/UserWidget.h"
 
-#include "../CharacterAnimInstance.h"
+#include "CharacterAnimInstance.h"
 #include "../Controller/CPlayerController.h"
 #include "../UI/ShopUI.h"
 #include "InvenComponent.h"

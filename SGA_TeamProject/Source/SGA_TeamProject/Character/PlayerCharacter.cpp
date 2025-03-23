@@ -102,6 +102,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		enhancedInputComponent->BindAction(_itemDropAction, ETriggerEvent::Triggered, this, &APlayerCharacter::DropItemByKey);
 		enhancedInputComponent->BindAction(_invenAction, ETriggerEvent::Triggered, this, &APlayerCharacter::InvenOpen);
 		enhancedInputComponent->BindAction(_NPCAction, ETriggerEvent::Triggered, this, &APlayerCharacter::NPCInteract);
+		ACPlayerController* controller = Cast<ACPlayerController>(Controller);
+		if (controller)
+			enhancedInputComponent->BindAction(_characterChange, ETriggerEvent::Started, controller, &ACPlayerController::CharacterChange);
 	}
 }
 

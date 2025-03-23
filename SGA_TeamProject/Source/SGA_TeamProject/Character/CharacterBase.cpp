@@ -16,7 +16,7 @@
 #include "../UI/HpBar.h"
 
 #include "../CGameInstance.h"
-#include "../CharacterAnimInstance.h"
+#include "CharacterAnimInstance.h"
 
 #include "Engine/DamageEvents.h"
 #include "Engine/OverlapResult.h"
@@ -186,6 +186,7 @@ void ACharacterBase::Dead()
 			itemManager->SpawnItem(1, GetActorLocation());
 		}
 	}
+	if (Controller)
 	Controller->UnPossess();
 	this->SetActorEnableCollision(false);
 }
@@ -204,7 +205,7 @@ void ACharacterBase::TryAttack()
 		return;
 	
 	_isAttack = true;
-	UE_LOG(LogTemp, Log, TEXT(" curAttack %d"), _curAttackSection);
+	//UE_LOG(LogTemp, Log, TEXT(" curAttack %d"), _curAttackSection);
 	if (_animInstance)
 	{
 		_animInstance->PlayAnimMontage(_attackAnimMontage);
@@ -402,7 +403,7 @@ void ACharacterBase::SetCamp_Enemy()
 	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Enemy")));
 	_camp = ECamp::Enemy;
 	_channel = ECC_GameTraceChannel8;
-	UE_LOG(LogTemp, Log, TEXT(" ECC_GameTraceChannel9 %d"),(int32)(_channel));
+	UE_LOG(LogTemp, Log, TEXT("SetCamp_Enemy %d"),(int32)(_channel));
 }
 
 UDamageLoggingComponent* ACharacterBase::GetLogComponent()
