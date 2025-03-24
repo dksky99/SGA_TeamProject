@@ -30,7 +30,8 @@ EBTNodeResult::Type UBT_Task_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 		return EBTNodeResult::Failed;
 
 	auto rot = UKismetMathLibrary::FindLookAtRotation(currentPawn->GetActorLocation(), target->GetActorLocation());
-
+	rot.Pitch = 0.0f;
+	rot.Roll = 0.0f;
 	currentPawn->SetActorRotation(rot);
 
 	currentPawn->TryAttack();

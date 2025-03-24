@@ -52,12 +52,12 @@ void ABossCharacter::AttackHit()
 	FCollisionQueryParams params(NAME_None, false, this);
 
 	float attackRange = _attackRange;
-	float attackRadius = 25.0f;
+	float attackRadius = _attackRange;
 	FVector fwd = GetActorForwardVector();
-	FQuat qRot = FQuat::FindBetweenVectors(FVector::UpVector, fwd);
-	FVector start = GetActorLocation();
-	FVector end = start + fwd * attackRange;
+	FVector start = GetActorLocation() + fwd * attackRange+FVector::UpVector*attackRange;
+	FVector end = start - FVector::UpVector * attackRange * 2;
 	FVector center = start + (end - start) * 0.5;
+	FQuat qRot = FQuat::FindBetweenVectors(start, end);
 
 	bool bResult = GetWorld()->SweepMultiByChannel(
 		OUT hitResult,
@@ -70,18 +70,29 @@ void ABossCharacter::AttackHit()
 	);
 
 	FColor drawColor = FColor::Green;
-	if (bResult && hitResult.GetActor()->IsValidLowLevel())
+	if (bResult)
 	{
 		drawColor = FColor::Red;
+		for (auto hit : hitResult)
+		{
+			if (hit.GetActor()->IsValidLowLevel())
+			{
 
 
 
-		FDamageEvent damageEvent;
+				FDamageEvent damageEvent;
 
-		hitResult.GetActor()->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
+				hit.GetActor()->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
 
+
+			}
+
+		}
 
 	}
+
+	UE_LOG(LogTemp, Error, TEXT("BossAttack %f %f %f"),center.X,center.Y,center.Z);
+	
 
 	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
 

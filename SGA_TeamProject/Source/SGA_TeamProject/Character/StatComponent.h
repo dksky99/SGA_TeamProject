@@ -62,7 +62,7 @@ public:
 	FExpChanged _expChanged;
 	FDeadEvent _deadEvent;
 private:
-	UPROPERTY(VisibleAnywhere, Category = "Stat", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(  EditAnywhere,BlueprintReadWrite, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	int32 _level = 1;
 	UPROPERTY(VisibleAnywhere, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	int32 _curHp = 100;
