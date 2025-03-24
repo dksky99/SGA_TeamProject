@@ -6,9 +6,7 @@
 #include "BehaviorTree/BTDecorator.h"
 #include "BT_Deco_CanAttack.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class SGA_TEAMPROJECT_API UBT_Deco_CanAttack : public UBTDecorator
 {

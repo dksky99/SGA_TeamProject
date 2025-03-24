@@ -108,6 +108,9 @@ void ACPlayerController::CharacterChange()
 
 			// UI 업데이트
 			_curCamp->_characterChanged.Broadcast(targetCharacter);
+
+			//리더 변경
+			_curCamp->LeaderChange(targetCharacter);
 		}
 	}
 }

@@ -125,7 +125,7 @@ protected:
 
 
 	UPROPERTY(EditAnywhere)
-	float _detectionRange = 800.0f;
+	float _detectionRange = 1000.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* _hpBarWidget;

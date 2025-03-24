@@ -37,9 +37,9 @@ void UStatComponent::GetData(int value)
 {
 	auto gameInstance = Cast<UCGameInstance>(GetWorld()->GetGameInstance());
 	auto statInfo = gameInstance->GetStat_Level(value);
-
+	
 	_maxHp = statInfo.hp;
-	_curHp = _maxHp;
+	AddCurHp((float)_maxHp);
 	_atk = statInfo.atk;
 	_maxExp = statInfo.exp;
 }

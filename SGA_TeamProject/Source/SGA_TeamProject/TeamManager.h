@@ -38,6 +38,9 @@ public:
 	FTeamChanged _teamChanged;
 	FCharacterChanged _characterChanged;
 
+	void SetLeader(ACharacterBase* member);
+	void LeaderChange(ACharacterBase* leader);
+
 private:
 	ACharacterBase* _ownerCharacter;
 	TArray<ACharacterBase*> _camp;

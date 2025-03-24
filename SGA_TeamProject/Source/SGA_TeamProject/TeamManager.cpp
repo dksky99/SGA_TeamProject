@@ -9,6 +9,11 @@
 
 #include "Engine/OverlapResult.h"
 
+
+#include "Controller/CAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BlackboardData.h"
+
 // Sets default values for this component's properties
 UTeamManager::UTeamManager()
 {
@@ -101,12 +106,33 @@ ACharacterBase* UTeamManager::FindCharacter()
 					_camp.AddUnique(targetCharacter);
 					_teamChanged.Broadcast(targetCharacter);
 					UE_LOG(LogTemp, Error, TEXT("%s : %d"), *targetCharacter->GetName(), _camp.Num());
+
+					SetLeader(targetCharacter);
+					
 				}
 			}
 		}
 	}
 
 	return nullptr;
+}
+
+void UTeamManager::SetLeader(ACharacterBase* member)
+{
+	auto temp = Cast<ACAIController>(member->GetController());
+	if (temp)
+	{
+		temp->GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Leader")), _ownerCharacter);
+	}
+}
+
+void UTeamManager::LeaderChange(ACharacterBase* leader)
+{
+	_ownerCharacter = leader;
+	for (auto member : _camp)
+	{
+		SetLeader(member);
+	}
 }
 
 
