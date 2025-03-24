@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BT_Task_Attack.h"
+#include "BT_Task_LookAt.h"
 
 #include "../../Controller/CAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -11,7 +11,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "../CharacterBase.h"
 
-EBTNodeResult::Type UBT_Task_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBT_Task_LookAt::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	auto btNodeResult = Super::ExecuteTask(OwnerComp, NodeMemory);
 
@@ -22,15 +22,24 @@ EBTNodeResult::Type UBT_Task_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	if (currentPawn->IsValidLowLevel() == false)
 		return EBTNodeResult::Failed;
 
-	if (currentPawn->IsAttack())
-		return EBTNodeResult::Failed;
 
 	auto target = Cast<ACharacterBase>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
 	if (target->IsValidLowLevel() == false)
 		return EBTNodeResult::Failed;
-	
+	FRotator curRot = currentPawn->GetActorRotation();
 
-	currentPawn->TryAttack();
+	FRotator targetRot = UKismetMathLibrary::FindLookAtRotation(
+		currentPawn->GetActorLocation(), target->GetActorLocation()
+	);
+	targetRot.Pitch = 0.0f;
+	targetRot.Roll = 0.0f;
+
+	// 부드럽게 회전 (DeltaTime과 RotationSpeed 반영)
+	float RotationSpeed = 50.0f;  // 회전 속도 (더 낮추면 천천히 돔)
+	FRotator newRot = FMath::RInterpTo(curRot, targetRot, GetWorld()->GetDeltaSeconds(), RotationSpeed);
+
+	currentPawn->SetActorRotation(newRot);
+
 
 
 	return btNodeResult;
