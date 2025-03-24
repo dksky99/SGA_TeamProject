@@ -16,6 +16,7 @@ class SGA_TEAMPROJECT_API UPartyListUI : public UUserWidget
 
 public:
     void AddPartySlot(class ACharacterBase* character);
+    void UpdateList(class ACharacterBase* character);
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
     class UVerticalBox* PartyList;

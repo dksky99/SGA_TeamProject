@@ -27,6 +27,8 @@ void ACPlayerController::PostInitializeComponents()
 	if (_partyListClass)
 	{
 		_partyListWidget = CreateWidget<UPartyListUI>(GetWorld(), _partyListClass);
+		_curCamp->_teamChanged.AddUObject(_partyListWidget, &UPartyListUI::AddPartySlot);
+		_curCamp->_characterChanged.AddUObject(_partyListWidget, &UPartyListUI::UpdateList);
 	}
 }
 
@@ -103,6 +105,9 @@ void ACPlayerController::CharacterChange()
 
 			// 인덱스 업데이트
 			_curPlayerIndex = (_curPlayerIndex + 1) % _curCamp->GetTeamMembers().Num();
+
+			// UI 업데이트
+			_curCamp->_characterChanged.Broadcast(targetCharacter);
 		}
 	}
 }

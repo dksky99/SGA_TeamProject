@@ -7,6 +7,8 @@
 #include "Controller/CPlayerController.h"
 #include "Engine/EngineTypes.h"
 
+#include "Engine/OverlapResult.h"
+
 // Sets default values for this component's properties
 UTeamManager::UTeamManager()
 {
@@ -32,6 +34,9 @@ void UTeamManager::BeginPlay()
 	{
 		_ownerCharacter = character;
 		_camp.AddUnique(character);
+		_teamChanged.Broadcast(character);
+		_characterChanged.Broadcast(character);
+		UE_LOG(LogTemp, Error, TEXT("Add Player"));
 	}
 }
 
@@ -91,8 +96,12 @@ ACharacterBase* UTeamManager::FindCharacter()
 		{
 			if (IsSameTeam(_ownerCharacter->GetCamp(), targetCharacter->GetCamp()))
 			{
-				_camp.AddUnique(targetCharacter);
-				UE_LOG(LogTemp, Error, TEXT("%s : %d"), *targetCharacter->GetName(), _camp.Num());
+				if (!_camp.Contains(targetCharacter))
+				{
+					_camp.AddUnique(targetCharacter);
+					_teamChanged.Broadcast(targetCharacter);
+					UE_LOG(LogTemp, Error, TEXT("%s : %d"), *targetCharacter->GetName(), _camp.Num());
+				}
 			}
 		}
 	}

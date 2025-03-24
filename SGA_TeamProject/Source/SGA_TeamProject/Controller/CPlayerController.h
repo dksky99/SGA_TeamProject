@@ -38,7 +38,7 @@ public:
 
 	class UInvenComponent* GetInvenComponent() { return _invenComponent; }
 
-	class UUserWidget* GetPartyListWidget() { return _partyListWidget; }
+	class UPartyListUI* GetPartyListWidget() { return _partyListWidget; }
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -47,11 +47,13 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	class UInvenComponent* _invenComponent;
 
+	// ÆÀ¿ø ¸®½ºÆ®
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PartyList", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> _partyListClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PartyList", meta = (AllowPrivateAccess = "true"))
-	class UUserWidget* _partyListWidget;
+	class UPartyListUI* _partyListWidget;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camp", meta = (AllowPrivateAccess = "true"))
 	class UTeamManager* _curCamp;
 
