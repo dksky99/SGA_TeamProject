@@ -16,8 +16,7 @@
 #include "../UI/HpBar.h"
 
 #include "../CGameInstance.h"
-#include "../CharacterAnimInstance.h"
-
+#include "CharacterAnimInstance.h"
 #include "Engine/DamageEvents.h"
 #include "Engine/OverlapResult.h"
 
