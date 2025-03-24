@@ -5,7 +5,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "../../Controller/CAIController.h"
 #include "../CharacterBase.h"
-
+#include "../../Helper/H_Relation.h"
 bool UBT_Deco_IsInSight::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
 	bool result = Super::CalculateRawConditionValue(OwnerComp, NodeMemory);
@@ -20,7 +20,9 @@ bool UBT_Deco_IsInSight::CalculateRawConditionValue(UBehaviorTreeComponent& Owne
 	if (curPawn->IsValidLowLevel() == false || target->IsValidLowLevel() == false)
 		return false;
 
-	return true;
+
+
+	return H_Relation::IsInSight(curPawn,target,45.0f);
 
 
 }

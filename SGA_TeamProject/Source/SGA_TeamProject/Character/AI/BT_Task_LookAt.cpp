@@ -21,6 +21,8 @@ EBTNodeResult::Type UBT_Task_LookAt::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 
 	if (currentPawn->IsValidLowLevel() == false)
 		return EBTNodeResult::Failed;
+	if(currentPawn->IsAttack())
+		return EBTNodeResult::Failed;
 
 
 	auto target = Cast<ACharacterBase>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
@@ -35,7 +37,7 @@ EBTNodeResult::Type UBT_Task_LookAt::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	targetRot.Roll = 0.0f;
 
 	// 부드럽게 회전 (DeltaTime과 RotationSpeed 반영)
-	float RotationSpeed = 50.0f;  // 회전 속도 (더 낮추면 천천히 돔)
+	float RotationSpeed = 10.0f;  // 회전 속도 (더 낮추면 천천히 돔)
 	FRotator newRot = FMath::RInterpTo(curRot, targetRot, GetWorld()->GetDeltaSeconds(), RotationSpeed);
 
 	currentPawn->SetActorRotation(newRot);
