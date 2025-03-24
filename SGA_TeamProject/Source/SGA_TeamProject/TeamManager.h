@@ -9,6 +9,9 @@
 
 #include "TeamManager.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FTeamChanged, ACharacterBase*);
+DECLARE_MULTICAST_DELEGATE_OneParam(FCharacterChanged, ACharacterBase*);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SGA_TEAMPROJECT_API UTeamManager : public UActorComponent
 {
@@ -32,6 +35,8 @@ public:
 	const TArray<ACharacterBase*>& GetTeamMembers() const { return _camp; }
 	const ACharacterBase* GetOwerCharacter() const { return _ownerCharacter; }
 
+	FTeamChanged _teamChanged;
+	FCharacterChanged _characterChanged;
 
 private:
 	ACharacterBase* _ownerCharacter;

@@ -16,10 +16,12 @@ class SGA_TEAMPROJECT_API UPartySlotUI : public UUserWidget
 	
 public:
 	void Setup(class ACharacterBase* character);
+	void UpdateSlot(bool isPlayer);
 
 	void SetHpBarValue(float ratio);
 
-	void OnCharacterDeath();
+	class ACharacterBase* GetCharacter() { return _character; }
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* Icon;
@@ -31,5 +33,11 @@ public:
 	class UProgressBar* HPBar;
 
 private:
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* _defaultTexture;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* _playerTexture;
+
 	class ACharacterBase* _character;
 };

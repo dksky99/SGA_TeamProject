@@ -17,3 +17,14 @@ void UPartyListUI::AddPartySlot(ACharacterBase* character)
 		PartyList->AddChild(partySlot);
 	}
 }
+
+void UPartyListUI::UpdateList(ACharacterBase* character)
+{
+	for (auto widget : PartyList->GetAllChildren())
+	{
+		auto slot = Cast<UPartySlotUI>(widget);
+		{
+			slot->UpdateSlot(slot->GetCharacter() == character);
+		}
+	}
+}
