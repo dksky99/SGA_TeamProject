@@ -8,10 +8,14 @@
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "Components/Button.h"
+
 #include "../Character/CharacterBase.h"
+#include "../Character/PlayerCharacter.h"
 #include "../Character/InvenComponent.h"
 
 #include "../UI/PartyListUI.h"
+#include "../UI/InvenUI.h"
 #include "../TeamManager.h"
 
 ACPlayerController::ACPlayerController()
@@ -29,6 +33,13 @@ void ACPlayerController::PostInitializeComponents()
 		_partyListWidget = CreateWidget<UPartyListUI>(GetWorld(), _partyListClass);
 		_curCamp->_teamChanged.AddUObject(_partyListWidget, &UPartyListUI::AddPartySlot);
 		_curCamp->_characterChanged.AddUObject(_partyListWidget, &UPartyListUI::UpdateList);
+	}
+
+	if (_invenWidgetClass)
+	{
+		_invenWidget = CreateWidget<UInvenUI>(GetWorld(), _invenWidgetClass);
+		_invenComponent->_itemChangeEvent.AddUObject(_invenWidget, &UInvenUI::SetItem_Index);
+		_invenWidget->Drop->OnClicked.AddDynamic(this, &ACPlayerController::DropItemByClick);
 	}
 }
 
@@ -112,5 +123,20 @@ void ACPlayerController::CharacterChange()
 			//리더 변경
 			_curCamp->LeaderChange(targetCharacter);
 		}
+	}
+}
+
+void ACPlayerController::DropItemByClick()
+{
+	int32 index = -1;
+	if (_invenWidget)
+		index = _invenWidget->_curIndex;
+
+	auto dropItem = _invenComponent->RemoveItem(index);
+
+	auto player = Cast<ACharacterBase>(GetPawn());
+	if (player)
+	{
+		player->DropItem(dropItem);
 	}
 }
