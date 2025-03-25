@@ -67,6 +67,7 @@ public:
 	virtual void AttackHit();
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+
 	void AddHp(int32 value);
 	void AddExp(int32 value);
 	class UStatComponent* GetStatComponent() { return _statComponent; }
@@ -119,6 +120,9 @@ protected:
 
 	float _vertical = 0;
 	float _horizontal = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Effect")
+	class UParticleSystem* _particleEffect;
 
 	UPROPERTY(EditAnywhere)
 	float _attackRange = 400.0f;

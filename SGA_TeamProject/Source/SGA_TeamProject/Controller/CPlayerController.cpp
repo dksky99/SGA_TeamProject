@@ -114,15 +114,14 @@ void ACPlayerController::CharacterChange()
 			playerCharacter->SetCamp_Ally();
 			targetCharacter->SetCamp_Player();
 
-			// 인덱스 업데이트
-			_curPlayerIndex = (_curPlayerIndex + 1) % _curCamp->GetTeamMembers().Num();
-
 			// UI 업데이트
 			_curCamp->_characterChanged.Broadcast(targetCharacter);
 
 			//리더 변경
 			_curCamp->LeaderChange(targetCharacter);
 		}
+			// 인덱스 업데이트
+			_curPlayerIndex = (_curPlayerIndex + 1) % _curCamp->GetTeamMembers().Num();
 	}
 }
 
