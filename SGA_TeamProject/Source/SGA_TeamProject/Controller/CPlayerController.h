@@ -4,14 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-
-
 #include "CPlayerController.generated.h"
 
 /**
  * 
  */
-
+#define INVEN_COMP Cast<ACPlayerController>(GetWorld()->GetFirstPlayerController())->GetInvenComponent()
+#define INVEN_UI Cast<ACPlayerController>(GetWorld()->GetFirstPlayerController())->GetInvenWidget()
 
 UCLASS()
 class SGA_TEAMPROJECT_API ACPlayerController : public APlayerController
@@ -35,14 +34,23 @@ public:
 	UFUNCTION()
 	void CharacterChange();
 
-
 	class UInvenComponent* GetInvenComponent() { return _invenComponent; }
-
+	class UInvenUI* GetInvenWidget() { return _invenWidget; }
 	class UPartyListUI* GetPartyListWidget() { return _partyListWidget; }
+
+	UFUNCTION()
+	void DropItemByClick();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
+
+	// 인벤토리
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> _invenWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	class UInvenUI* _invenWidget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	class UInvenComponent* _invenComponent;
