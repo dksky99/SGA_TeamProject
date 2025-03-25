@@ -22,7 +22,7 @@ bool UBT_Deco_IsInSight::CalculateRawConditionValue(UBehaviorTreeComponent& Owne
 
 
 
-	return H_Relation::IsInSight(curPawn,target,45.0f);
+	return H_Relation::IsInSightYaw(curPawn,target,10.0f);
 
 
 }

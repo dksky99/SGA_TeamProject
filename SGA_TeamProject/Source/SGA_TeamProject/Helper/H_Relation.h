@@ -11,6 +11,7 @@ class SGA_TEAMPROJECT_API H_Relation
 {
 public:
 	static bool IsInSight(class AActor* user, class AActor* target, float maxAngle);
-	static bool IsInDistance(class AActor* user, class AActor* target, float maxDistance);
-
+	static bool IsInSightYaw(class AActor* user, class AActor* target, float maxAngle);
+	static bool IsInDistance(class AActor* user, class AActor* target, float maxDistance, float minDistance);
+	static FVector LocOfDistanceFromTarget(class AActor* user, class AActor* target, float distance );
 };

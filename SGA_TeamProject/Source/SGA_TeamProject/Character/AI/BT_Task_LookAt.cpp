@@ -42,7 +42,7 @@ EBTNodeResult::Type UBT_Task_LookAt::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 
 	currentPawn->SetActorRotation(newRot);
 
-
+	
 
 	return btNodeResult;
 }

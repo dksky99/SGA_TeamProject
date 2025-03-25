@@ -5,6 +5,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "../../Controller/CAIController.h"
 #include "../CharacterBase.h"
+#include "../../Helper/H_Relation.h"
 bool UBT_Deco_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
 	bool result = Super::CalculateRawConditionValue(OwnerComp, NodeMemory);
@@ -17,9 +18,8 @@ bool UBT_Deco_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& Owne
 
 	if (curPawn->IsValidLowLevel() == false || target->IsValidLowLevel() == false)
 		return false;
-	float dist = target->GetDistanceTo(curPawn);
 
-	if (dist < curPawn->GetAttackRange())
+	if (H_Relation::IsInDistance(curPawn,target,curPawn->GetAttackRange()*0.8,100.0f  ))
 		return true;
 
 	return false;
