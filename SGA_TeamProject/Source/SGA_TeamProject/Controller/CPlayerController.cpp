@@ -19,7 +19,7 @@
 #include "../TeamManager.h"
 
 #include "../CGameInstance.h"
-#include "../Item/Item.h"
+#include "../Item/ItemBase.h"
 #include "../Item/ItemManager.h"
 
 ACPlayerController::ACPlayerController()
@@ -153,11 +153,11 @@ void ACPlayerController::UseItemByClick()
 		index = _invenWidget->_curIndex;
 
 	auto useItemData = _invenComponent->RemoveItem(index);
-	auto useItem = ITEM_M->GetItem(useItemData.id);
+//	auto useItem = ITEM_M->GetItem(useItemData.id);
 
-	auto player = Cast<APlayerCharacter>(GetPawn());
+	/*auto player = Cast<APlayerCharacter>(GetPawn());
 	if (player && useItem)
 	{
 		useItem->UseItem(player);
-	}
+	}*/
 }

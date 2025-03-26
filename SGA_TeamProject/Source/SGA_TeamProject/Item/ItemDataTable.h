@@ -34,7 +34,7 @@ struct FItemData : public FTableRowBase
 	int32 price = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class AItem> itemClass;
+	TSubclassOf<class AItemBase> itemClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> icon;

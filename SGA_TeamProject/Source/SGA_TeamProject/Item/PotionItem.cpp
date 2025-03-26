@@ -1,15 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Potion.h"
+#include "PotionItem.h"
 
 #include "../Character/PlayerCharacter.h"
 
-APotion::APotion()
+APotionItem::APotionItem()
 {
 }
 
-void APotion::UseItem(APlayerCharacter* player)
+void APotionItem::UseItem(APlayerCharacter* player)
 {
 	player->AddHp(10);
 }
