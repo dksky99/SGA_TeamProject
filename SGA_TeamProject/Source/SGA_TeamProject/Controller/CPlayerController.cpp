@@ -93,36 +93,51 @@ void ACPlayerController::CharacterChange()
 	UE_LOG(LogTemp, Warning, TEXT("CharacterChange : %d"), _curPlayerIndex);
 
 	ACharacterBase* playerCharacter = Cast<ACharacterBase>(GetPawn());
-	ACharacterBase* targetCharacter = _curCamp->GetTeamMembers()[_curPlayerIndex];
-	if (targetCharacter)
+	if (!playerCharacter) return;
+
+	const TArray<ACharacterBase*>& teamMembers = _curCamp->GetTeamMembers();
+	const int32 memberCount = teamMembers.Num();
+	if (memberCount == 0) return;
+
+	ACharacterBase* targetCharacter = nullptr;
+
+	for (int32 i = 0; i < memberCount; i++)
 	{
-		if (targetCharacter->IsAlive())
+		int32 index = (_curPlayerIndex + i) % memberCount;
+		ACharacterBase* candidate = teamMembers[index];
+
+		if (candidate && candidate->IsAlive() && candidate != playerCharacter)
 		{
-			// 두 컨트롤러 가져오기
-			AController* playerController = this; // 현재 PlayerController
-			AController* aiController = targetCharacter->GetController(); // 타겟의 AI 컨트롤러
-
-			// 각각 UnPossess
-			if (playerController) playerController->UnPossess();
-			if (aiController) aiController->UnPossess();
-
-			// 컨트롤러 교체 
-			playerController->Possess(targetCharacter);
-			aiController->Possess(playerCharacter);
-
-			// cmap 교체
-			playerCharacter->SetCamp_Ally();
-			targetCharacter->SetCamp_Player();
-
-			// UI 업데이트
-			_curCamp->_characterChanged.Broadcast(targetCharacter);
-
-			//리더 변경
-			_curCamp->LeaderChange(targetCharacter);
+			targetCharacter = candidate;
+			_curPlayerIndex = (index + 1) % memberCount;
+			break;
 		}
-			// 인덱스 업데이트
-			_curPlayerIndex = (_curPlayerIndex + 1) % _curCamp->GetTeamMembers().Num();
 	}
+
+	// 살아있는 캐릭터가 없으면 종료
+	if (!targetCharacter)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No valid target character found to switch to."));
+		return;
+	}
+
+	// 컨트롤러 교체
+	AController* playerController = this;
+	AController* aiController = targetCharacter->GetController();
+
+	if (playerController) playerController->UnPossess();
+	if (aiController) aiController->UnPossess();
+
+	playerController->Possess(targetCharacter);
+	aiController->Possess(playerCharacter);
+
+	// 캠프 교체
+	playerCharacter->SetCamp_Ally();
+	targetCharacter->SetCamp_Player();
+
+	// UI/리더 갱신
+	_curCamp->_characterChanged.Broadcast(targetCharacter);
+	_curCamp->LeaderChange(targetCharacter);
 }
 
 void ACPlayerController::DropItemByClick()
