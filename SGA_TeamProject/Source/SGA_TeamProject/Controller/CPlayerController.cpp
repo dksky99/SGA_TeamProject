@@ -39,6 +39,7 @@ void ACPlayerController::PostInitializeComponents()
 	{
 		_invenWidget = CreateWidget<UInvenUI>(GetWorld(), _invenWidgetClass);
 		_invenComponent->_itemChangeEvent.AddUObject(_invenWidget, &UInvenUI::SetItem_Index);
+		_invenComponent->_goldChangeEvent.AddUObject(_invenWidget, &UInvenUI::SetGold);
 		_invenWidget->Drop->OnClicked.AddDynamic(this, &ACPlayerController::DropItemByClick);
 	}
 }

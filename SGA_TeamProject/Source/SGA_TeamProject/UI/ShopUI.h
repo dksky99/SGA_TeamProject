@@ -35,7 +35,7 @@ public:
 	void SetShopData();
 	UFUNCTION()
 	void SetInvenData();
-	void SetData(class UTextBlock* textBlock, class UImage* imageBlock, FItemData data);
+	void SetData(class UTextBlock* itemData, class UImage* itemImage, UTextBlock* price, FItemData data);
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -70,6 +70,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* InvenItemImage;
+
+	// АЁАн
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* ShopPrice;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* InvenPrice;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* Gold;
 
 	FGetInvenItemData _getInvenItemData;
 	FGetShopItemData _getShopItemData;

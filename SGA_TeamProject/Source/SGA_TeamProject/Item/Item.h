@@ -31,6 +31,9 @@ public:
 
 	bool IsActive();
 
+	// TODO
+	//virtual void UseItem();
+
 	UFUNCTION()
 	void OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 
