@@ -351,10 +351,9 @@ void ACharacterBase::DropItem(FItemData item)
 	FVector dropLocation = playerLocation + randomOffset;
 	dropLocation.Z = playerLocation.Z;
 
-	auto itemManager = Cast<UCGameInstance>(GetGameInstance())->ItemManager();
-	if (itemManager)
+	if (ITEM_M)
 	{
-		itemManager->SpawnItem(item.id, dropLocation);
+		ITEM_M->SpawnItem(item.id, dropLocation);
 	}
 }
 

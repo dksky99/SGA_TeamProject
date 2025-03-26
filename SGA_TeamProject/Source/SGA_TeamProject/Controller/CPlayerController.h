@@ -40,6 +40,8 @@ public:
 
 	UFUNCTION()
 	void DropItemByClick();
+	UFUNCTION()
+	void UseItemByClick();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")

@@ -18,6 +18,10 @@
 #include "../UI/InvenUI.h"
 #include "../TeamManager.h"
 
+#include "../CGameInstance.h"
+#include "../Item/Item.h"
+#include "../Item/ItemManager.h"
+
 ACPlayerController::ACPlayerController()
 {
 	_invenComponent = CreateDefaultSubobject<UInvenComponent>(TEXT("InvenComponent"));
@@ -41,6 +45,7 @@ void ACPlayerController::PostInitializeComponents()
 		_invenComponent->_itemChangeEvent.AddUObject(_invenWidget, &UInvenUI::SetItem_Index);
 		_invenComponent->_goldChangeEvent.AddUObject(_invenWidget, &UInvenUI::SetGold);
 		_invenWidget->Drop->OnClicked.AddDynamic(this, &ACPlayerController::DropItemByClick);
+		_invenWidget->Use->OnClicked.AddDynamic(this, &ACPlayerController::UseItemByClick);
 	}
 }
 
@@ -138,5 +143,21 @@ void ACPlayerController::DropItemByClick()
 	if (player)
 	{
 		player->DropItem(dropItem);
+	}
+}
+
+void ACPlayerController::UseItemByClick()
+{
+	int32 index = -1;
+	if (_invenWidget)
+		index = _invenWidget->_curIndex;
+
+	auto useItemData = _invenComponent->RemoveItem(index);
+	auto useItem = ITEM_M->GetItem(useItemData.id);
+
+	auto player = Cast<APlayerCharacter>(GetPawn());
+	if (player && useItem)
+	{
+		useItem->UseItem(player);
 	}
 }

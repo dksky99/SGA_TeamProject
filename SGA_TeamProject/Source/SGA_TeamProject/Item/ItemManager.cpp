@@ -24,7 +24,7 @@ void AItemManager::BeginPlay()
 	for (int32 i = 1; i <= itemIDCount; i++)
 	{
 		int32 id = i;
-		_itemTable.Add(id);
+		_itemPool.Add(id);
 		auto itemData = gameInstance->GetItemData_ID(id);
 		auto itemClass = itemData.itemClass;
 
@@ -35,7 +35,7 @@ void AItemManager::BeginPlay()
 			item->SetData(itemData);
 			item->Deactivate();
 			
-			_itemTable[id]._items.Add(item);
+			_itemPool[id]._items.Add(item);
 		}
 	}
 }
@@ -47,11 +47,11 @@ void AItemManager::Tick(float DeltaTime)
 
 }
 
-void AItemManager::SpawnItem(int32 id, FVector pos)
+AItem* AItemManager::GetItem(int32 id)
 {
-	auto items = _itemTable.Find(id);
+	auto items = _itemPool.Find(id);
 	if (!items)
-		return;
+		return nullptr;
 
 	auto iter = items->_items.FindByPredicate([](AItem* item)->bool
 		{
@@ -60,8 +60,20 @@ void AItemManager::SpawnItem(int32 id, FVector pos)
 
 	if (iter)
 	{
-		(*iter)->Activate();
-		(*iter)->SetActorLocation(pos);
+		return *iter;
+	}
+	
+	return nullptr;
+}
+
+void AItemManager::SpawnItem(int32 id, FVector pos)
+{
+	auto item = GetItem(id);
+
+	if (item)
+	{
+		item->Activate();
+		item->SetActorLocation(pos);
 	}
 }
 

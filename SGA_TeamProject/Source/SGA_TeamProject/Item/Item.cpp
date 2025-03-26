@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "../Item/Item.h"
+#include "Item.h"
 
 #include "Components/CapsuleComponent.h"
 
@@ -45,6 +45,7 @@ void AItem::Tick(float DeltaTime)
 
 void AItem::Activate()
 {
+	SetActive(true);
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
 	_collider->SetSimulatePhysics(true);
@@ -53,15 +54,15 @@ void AItem::Activate()
 
 void AItem::Deactivate()
 {
+	SetActive(false);
 	SetActorHiddenInGame(true);
 	SetActorEnableCollision(false);
 	_collider->SetSimulatePhysics(false);
 	_collider->SetEnableGravity(false);
 }
 
-bool AItem::IsActive()
+void AItem::UseItem(APlayerCharacter* player)
 {
-	return !IsHidden() && GetActorEnableCollision();
 }
 
 void AItem::OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult)
