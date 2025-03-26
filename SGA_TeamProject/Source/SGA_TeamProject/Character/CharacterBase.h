@@ -24,6 +24,7 @@ enum class ECamp
 
 
 
+
 UCLASS()
 class SGA_TEAMPROJECT_API ACharacterBase : public ACharacter
 {
