@@ -57,6 +57,14 @@ public:
 	void TryAttack();
 
 	UFUNCTION()
+	void TryAbility1();
+
+	UFUNCTION()
+	void TryAbility2();
+
+	
+
+	UFUNCTION()
 	void AttackEnd(class UAnimMontage* Montage, bool bInterrupted);
 
 	float MyVertical() { return _vertical; }
@@ -65,16 +73,20 @@ public:
 	virtual bool CheckEnemy(AActor* target);
 
 	virtual void AttackHit();
+
+
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	void AddHp(int32 value);
 	void AddExp(int32 value);
 	class UStatComponent* GetStatComponent() { return _statComponent; }
+	class USkillComponent* GetSkillComponent() { return _skillComponent; }
 
 	void DropItem(struct FItemData item);
 
 	bool IsAlive();
 	bool IsAttack() { return _isAttack; }
+	void SetAttack() { _isAttack = true; }
 	float GetAttackRange() { return _attackRange; }
 	float GetDetectRange() { return _detectionRange; }
 	ECollisionChannel GetChannel() { return _channel; }
@@ -100,6 +112,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "stat", meta = (AllowPrivateAccess = "true"))
 	class UDamageLoggingComponent* _dmgLogComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "skill", meta = (AllowPrivateAccess = "true"))
+	class USkillComponent* _skillComponent;
 
 	bool _isAttack = false;
 	bool _isUnable = false;

@@ -30,12 +30,21 @@ public:
 	UFUNCTION()
 	void AnimNotify_Attack_Hit();
 
+
+	UFUNCTION()
+	void AnimNotify_Skill1();
+
+
+	UFUNCTION()
+	void AnimNotify_Skill2();
 	UFUNCTION()
 	void AnimNotify_Dead();
 
 	void JumpToSection(int32 sectionIndex);
 
 	AttackHitDelegate _attackHitDelegate;
+	AttackHitDelegate _skill1HitDelegate;
+	AttackHitDelegate _skill2HitDelegate;
 	DeadEvent _animDeadEvent;
 
 private:

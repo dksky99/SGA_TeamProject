@@ -27,6 +27,7 @@
 #include "../CGameInstance.h"
 #include "../Controller/CPlayerController.h"
 #include "StatComponent.h"
+#include "SkillComponent.h"
 
 #include "InvenComponent.h"
 #include "../UI/InvenUI.h"
@@ -102,6 +103,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		enhancedInputComponent->BindAction(_itemDropAction, ETriggerEvent::Triggered, this, &APlayerCharacter::DropItemByKey);
 		enhancedInputComponent->BindAction(_invenAction, ETriggerEvent::Triggered, this, &APlayerCharacter::InvenOpen);
 		enhancedInputComponent->BindAction(_NPCAction, ETriggerEvent::Triggered, this, &APlayerCharacter::NPCInteract);
+		enhancedInputComponent->BindAction(_ability1Action, ETriggerEvent::Started, this, &APlayerCharacter::Abillity1_Press);
+		enhancedInputComponent->BindAction(_ability1Action, ETriggerEvent::Completed, this, &APlayerCharacter::Abillity1_Release);
+		enhancedInputComponent->BindAction(_ability2Action, ETriggerEvent::Started, this, &APlayerCharacter::Abillity2_Press);
+		enhancedInputComponent->BindAction(_ability2Action, ETriggerEvent::Completed, this, &APlayerCharacter::Abillity2_Release);
 		ACPlayerController* controller = Cast<ACPlayerController>(Controller);
 		if (controller)
 			enhancedInputComponent->BindAction(_characterChange, ETriggerEvent::Started, controller, &ACPlayerController::CharacterChange);
@@ -163,6 +168,24 @@ void APlayerCharacter::Attack(const FInputActionValue& value)
 	}
 }
 
+void APlayerCharacter::Abillity1_Press(const FInputActionValue& value)
+{
+}
+
+void APlayerCharacter::Abillity1_Release(const FInputActionValue& value)
+{
+	TryAbility1();
+}
+
+void APlayerCharacter::Abillity2_Press(const FInputActionValue& value)
+{
+}
+
+
+void APlayerCharacter::Abillity2_Release(const FInputActionValue& value)
+{
+	TryAbility2();
+}
 
 void APlayerCharacter::DropItemByKey(const FInputActionValue& value)
 {

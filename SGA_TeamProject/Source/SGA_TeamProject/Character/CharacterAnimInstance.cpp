@@ -44,6 +44,18 @@ void UCharacterAnimInstance::AnimNotify_Attack_Hit()
 		_attackHitDelegate.Broadcast();
 }
 
+void UCharacterAnimInstance::AnimNotify_Skill1()
+{
+	if (_skill1HitDelegate.IsBound())
+		_skill1HitDelegate.Broadcast();
+}
+
+void UCharacterAnimInstance::AnimNotify_Skill2()
+{
+	if (_skill2HitDelegate.IsBound())
+		_skill2HitDelegate.Broadcast();
+}
+
 void UCharacterAnimInstance::AnimNotify_Dead()
 {
 	if (_animDeadEvent.IsBound())

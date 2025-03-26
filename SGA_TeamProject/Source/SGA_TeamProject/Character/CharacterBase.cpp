@@ -22,6 +22,7 @@
 #include "Engine/OverlapResult.h"
 
 #include "StatComponent.h"
+#include "SkillComponent.h"
 #include "DamageLoggingComponent.h"
 #include "../Controller/CPlayerController.h"
 #include "Blueprint/UserWidget.h"
@@ -48,6 +49,7 @@ ACharacterBase::ACharacterBase()
 	GetMesh()->SetCollisionProfileName(FName(TEXT("NoCollision")));
 	_statComponent = CreateDefaultSubobject<UStatComponent>(TEXT("Stat"));
 	_dmgLogComponent = CreateDefaultSubobject<UDamageLoggingComponent>(TEXT("DmgLog"));
+	_skillComponent = CreateDefaultSubobject<USkillComponent>(TEXT("Skill"));
 
 	_hpBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
 	_hpBarWidget->SetupAttachment(GetMesh());
@@ -212,11 +214,29 @@ void ACharacterBase::TryAttack()
 
 }
 
+void ACharacterBase::TryAbility1()
+{
+
+	if (_isAttack)
+		return;
+
+	_skillComponent->PlaySkill1();
+}
+
+void ACharacterBase::TryAbility2()
+{
+	if (_isAttack)
+		return;
+
+	_skillComponent->PlaySkill2();
+}
+
 void ACharacterBase::AttackEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 
 
 	_isAttack = false;
+	_skillComponent->SkillUsingFinish();
 }
 
 bool ACharacterBase::CheckEnemy(AActor* target)

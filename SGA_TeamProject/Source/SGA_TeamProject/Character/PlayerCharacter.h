@@ -38,7 +38,17 @@ public:
 	UFUNCTION()
 	void Attack(const  FInputActionValue& value);
 
+	UFUNCTION()
+	void Abillity1_Press(const  FInputActionValue& value);
 
+	UFUNCTION()
+	void Abillity1_Release(const  FInputActionValue& value);
+
+	UFUNCTION()
+	void Abillity2_Press(const  FInputActionValue& value);
+
+	UFUNCTION()
+	void Abillity2_Release(const  FInputActionValue& value);
 	UFUNCTION()
 	void DropItemByKey(const  FInputActionValue& value);
 	UFUNCTION()
@@ -62,6 +72,10 @@ private:
 	UInputAction* _jumpAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* _attackAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* _ability1Action;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* _ability2Action;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* _itemDropAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
