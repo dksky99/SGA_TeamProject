@@ -11,7 +11,7 @@ UInvenComponent::UInvenComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	_items.SetNum(9);
-	_money = 0;
+	_gold = 0;
 }
 
 
@@ -126,6 +126,14 @@ FItemData UInvenComponent::RemoveItem(int32 index)
 		_itemChangeEvent.Broadcast(index, _items[index]);
 
 	return dropItem;
+}
+
+void UInvenComponent::SetGold(int32 gold)
+{
+	_gold = gold;
+
+	if (_goldChangeEvent.IsBound())
+		_goldChangeEvent.Broadcast(gold);
 }
 
 bool UInvenComponent::IsFull()

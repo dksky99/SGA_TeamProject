@@ -9,6 +9,7 @@
 #include "InvenComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FItemChangeEvent, int32, const FItemSlotData&);
+DECLARE_MULTICAST_DELEGATE_OneParam(FGoldChangeEvent, int32);
 
 USTRUCT(BlueprintType)
 struct FItemSlotData
@@ -46,14 +47,18 @@ public:
 	FItemData RemoveItem();
 	FItemData RemoveItem(int32 index);
 
+	int32 GetGold() { return _gold; }
+	void SetGold(int32 gold);
+
 	bool IsFull();
 
 	FItemChangeEvent _itemChangeEvent;
+	FGoldChangeEvent _goldChangeEvent;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TArray<FItemSlotData> _items;
 
 	UPROPERTY(VisibleAnywhere)
-	int32 _money = 0;
+	int32 _gold = 0;
 };

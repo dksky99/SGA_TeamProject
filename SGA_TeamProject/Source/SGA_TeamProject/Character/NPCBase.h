@@ -16,6 +16,7 @@ public:
 	ANPCBase();
 
 	virtual void PostInitializeComponents() override;
+	void InitializeShop();
 
 protected:
 	// Called when the game starts or when spawned
