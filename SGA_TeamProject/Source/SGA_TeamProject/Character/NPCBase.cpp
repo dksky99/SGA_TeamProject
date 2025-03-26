@@ -46,15 +46,17 @@ void ANPCBase::PostInitializeComponents()
 
 void ANPCBase::InitializeShop()
 {
-	TArray<int32> shopItemID = { 1, 2 };
-
 	auto gameInstance = Cast<UCGameInstance>(GetWorld()->GetGameInstance());
-	for (auto id : shopItemID)
+
+	if (_shopItemList && gameInstance)
 	{
-		for (int i = 0; i < 5; i++)
+		TArray<FShopItemList*> allRows;
+		_shopItemList->GetAllRows(TEXT(""), allRows);
+
+		for (auto row : allRows)
 		{
-			auto itemData = gameInstance->GetItemData_ID(id);
-			_shopComponent->AddItem(itemData);
+			auto itemData = gameInstance->GetItemData_ID(row->id);
+			_shopComponent->AddItem(itemData, row->count);
 		}
 	}
 }

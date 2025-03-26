@@ -43,7 +43,7 @@ public:
 	FItemSlotData GetItemSlot_Index(int32 index);
 	FItemData GetItemData_Index(int32 index);
 
-	void AddItem(FItemData itemdata);
+	void AddItem(FItemData itemdata, int32 count = 1);
 	FItemData RemoveItem();
 	FItemData RemoveItem(int32 index);
 

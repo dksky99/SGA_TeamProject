@@ -6,6 +6,18 @@
 #include "GameFramework/Character.h"
 #include "NPCBase.generated.h"
 
+USTRUCT(BlueprintType)
+struct FShopItemList : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 id = -1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 count = 0;
+};
+
 UCLASS()
 class SGA_TEAMPROJECT_API ANPCBase : public ACharacter
 {
@@ -41,6 +53,9 @@ public:
 protected:
 	UPROPERTY()
 	class UCharacterAnimInstance* _animInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	class UDataTable* _shopItemList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> _shopWidgetClass;

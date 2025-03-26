@@ -55,7 +55,7 @@ FItemData UInvenComponent::GetItemData_Index(int32 index)
 	return _items[index].itemData;
 }
 
-void UInvenComponent::AddItem(FItemData item)
+void UInvenComponent::AddItem(FItemData item, int32 count)
 {
 	auto index = _items.IndexOfByPredicate([item](const FItemSlotData& slot) -> bool
 		{
@@ -76,7 +76,7 @@ void UInvenComponent::AddItem(FItemData item)
 		return;
 
 	_items[index].itemData = item;
-	_items[index].count++;
+	_items[index].count += count;
 	
 
 	if (_itemChangeEvent.IsBound())
