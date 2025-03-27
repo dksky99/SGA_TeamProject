@@ -19,7 +19,12 @@ USkillComponent::USkillComponent()
 
 void USkillComponent::DrawSkill1()
 {
-
+	if (_owner->IsAttack())
+		return;
+	if (_nowUsing != 0)
+		return;
+	_manager->SkillGuide(1);
+	_nowUsing = 1;
 }
 
 void USkillComponent::PlaySkill1()
@@ -27,20 +32,21 @@ void USkillComponent::PlaySkill1()
 
 	if (_owner->IsAttack())
 		return;
+	if (_nowUsing != 1)
+		return;
 
 	UE_LOG(LogTemp, Log, TEXT(" Ability1"));
 	if (_animInstance)
 	{
 		if (_manager->SkillRelease(1))
 		{
-			_nowUsing = 1;
 			_owner->SetAttack();
 			_animInstance->PlayAnimMontage(_firstMontage);
 
 		}
 		else
 		{
-			UE_LOG(LogTemp, Log, TEXT(" Ability Time Remai %f"), _manager->GetFirstSkill()->GetRemainCoolTime());
+			UE_LOG(LogTemp, Log, TEXT(" Ability Time Remain %f"), _manager->GetFirstSkill()->GetRemainCoolTime());
 
 		}
 	}
@@ -48,6 +54,12 @@ void USkillComponent::PlaySkill1()
 
 void USkillComponent::DrawSkill2()
 {
+	if (_owner->IsAttack())
+		return;
+	if (_nowUsing != 0)
+		return;
+	_manager->SkillGuide(2);
+	_nowUsing = 2;
 }
 
 void USkillComponent::PlaySkill2()
@@ -56,6 +68,8 @@ void USkillComponent::PlaySkill2()
 	if (_owner->IsAttack())
 		return;
 
+	if (_nowUsing != 2)
+		return;
 	UE_LOG(LogTemp, Log, TEXT(" Ability1"));
 	if (_animInstance)
 	{
@@ -68,7 +82,7 @@ void USkillComponent::PlaySkill2()
 		}
 		else
 		{
-			UE_LOG(LogTemp, Log, TEXT(" Ability Time Remai %f"), _manager->GetSecondSkill()->GetRemainCoolTime());
+			UE_LOG(LogTemp, Log, TEXT(" Ability Time Remain %f"), _manager->GetSecondSkill()->GetRemainCoolTime());
 			
 		}
 	}
@@ -76,8 +90,10 @@ void USkillComponent::PlaySkill2()
 
 void USkillComponent::SkillUsingFinish()
 {
+	_nowUsing = 0;
 	if(_manager)
 		_manager->SkillActFinish();
+
 
 }
 
@@ -87,10 +103,10 @@ void USkillComponent::SkillUsingFinish()
 void USkillComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	_owner = Cast<ACharacterBase>(GetOwner());
 	if(_managerClass)
-	_manager = GetWorld()->SpawnActor<ASkillManager>(_managerClass);
+	_manager = GetWorld()->SpawnActor<ASkillManager>(_managerClass,_owner->GetActorLocation(),_owner->GetActorRotation());
 
-	_owner=Cast<ACharacterBase>( GetOwner());
 
 
 
@@ -99,7 +115,7 @@ void USkillComponent::BeginPlay()
 
 	if (_manager)
 	{
-
+		_manager->AttachToActor(_owner, FAttachmentTransformRules::KeepRelativeTransform);
 		_manager->SetOwner(_owner);
 		_animInstance->_skill1HitDelegate.AddUObject(_manager->GetFirstSkill(), &ASkillBase::SkillHit);
 		_animInstance->_skill2HitDelegate.AddUObject(_manager->GetSecondSkill(), &ASkillBase::SkillHit);

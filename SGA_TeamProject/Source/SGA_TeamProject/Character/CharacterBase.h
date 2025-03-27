@@ -60,8 +60,12 @@ public:
 	void TryAbility1();
 
 	UFUNCTION()
+	void TryAbility1Aiming();
+	UFUNCTION()
 	void TryAbility2();
 
+	UFUNCTION()
+	void TryAbility2Aiming();
 	
 
 	UFUNCTION()

@@ -6,6 +6,9 @@
 #include "Engine/DamageEvents.h"
 #include "../../Character/StatComponent.h"
 #include "../../Character/CharacterBase.h"
+
+#include "Components/DecalComponent.h"
+#include "Materials/MaterialInterface.h"
 void AGrayStoneSkill1::SkillHit()
 {
 	UE_LOG(LogTemp, Error, TEXT("Skill1Hit"));
@@ -48,4 +51,14 @@ void AGrayStoneSkill1::SkillHit()
 
 	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
 
+}
+
+void AGrayStoneSkill1::DrawSkillAiming()
+{
+	_loc = _owner->GetActorLocation();
+	_rot = _owner->GetActorForwardVector().Rotation();
+
+	UE_LOG(LogTemp, Error, TEXT("drawSkill"));
+	_decalComponent->SetWorldLocation(_loc);
+	_decalComponent->SetWorldRotation(_rot);
 }

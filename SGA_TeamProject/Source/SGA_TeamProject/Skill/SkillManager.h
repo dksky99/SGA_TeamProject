@@ -29,7 +29,7 @@ public:
 
 	bool CheckSkillAble(class ASkillBase* skill);
 	bool CheckSkillAble(int index);
-
+	bool SkillGuide(int index);
 	bool SkillRelease(int index);
 
 	void SkillActFinish();

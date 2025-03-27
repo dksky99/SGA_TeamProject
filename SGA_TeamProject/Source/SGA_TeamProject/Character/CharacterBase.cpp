@@ -223,12 +223,28 @@ void ACharacterBase::TryAbility1()
 	_skillComponent->PlaySkill1();
 }
 
+void ACharacterBase::TryAbility1Aiming()
+{
+	if (_isAttack)
+		return;
+
+	_skillComponent->DrawSkill1();
+}
+
 void ACharacterBase::TryAbility2()
 {
 	if (_isAttack)
 		return;
 
 	_skillComponent->PlaySkill2();
+}
+
+void ACharacterBase::TryAbility2Aiming()
+{
+	if (_isAttack)
+		return;
+
+	_skillComponent->DrawSkill2();
 }
 
 void ACharacterBase::AttackEnd(UAnimMontage* Montage, bool bInterrupted)

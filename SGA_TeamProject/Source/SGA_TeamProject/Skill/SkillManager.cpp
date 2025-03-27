@@ -25,9 +25,11 @@ void ASkillManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_firstAbility = GetWorld()->SpawnActor<ASkillBase>(_firstAbilityClass,FVector::ZeroVector, FRotator::ZeroRotator);
-	_secondAbility = GetWorld()->SpawnActor<ASkillBase>(_secondAbilityClass,FVector::ZeroVector, FRotator::ZeroRotator);
+	_firstAbility = GetWorld()->SpawnActor<ASkillBase>(_firstAbilityClass, GetActorLocation(), GetActorRotation());
+	_secondAbility = GetWorld()->SpawnActor<ASkillBase>(_secondAbilityClass, GetActorLocation(), GetActorRotation());
 
+	_firstAbility->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+	_secondAbility->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 	
 	
 }
@@ -64,6 +66,7 @@ bool ASkillManager::TryUseSkill(int index)
 	if (CheckSkillAble(temp))
 	{
 		_nowUsing = temp;
+		_nowNum = index;
 		return true;
 	}
 	return false;
@@ -93,11 +96,24 @@ bool ASkillManager::CheckSkillAble(int index)
 	return con;
 }
 
+bool ASkillManager::SkillGuide(int index)
+{
+	if (CheckSkillAble(index) == false)
+		return false;
+	if (TryUseSkill(index) == false)
+		return false;
+
+	_nowUsing->StartAiming();
+	
+	return true;
+}
+
 bool ASkillManager::SkillRelease(int index)
 {
 	if (CheckSkillAble(index) == false)
 		return false;
-	TryUseSkill(index);
+	if(TryUseSkill(index)==false)
+		return false;
 	_bIsPlaying = true;
 	_nowUsing->SKillBegin();
 	return true;

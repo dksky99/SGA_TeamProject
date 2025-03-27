@@ -170,6 +170,7 @@ void APlayerCharacter::Attack(const FInputActionValue& value)
 
 void APlayerCharacter::Abillity1_Press(const FInputActionValue& value)
 {
+	TryAbility1Aiming();
 }
 
 void APlayerCharacter::Abillity1_Release(const FInputActionValue& value)
@@ -179,6 +180,8 @@ void APlayerCharacter::Abillity1_Release(const FInputActionValue& value)
 
 void APlayerCharacter::Abillity2_Press(const FInputActionValue& value)
 {
+	
+	TryAbility2Aiming();
 }
 
 

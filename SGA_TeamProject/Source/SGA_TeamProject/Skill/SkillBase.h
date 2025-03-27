@@ -20,10 +20,12 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	void StartAiming();
+	void FinishAiming();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SkillAiming() ;
+	virtual void DrawSkillAiming() ;
 
 	virtual void SKillBegin();
 
@@ -36,9 +38,17 @@ public:
 	bool IsReady() { return _curTime >= _coolTime; }
 
 	void SetOwner(class ACharacterBase* owner);
+
+private:
+	void CoolTimeFlow(float DeltaTime);
 protected:
 	
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="Guide",meta=(AllowPrivateAccess="true"))
+	class UDecalComponent* _decalComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Guide", meta = (AllowPrivateAccess = "true"))
+	class USplineComponent* _splineComponent;
 
 	class ACharacterBase* _owner;
 
@@ -47,6 +57,11 @@ protected:
 	
 	float _curTime;
 
+	FVector _loc;
+	FRotator _rot;
+
+	bool _bIsPlaying = false;
+	bool _bIsGuiding = false;
 
 
 
