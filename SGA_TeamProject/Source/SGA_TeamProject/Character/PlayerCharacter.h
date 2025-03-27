@@ -49,7 +49,7 @@ public:
 	UFUNCTION()
 	void NPCInteract(const  FInputActionValue& value);
 
-	void AddItem(class AItem* item);
+	void AddItem(class AItemBase* item);
 
 private:
 

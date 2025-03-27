@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "../Item/Item.h"
+#include "../Item/ItemBase.h"
 #include "InvenUI.generated.h"
 
 /**

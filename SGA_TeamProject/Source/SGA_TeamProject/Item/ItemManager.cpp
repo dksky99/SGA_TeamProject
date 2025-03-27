@@ -20,6 +20,7 @@ AItemManager::AItemManager()
 void AItemManager::BeginPlay()
 {
 	Super::BeginPlay();
+
 	auto gameInstance = Cast<UCGameInstance>(GetWorld()->GetGameInstance());
 	for (int32 i = 1; i <= itemIDCount; i++)
 	{
@@ -30,10 +31,12 @@ void AItemManager::BeginPlay()
 
 		for (int j = 0; j < itemPoolCount; j++)
 		{
-			auto item = GetWorld()->SpawnActor<AItem>(itemClass, FVector::ZeroVector, FRotator::ZeroRotator);
+			auto item = GetWorld()->SpawnActor<AItemBase>(itemClass, FVector::ZeroVector, FRotator::ZeroRotator);
 			item->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 			item->SetData(itemData);
 			item->Deactivate();
+
+			UE_LOG(LogTemp, Warning, TEXT("Spawned item: %s"), *item->GetClass()->GetName());
 			
 			_itemPool[id]._items.Add(item);
 		}
@@ -47,13 +50,13 @@ void AItemManager::Tick(float DeltaTime)
 
 }
 
-AItem* AItemManager::GetItem(int32 id)
+AItemBase* AItemManager::GetItem(int32 id)
 {
 	auto items = _itemPool.Find(id);
 	if (!items)
 		return nullptr;
 
-	auto iter = items->_items.FindByPredicate([](AItem* item)->bool
+	auto iter = items->_items.FindByPredicate([](AItemBase* item)->bool
 		{
 			return !item->IsActive();
 		});
@@ -74,6 +77,7 @@ void AItemManager::SpawnItem(int32 id, FVector pos)
 	{
 		item->Activate();
 		item->SetActorLocation(pos);
+		UE_LOG(LogTemp, Error, TEXT("Item Spawn"));
 	}
 }
 

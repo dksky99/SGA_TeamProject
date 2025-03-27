@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Item.h"
+#include "ItemBase.h"
 #include "ItemManager.generated.h"
 
 USTRUCT()
@@ -13,7 +13,7 @@ struct FCItems
 	GENERATED_BODY()
 
 	UPROPERTY()
-	TArray<AItem*> _items;
+	TArray<AItemBase*> _items;
 };
 
 UCLASS()
@@ -33,7 +33,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	AItem* GetItem(int32 id);
+	AItemBase* GetItem(int32 id);
 	void SpawnItem(int32 id, FVector pos);
 
 private:
@@ -41,7 +41,7 @@ private:
 	TMap<int32, FCItems> _itemPool;
 
 	UPROPERTY(EditAnywhere)
-	int32 itemIDCount = 1; // 아이템 종류 수 (아이디 개수)
+	int32 itemIDCount = 2; // 아이템 종류 수 (아이디 개수)
 
 	UPROPERTY(EditAnywhere)
 	int32 itemPoolCount = 10; // 각 종류당 풀 개수

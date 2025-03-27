@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item.h"
-#include "Potion.generated.h"
+#include "ItemBase.h"
+#include "PotionItem.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SGA_TEAMPROJECT_API APotion : public AItem
+class SGA_TEAMPROJECT_API APotionItem : public AItemBase
 {
 	GENERATED_BODY()
 	
 public:
-	APotion();
+	APotionItem();
 
 	virtual void UseItem(class APlayerCharacter* player) override;
 };

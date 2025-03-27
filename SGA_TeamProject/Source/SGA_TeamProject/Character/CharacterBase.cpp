@@ -34,7 +34,7 @@
 #include "../UI/InvenUI.h"
 
 #include "NPCBase.h"
-#include "../Item/Item.h"
+#include "../Item/ItemBase.h"
 #include "../Item/ItemManager.h"
 
 #include "../Helper/H_Targetting.h"
