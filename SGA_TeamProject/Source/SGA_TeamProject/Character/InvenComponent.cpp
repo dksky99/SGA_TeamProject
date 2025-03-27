@@ -3,6 +3,7 @@
 
 #include "InvenComponent.h"
 
+
 // Sets default values for this component's properties
 UInvenComponent::UInvenComponent()
 {
@@ -136,5 +137,25 @@ bool UInvenComponent::IsFull()
 		});
 
 	return index == INDEX_NONE;
+}
+
+void UInvenComponent::EquipItem(ACharacterBase* character, AItem* item)
+{
+	if (!character || !item) return;
+
+	EquipSlot slot = item->GetData().equipSlot;
+	if (slot == EquipSlot::NONE) return;
+
+	if (_characterEquipMap.Contains(character))
+	{
+		if (_characterEquipMap[character].equipSlot.Contains(slot))
+		{
+			// 장착 슬롯에 아이템이 들어 있을 때
+		}
+	}
+
+	_characterEquipMap.FindOrAdd(character).equipSlot.Add(slot, item);
+
+
 }
 

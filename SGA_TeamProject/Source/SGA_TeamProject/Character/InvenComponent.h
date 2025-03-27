@@ -22,6 +22,15 @@ struct FItemSlotData
 	int32 count = 0;
 };
 
+USTRUCT(BlueprintType)
+struct FEquipSlotMap
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EquipSlot, AItem*> equipSlot;
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SGA_TEAMPROJECT_API UInvenComponent : public UActorComponent
 {
@@ -50,10 +59,15 @@ public:
 
 	FItemChangeEvent _itemChangeEvent;
 
+	void EquipItem(class ACharacterBase* character, AItem* item);
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TArray<FItemSlotData> _items;
 
 	UPROPERTY(VisibleAnywhere)
 	int32 _money = 0;
+
+	UPROPERTY(VisibleAnywhere)
+	TMap<class ACharacterBase*, FEquipSlotMap> _characterEquipMap;
 };
