@@ -33,11 +33,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SpawnItem(int32 key, FVector pos);
+	AItem* GetItem(int32 id);
+	void SpawnItem(int32 id, FVector pos);
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	TMap<int32, FCItems> _itemTable;
+	TMap<int32, FCItems> _itemPool;
 
 	UPROPERTY(EditAnywhere)
 	int32 itemIDCount = 1; // 아이템 종류 수 (아이디 개수)

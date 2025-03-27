@@ -29,6 +29,9 @@ public:
 	class UButton* Drop;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Use;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* Gold;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

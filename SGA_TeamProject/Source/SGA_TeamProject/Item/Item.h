@@ -29,10 +29,10 @@ public:
 	void Activate();
 	void Deactivate();
 
-	bool IsActive();
+	bool IsActive() { return _isActive; }
+	void SetActive(bool isActive) { _isActive = isActive; };
 
-	// TODO
-	//virtual void UseItem();
+	virtual void UseItem(class APlayerCharacter* player);
 
 	UFUNCTION()
 	void OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
@@ -49,4 +49,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
 	FItemData _itemData;
+
+	bool _isActive;
 };
