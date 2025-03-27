@@ -16,6 +16,14 @@ enum class ItemType
 	EQUIPMENT
 };
 
+UENUM()
+enum class EquipSlot
+{
+	NONE,
+	WEAPON,
+	ARMOR
+};
+
 USTRUCT(BlueprintType)
 struct FItemData : public FTableRowBase
 {
@@ -31,10 +39,13 @@ struct FItemData : public FTableRowBase
 	ItemType type = ItemType::NONE;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EquipSlot equipSlot = EquipSlot::NONE;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 price = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<class AItem> itemClass;
+	TSubclassOf<class AItemBase> itemClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> icon;

@@ -12,6 +12,10 @@
 #include "Camera/CameraComponent.h"
 #include "Camera/CameraActor.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
+
 #include "Components/WidgetComponent.h"
 #include "../UI/HpBar.h"
 
@@ -31,7 +35,7 @@
 #include "../UI/InvenUI.h"
 
 #include "NPCBase.h"
-#include "../Item/Item.h"
+#include "../Item/ItemBase.h"
 #include "../Item/ItemManager.h"
 
 #include "../Helper/H_Targetting.h"
@@ -292,7 +296,28 @@ void ACharacterBase::AttackHit()
 	if (bResult && hitResult.GetActor()->IsValidLowLevel())
 	{
 		drawColor = FColor::Red;
+		ACharacterBase* victim = Cast<ACharacterBase>(hitResult.GetActor());
+		if (victim)
+		{
+			FDamageEvent damageEvent = FDamageEvent();
 
+			FVector hitPoint = hitResult.ImpactPoint;
+			//EFFECT_M->PlayEffect("MeleeAttack", hitPoint);
+			victim->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
+
+			if (_particleEffect)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation
+				(
+					GetWorld(),            // 현재 월드
+					_particleEffect,       // 에디터에서 세팅한 파티클
+					hitPoint,			   // 위치
+					FRotator::ZeroRotator, // 회전
+					FVector(1.0f),         // 스케일
+					true                   // Auto Destroy (자동 제거)
+				);
+			}
+		}
 		
 
 		FDamageEvent damageEvent;
@@ -362,10 +387,9 @@ void ACharacterBase::DropItem(FItemData item)
 	FVector dropLocation = playerLocation + randomOffset;
 	dropLocation.Z = playerLocation.Z;
 
-	auto itemManager = Cast<UCGameInstance>(GetGameInstance())->ItemManager();
-	if (itemManager)
+	if (ITEM_M)
 	{
-		itemManager->SpawnItem(item.id, dropLocation);
+		ITEM_M->SpawnItem(item.id, dropLocation);
 	}
 }
 

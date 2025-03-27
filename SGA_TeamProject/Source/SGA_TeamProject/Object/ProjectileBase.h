@@ -23,9 +23,25 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	void FireDirection(const FVector& direction);
+
+	UFUNCTION()
+	void OnProjectileOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
+
+	void SetOwner(class ACharacterBase* owner);
+
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Transform", meta = (AllowPrivateAccess = "true"))
-	USceneComponent* _loc;
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Transform", meta = (AllowPrivateAccess = "true"))
+	USceneComponent* _loc;*/
+
+	UPROPERTY()
+	class ACharacterBase* _owner;
+
+	int32 _damage = 50;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Collider, meta = (AllowPrivateAccess = "true"))
+	class UCapsuleComponent* _collider;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* _projectileComponent;

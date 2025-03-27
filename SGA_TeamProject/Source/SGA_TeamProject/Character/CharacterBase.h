@@ -24,6 +24,7 @@ enum class ECamp
 
 
 
+
 UCLASS()
 class SGA_TEAMPROJECT_API ACharacterBase : public ACharacter
 {
@@ -80,6 +81,7 @@ public:
 
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 
 	void AddHp(int32 value);
 	void AddExp(int32 value);
@@ -138,6 +140,9 @@ protected:
 
 	float _vertical = 0;
 	float _horizontal = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Effect")
+	class UParticleSystem* _particleEffect;
 
 	UPROPERTY(EditAnywhere)
 	float _attackRange = 400.0f;

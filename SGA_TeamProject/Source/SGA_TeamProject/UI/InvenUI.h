@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "../Item/Item.h"
+#include "../Item/ItemBase.h"
 #include "InvenUI.generated.h"
 
 /**
@@ -19,6 +19,7 @@ public:
 	virtual bool Initialize() override;
 
 	void SetItem_Index(int32 index, const struct FItemSlotData& item);
+	void SetGold(int32 gold);
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -26,6 +27,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* Drop;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Use;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* Gold;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<class UItemSlotUI*> _itemSlots;

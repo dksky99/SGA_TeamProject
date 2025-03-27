@@ -54,13 +54,12 @@ public:
 	UFUNCTION()
 	void InvenOpen(const  FInputActionValue& value);
 
+
+
 	UFUNCTION()
 	void NPCInteract(const  FInputActionValue& value);
 
-	UFUNCTION()
-	void DropItemByClick();
-
-	void AddItem(class AItem* item);
+	void AddItem(class AItemBase* item);
 
 private:
 
@@ -91,17 +90,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* _springArm;
 
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<UUserWidget> _invenWidgetClass;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
-	class UUserWidget* _invenWidget;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
-	class UInvenComponent* _invenComponent;
-
-
 	bool _isInvenOpen = false;
 
+	/*UPROPERTY(VisibleAnywhere)
+	TArray<class AItem*> _equipment;*/
 };

@@ -55,32 +55,12 @@ void APlayerCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	if (_invenWidgetClass)
-	{
-		_invenWidget = CreateWidget<UUserWidget>(GetWorld(), _invenWidgetClass);
-		UE_LOG(LogTemp, Log, TEXT("Inven Widget Created"));
-	}
-
-	if (APlayerController* playerController = GetWorld()->GetFirstPlayerController())
-	{
-		ACPlayerController* myController = Cast<ACPlayerController>(playerController);
-		if (myController && myController->GetInvenComponent())
-		{
-			_invenComponent = myController->GetInvenComponent();
-		}
-	}
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto invenUI = Cast<UInvenUI>(_invenWidget);
-	if (invenUI)
-	{
-		_invenComponent->_itemChangeEvent.AddUObject(invenUI, &UInvenUI::SetItem_Index);
-		invenUI->Drop->OnClicked.AddDynamic(this, &APlayerCharacter::DropItemByClick);
-	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -199,7 +179,7 @@ void APlayerCharacter::DropItemByKey(const FInputActionValue& value)
 
 	if (isPress)
 	{
-		auto dropItem = _invenComponent->RemoveItem();
+		auto dropItem = INVEN_COMP->RemoveItem();
 		DropItem(dropItem);
 	}
 
@@ -221,13 +201,13 @@ void APlayerCharacter::InvenOpen(const FInputActionValue& value)
 		{
 			if (controller)
 				controller->HideUI();
-			_invenWidget->RemoveFromViewport();
+			INVEN_UI->RemoveFromViewport();
 		}
 		else
 		{
 			if (controller)
 				controller->ShowUI();
-			_invenWidget->AddToViewport();
+			INVEN_UI->AddToViewport();
 		}
 
 		_isInvenOpen = !_isInvenOpen;
@@ -284,30 +264,14 @@ void APlayerCharacter::NPCInteract(const FInputActionValue& value)
 	}
 }
 
-void APlayerCharacter::DropItemByClick()
+void APlayerCharacter::AddItem(AItemBase* item)
 {
-	if (_isUnable)
-		return;
-
-	int32 index = -1;
-	auto invenUI = Cast<UInvenUI>(_invenWidget);
-	if (invenUI)
-		index = invenUI->_curIndex;
-
-	auto dropItem = _invenComponent->RemoveItem(index);
-	DropItem(dropItem);
-
-	UE_LOG(LogTemp, Log, TEXT("Empty Space"));
-}
-
-void APlayerCharacter::AddItem(AItem* item)
-{
-	if (item && _invenComponent)
+	if (item && INVEN_COMP)
 	{
-		if (_invenComponent->IsFull())
+		if (INVEN_COMP->IsFull())
 			return;
 
-		_invenComponent->AddItem(item->GetData());
+		INVEN_COMP->AddItem(item->GetData());
 
 		item->Deactivate();
 	}

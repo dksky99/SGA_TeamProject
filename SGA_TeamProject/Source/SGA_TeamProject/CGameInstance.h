@@ -10,6 +10,8 @@
 /**
  * 
  */
+#define ITEM_M Cast<UCGameInstance>(GetGameInstance())->ItemManager()
+
 UCLASS()
 class SGA_TEAMPROJECT_API UCGameInstance : public UGameInstance
 {

@@ -20,22 +20,25 @@ AItemManager::AItemManager()
 void AItemManager::BeginPlay()
 {
 	Super::BeginPlay();
+
 	auto gameInstance = Cast<UCGameInstance>(GetWorld()->GetGameInstance());
 	for (int32 i = 1; i <= itemIDCount; i++)
 	{
 		int32 id = i;
-		_itemTable.Add(id);
+		_itemPool.Add(id);
 		auto itemData = gameInstance->GetItemData_ID(id);
 		auto itemClass = itemData.itemClass;
 
 		for (int j = 0; j < itemPoolCount; j++)
 		{
-			auto item = GetWorld()->SpawnActor<AItem>(itemClass, FVector::ZeroVector, FRotator::ZeroRotator);
+			auto item = GetWorld()->SpawnActor<AItemBase>(itemClass, FVector::ZeroVector, FRotator::ZeroRotator);
 			item->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 			item->SetData(itemData);
 			item->Deactivate();
+
+			UE_LOG(LogTemp, Warning, TEXT("Spawned item: %s"), *item->GetClass()->GetName());
 			
-			_itemTable[id]._items.Add(item);
+			_itemPool[id]._items.Add(item);
 		}
 	}
 }
@@ -47,21 +50,34 @@ void AItemManager::Tick(float DeltaTime)
 
 }
 
-void AItemManager::SpawnItem(int32 id, FVector pos)
+AItemBase* AItemManager::GetItem(int32 id)
 {
-	auto items = _itemTable.Find(id);
+	auto items = _itemPool.Find(id);
 	if (!items)
-		return;
+		return nullptr;
 
-	auto iter = items->_items.FindByPredicate([](AItem* item)->bool
+	auto iter = items->_items.FindByPredicate([](AItemBase* item)->bool
 		{
 			return !item->IsActive();
 		});
 
 	if (iter)
 	{
-		(*iter)->Activate();
-		(*iter)->SetActorLocation(pos);
+		return *iter;
+	}
+	
+	return nullptr;
+}
+
+void AItemManager::SpawnItem(int32 id, FVector pos)
+{
+	auto item = GetItem(id);
+
+	if (item)
+	{
+		item->Activate();
+		item->SetActorLocation(pos);
+		UE_LOG(LogTemp, Error, TEXT("Item Spawn"));
 	}
 }
 
