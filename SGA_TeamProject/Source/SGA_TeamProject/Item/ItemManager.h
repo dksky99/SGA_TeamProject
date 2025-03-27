@@ -41,7 +41,7 @@ private:
 	TMap<int32, FCItems> _itemPool;
 
 	UPROPERTY(EditAnywhere)
-	int32 itemIDCount = 1; // 아이템 종류 수 (아이디 개수)
+	int32 itemIDCount = 2; // 아이템 종류 수 (아이디 개수)
 
 	UPROPERTY(EditAnywhere)
 	int32 itemPoolCount = 10; // 각 종류당 풀 개수

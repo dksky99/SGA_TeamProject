@@ -35,6 +35,8 @@ void AItemManager::BeginPlay()
 			item->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 			item->SetData(itemData);
 			item->Deactivate();
+
+			UE_LOG(LogTemp, Warning, TEXT("Spawned item: %s"), *item->GetClass()->GetName());
 			
 			_itemPool[id]._items.Add(item);
 		}
@@ -75,6 +77,7 @@ void AItemManager::SpawnItem(int32 id, FVector pos)
 	{
 		item->Activate();
 		item->SetActorLocation(pos);
+		UE_LOG(LogTemp, Error, TEXT("Item Spawn"));
 	}
 }
 

@@ -152,12 +152,16 @@ void ACPlayerController::UseItemByClick()
 	if (_invenWidget)
 		index = _invenWidget->_curIndex;
 
-	auto useItemData = _invenComponent->RemoveItem(index);
-//	auto useItem = ITEM_M->GetItem(useItemData.id);
+	auto useItemData = _invenComponent->GetItemData_Index(index);
+	if (useItemData.type == ItemType::NONE)
+		return;
 
-	/*auto player = Cast<APlayerCharacter>(GetPawn());
+	_invenComponent->RemoveItem(index);
+	auto useItem = ITEM_M->GetItem(useItemData.id);
+
+	auto player = Cast<APlayerCharacter>(GetPawn());
 	if (player && useItem)
 	{
 		useItem->UseItem(player);
-	}*/
+	}
 }
