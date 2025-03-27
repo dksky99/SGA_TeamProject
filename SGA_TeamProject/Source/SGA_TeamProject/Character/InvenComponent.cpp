@@ -12,7 +12,7 @@ UInvenComponent::UInvenComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	_items.SetNum(9);
-	_money = 0;
+	_gold = 0;
 }
 
 
@@ -56,7 +56,7 @@ FItemData UInvenComponent::GetItemData_Index(int32 index)
 	return _items[index].itemData;
 }
 
-void UInvenComponent::AddItem(FItemData item)
+void UInvenComponent::AddItem(FItemData item, int32 count)
 {
 	auto index = _items.IndexOfByPredicate([item](const FItemSlotData& slot) -> bool
 		{
@@ -77,7 +77,7 @@ void UInvenComponent::AddItem(FItemData item)
 		return;
 
 	_items[index].itemData = item;
-	_items[index].count++;
+	_items[index].count += count;
 	
 
 	if (_itemChangeEvent.IsBound())
@@ -127,6 +127,14 @@ FItemData UInvenComponent::RemoveItem(int32 index)
 		_itemChangeEvent.Broadcast(index, _items[index]);
 
 	return dropItem;
+}
+
+void UInvenComponent::SetGold(int32 gold)
+{
+	_gold = gold;
+
+	if (_goldChangeEvent.IsBound())
+		_goldChangeEvent.Broadcast(gold);
 }
 
 bool UInvenComponent::IsFull()

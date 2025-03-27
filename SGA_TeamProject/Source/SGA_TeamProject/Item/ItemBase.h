@@ -5,16 +5,16 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ItemDataTable.h"
-#include "Item.generated.h"
+#include "ItemBase.generated.h"
 
-UCLASS()
-class SGA_TEAMPROJECT_API AItem : public AActor
+UCLASS(Abstract)
+class SGA_TEAMPROJECT_API AItemBase : public AActor
 {
 	GENERATED_BODY()
-	
+
 public:	
 	// Sets default values for this actor's properties
-	AItem();
+	AItemBase();
 
 protected:
 	virtual void PostInitializeComponents() override;
@@ -29,7 +29,10 @@ public:
 	void Activate();
 	void Deactivate();
 
-	bool IsActive();
+	bool IsActive() { return _isActive; }
+	void SetActive(bool isActive) { _isActive = isActive; };
+
+	virtual void UseItem(class APlayerCharacter* player) PURE_VIRTUAL(AItemBase::UseItem, );
 
 	UFUNCTION()
 	void OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
@@ -46,4 +49,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
 	FItemData _itemData;
+
+	bool _isActive;
 };

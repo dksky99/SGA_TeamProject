@@ -46,3 +46,9 @@ void UInvenUI::SetItem_Index(int32 index, const FItemSlotData& item)
 		_itemSlots[index]->SetItem(item.count, item.itemData.icon);
 	}
 }
+
+void UInvenUI::SetGold(int32 gold)
+{
+	FString text = FString::Printf(TEXT("%d"), gold);
+	Gold->SetText(FText::FromString(text));
+}

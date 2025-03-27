@@ -1,4 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+
+
+
+//Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "ShopUI.h"
@@ -78,6 +81,10 @@ void UShopUI::UpdateShop(UInvenComponent* inven, UInvenComponent* shop)
 
 	SetShopData();
 	SetInvenData();
+
+	int32 gold = inven->GetGold();
+	FString text = FString::Printf(TEXT("%d"), gold);
+	Gold->SetText(FText::FromString(text));
 }
 
 
@@ -110,7 +117,7 @@ void UShopUI::SetShopData()
 
 	auto data = _getShopItemData.Execute(_curShopIndex);
 
-	SetData(ShopItemData, ShopItemImage, data);
+	SetData(ShopItemData, ShopItemImage, ShopPrice, data);
 }
 
 void UShopUI::SetInvenData()
@@ -120,15 +127,16 @@ void UShopUI::SetInvenData()
 
 	auto data = _getInvenItemData.Execute(_curInvenIndex);
 
-	SetData(InvenItemData, InvenItemImage, data);
+	SetData(InvenItemData, InvenItemImage, InvenPrice, data);
 }
 
-void UShopUI::SetData(UTextBlock* textBlock, UImage* imageBlock, FItemData data)
+void UShopUI::SetData(UTextBlock* itemData, UImage* itemImage, UTextBlock* itemPrice, FItemData data)
 {
 	if (data.id == -1)
 	{
-		textBlock->SetText(FText::FromString(TEXT("")));
-		imageBlock->SetBrushFromTexture(_defaultTexture);
+		itemData->SetText(FText::FromString(TEXT("")));
+		itemImage->SetBrushFromTexture(_defaultTexture);
+		itemPrice->SetText(FText::FromString(TEXT("")));
 	}
 	else
 	{
@@ -137,9 +145,15 @@ void UShopUI::SetData(UTextBlock* textBlock, UImage* imageBlock, FItemData data)
 		FString itemName = data.name.ToString();
 
 		FString text = FString::Printf(TEXT("%s\nItemType : %s\nItemID : %d"), *itemName, *itemType, data.id);
-		textBlock->SetText(FText::FromString(text));
+		itemData->SetText(FText::FromString(text));
 
 		UTexture2D* itemIcon = data.icon.LoadSynchronous();
-		imageBlock->SetBrushFromTexture(itemIcon);
+		itemImage->SetBrushFromTexture(itemIcon);
+
+		int32 price = data.price;
+		if (itemPrice == InvenPrice)
+			price /= 2;
+		text = FString::Printf(TEXT("%d"), price);
+		itemPrice->SetText(FText::FromString(text));
 	}
 }

@@ -238,7 +238,7 @@ void APlayerCharacter::NPCInteract(const FInputActionValue& value)
 	}
 }
 
-void APlayerCharacter::AddItem(AItem* item)
+void APlayerCharacter::AddItem(AItemBase* item)
 {
 	if (item && INVEN_COMP)
 	{

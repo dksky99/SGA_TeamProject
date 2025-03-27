@@ -44,6 +44,8 @@ public:
 	// 장착 리스트를 인벤 컴포넌트에서 구현(캐릭터에 구현 시 캐릭터 사망과 동시에 아이템에 접근할 방법이 없어짐)
 	// 인벤 컴포넌트에서 TMap<ACharacterBase*, TMap<EquipSlot, AItem*>> _characterEquipMap; 를 만든다
 	// 컨트롤러에서 아이템을 장착하면 인벤 컴포넌트에서 캐릭터의 아이템 장착 함수를 불러온다
+	UFUNCTION()
+	void UseItemByClick();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")

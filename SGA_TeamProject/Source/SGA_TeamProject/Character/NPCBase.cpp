@@ -6,9 +6,11 @@
 #include "Components/Button.h"
 #include "Blueprint/UserWidget.h"
 
-#include "CharacterAnimInstance.h"
+#include "../CGameInstance.h" 
 #include "../Controller/CPlayerController.h"
 #include "../UI/ShopUI.h"
+
+#include "CharacterAnimInstance.h"
 #include "InvenComponent.h"
 
 // Sets default values
@@ -42,6 +44,23 @@ void ANPCBase::PostInitializeComponents()
 	}
 }
 
+void ANPCBase::InitializeShop()
+{
+	auto gameInstance = Cast<UCGameInstance>(GetWorld()->GetGameInstance());
+
+	if (_shopItemList && gameInstance)
+	{
+		TArray<FShopItemList*> allRows;
+		_shopItemList->GetAllRows(TEXT(""), allRows);
+
+		for (auto row : allRows)
+		{
+			auto itemData = gameInstance->GetItemData_ID(row->id);
+			_shopComponent->AddItem(itemData, row->count);
+		}
+	}
+}
+
 // Called when the game starts or when spawned
 void ANPCBase::BeginPlay()
 {
@@ -59,6 +78,8 @@ void ANPCBase::BeginPlay()
 		shopUI->Sell->OnClicked.AddDynamic(this, &ANPCBase::ItemSell);
 		shopUI->Buy->OnClicked.AddDynamic(this, &ANPCBase::ItemBuy);
 	}
+
+	InitializeShop();
 }
 
 // Called every frame
@@ -132,8 +153,12 @@ void ANPCBase::ItemBuy()
 		if (item.id == -1)
 			return;
 
+		if (item.price > _invenComponent->GetGold())
+			return;
+
 		_shopComponent->RemoveItem(index);
 		_invenComponent->AddItem(item);
+		_invenComponent->SetGold(_invenComponent->GetGold() - item.price);
 
 		shopUI->UpdateShop(_invenComponent, _shopComponent);
 		shopUI->SetShopData();
@@ -156,6 +181,7 @@ void ANPCBase::ItemSell()
 
 		_invenComponent->RemoveItem(index);
 		_shopComponent->AddItem(item);
+		_invenComponent->SetGold(_invenComponent->GetGold() + (item.price / 2));
 
 		shopUI->UpdateShop(_invenComponent, _shopComponent);
 		shopUI->SetShopData();
