@@ -151,7 +151,7 @@ void UShopUI::SetData(UTextBlock* itemData, UImage* itemImage, UTextBlock* itemP
 		itemImage->SetBrushFromTexture(itemIcon);
 
 		int32 price = data.price;
-		if (itemPrice == InvenPrice)
+		if (itemPrice == InvenPrice && data.type != ItemType::NONE)
 			price /= 2;
 		text = FString::Printf(TEXT("%d"), price);
 		itemPrice->SetText(FText::FromString(text));

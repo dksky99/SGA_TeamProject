@@ -180,7 +180,7 @@ void APlayerCharacter::DropItemByKey(const FInputActionValue& value)
 	if (isPress)
 	{
 		auto dropItem = INVEN_COMP->RemoveItem();
-		DropItem(dropItem);
+		DropItem(dropItem.id);
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("Drop Empty Space"));

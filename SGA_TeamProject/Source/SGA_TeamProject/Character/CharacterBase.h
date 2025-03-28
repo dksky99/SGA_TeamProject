@@ -90,7 +90,8 @@ public:
 	class UStatComponent* GetStatComponent() { return _statComponent; }
 	class USkillComponent* GetSkillComponent() { return _skillComponent; }
 
-	void DropItem(struct FItemData item);
+	void DropItem(int32 id);
+	void DropRandomItem();
 
 	bool IsAlive();
 	bool IsAttack() { return _isAttack; }
