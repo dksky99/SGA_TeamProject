@@ -14,6 +14,6 @@ public:
 	static bool IsInSightYaw(class AActor* user, class AActor* target, float maxAngle);
 	static bool IsInDistance(class AActor* user, class AActor* target, float maxDistance, float minDistance);
 	static FVector LocOfDistanceFromTarget(class AActor* user, class AActor* target, float distance );
-	static FVector FindFloorFromLoc(class AActor* user, float maxDistance,bool useAnotherLoc,  FVector loc);
+	static FVector FindFloorFromLoc(class AActor* user, float maxDistance,bool useAnotherLoc,  FVector loc = FVector::ZeroVector);
 
 };

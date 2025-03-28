@@ -45,7 +45,7 @@ FVector H_Relation::LocOfDistanceFromTarget(AActor* user, AActor* target, float 
     return target->GetActorLocation()+temp;
 }
 
-FVector H_Relation::FindFloorFromLoc(AActor* user,float maxDistance, bool useAnotherLoc, FVector loc=FVector::ZeroVector)
+FVector H_Relation::FindFloorFromLoc(AActor* user,float maxDistance, bool useAnotherLoc, FVector loc)
 {
     FVector Start = useAnotherLoc?loc: user->GetActorLocation(); // 캐릭터 위치
     FVector End = Start - FVector(0, 0, maxDistance); // 아래 방향으로 1000 유닛
