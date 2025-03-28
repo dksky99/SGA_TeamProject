@@ -9,6 +9,11 @@
 
 #include "Components/DecalComponent.h"
 #include "Materials/MaterialInterface.h"
+void AGrayStoneSkill1::BeginPlay()
+{
+	Super::BeginPlay();
+
+}
 void AGrayStoneSkill1::SkillHit()
 {
 	UE_LOG(LogTemp, Error, TEXT("Skill1Hit"));
@@ -17,7 +22,7 @@ void AGrayStoneSkill1::SkillHit()
 	FHitResult hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
-	float attackRange = _owner->GetAttackRange();
+	float attackRange = _attackRange;
 	float attackRadius = 25.0f;
 	FVector fwd = _owner->GetActorForwardVector();
 	FQuat qRot = FQuat::FindBetweenVectors(FVector::UpVector, fwd);
@@ -55,10 +60,13 @@ void AGrayStoneSkill1::SkillHit()
 
 void AGrayStoneSkill1::DrawSkillAiming()
 {
-	_loc = _owner->GetActorLocation();
-	_rot = _owner->GetActorForwardVector().Rotation();
+	FVector start = _owner->GetActorLocation();
+	FVector end = start + _owner->GetActorForwardVector() * _attackRange;
+	_rot = (end-start).Rotation();
+	_loc = start + (end - start) * 0.5f;
+	SetLocOfFloor();
 
 	UE_LOG(LogTemp, Error, TEXT("drawSkill"));
-	_decalComponent->SetWorldLocation(_loc);
-	_decalComponent->SetWorldRotation(_rot);
+	SetActorLocation(_loc);
+	SetActorRotation(_rot);
 }

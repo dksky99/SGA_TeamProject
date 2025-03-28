@@ -38,12 +38,14 @@ public:
 	bool IsReady() { return _curTime >= _coolTime; }
 
 	void SetOwner(class ACharacterBase* owner);
-
+	void SetLocOfFloor();
 private:
 	void CoolTimeFlow(float DeltaTime);
 protected:
 	
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Guide", meta = (AllowPrivateAccess = "true"))
+	class USceneComponent* _sceneComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category="Guide",meta=(AllowPrivateAccess="true"))
 	class UDecalComponent* _decalComponent;
 
@@ -62,6 +64,9 @@ protected:
 
 	bool _bIsPlaying = false;
 	bool _bIsGuiding = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	float _attackRange=0.0f;
 
 
 

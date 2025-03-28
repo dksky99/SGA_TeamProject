@@ -18,6 +18,8 @@ void ASkillManager::SetOwner(ACharacterBase* owner)
 	_owner = owner;
 	_firstAbility->SetOwner(owner);
 	_secondAbility->SetOwner(owner);
+	SetActorLocationAndRotation(owner->GetActorLocation(),owner->GetActorRotation());
+	
 }
 
 // Called when the game starts or when spawned
@@ -28,8 +30,6 @@ void ASkillManager::BeginPlay()
 	_firstAbility = GetWorld()->SpawnActor<ASkillBase>(_firstAbilityClass, GetActorLocation(), GetActorRotation());
 	_secondAbility = GetWorld()->SpawnActor<ASkillBase>(_secondAbilityClass, GetActorLocation(), GetActorRotation());
 
-	_firstAbility->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-	_secondAbility->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 	
 	
 }

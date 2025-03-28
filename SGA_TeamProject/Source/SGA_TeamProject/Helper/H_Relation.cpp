@@ -44,3 +44,30 @@ FVector H_Relation::LocOfDistanceFromTarget(AActor* user, AActor* target, float 
     temp*= distance;
     return target->GetActorLocation()+temp;
 }
+
+FVector H_Relation::FindFloorFromLoc(AActor* user,float maxDistance, bool useAnotherLoc, FVector loc=FVector::ZeroVector)
+{
+    FVector Start = useAnotherLoc?loc: user->GetActorLocation(); // 캐릭터 위치
+    FVector End = Start - FVector(0, 0, maxDistance); // 아래 방향으로 1000 유닛
+
+    FHitResult HitResult;
+    FCollisionQueryParams Params;
+    Params.AddIgnoredActor(user); // 캐릭터 자신을 충돌 검사에서 제외
+
+    // 라인 트레이스 실행
+    bool bHit = user->GetWorld()->LineTraceSingleByChannel(
+        HitResult,
+        Start,
+        End,
+        ECC_WorldStatic, // 보통 ECC_Visibility 또는 ECC_WorldStatic 사용
+        Params
+    );
+
+    if (bHit)
+    {
+        return HitResult.ImpactPoint; // 충돌한 위치 반환 (땅 좌표)
+    }
+
+    return FVector::ZeroVector; // 충돌이 없으면 (0,0,0) 반환
+    return FVector();
+}

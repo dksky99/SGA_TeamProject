@@ -6,6 +6,7 @@
 
 #include "Components/DecalComponent.h"
 #include "Components/SplineComponent.h"
+#include "../Helper/H_Relation.h"
 
 // Sets default values
 ASkillBase::ASkillBase()
@@ -13,8 +14,13 @@ ASkillBase::ASkillBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	_sceneComponent = CreateDefaultSubobject<USceneComponent>("Transform");
 	_decalComponent = CreateDefaultSubobject<UDecalComponent>("Decal");
 	_splineComponent = CreateDefaultSubobject<USplineComponent>("Spline");
+
+	SetRootComponent(_sceneComponent);
+	_decalComponent->SetupAttachment(RootComponent);
+	_splineComponent->SetupAttachment(RootComponent);
 
 	_decalComponent->SetVisibility(false);
 	_splineComponent->SetVisibility(false);
@@ -87,6 +93,17 @@ void ASkillBase::SkillEnd()
 void ASkillBase::SetOwner(ACharacterBase* owner)
 {
 	_owner = owner;
+	SetActorLocationAndRotation(owner->GetActorLocation(), owner->GetActorRotation());
+}
+
+void ASkillBase::SetLocOfFloor()
+{
+	FVector loc = _loc;
+	loc=H_Relation::FindFloorFromLoc(this, 1000, true, loc);
+	if (loc != FVector::ZeroVector)
+		_loc == loc;
+
+	UE_LOG(LogTemp, Error, TEXT("Drawing: %f %f %f"),_loc.X,_loc.Y,_loc.Z);
 }
 
 void ASkillBase::CoolTimeFlow(float DeltaTime)

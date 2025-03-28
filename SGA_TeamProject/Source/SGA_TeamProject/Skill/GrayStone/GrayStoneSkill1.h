@@ -14,6 +14,7 @@ class SGA_TEAMPROJECT_API AGrayStoneSkill1 : public ASkillBase
 {
 	GENERATED_BODY()
 public:
+	virtual void BeginPlay() override;
 
 	
 
