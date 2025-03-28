@@ -82,7 +82,9 @@ public:
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-
+	void AddSpeed(int32 value);
+	void AddMaxHp(int32 value);
+	void AddAtk(int32 value);
 	void AddHp(int32 value);
 	void AddExp(int32 value);
 	class UStatComponent* GetStatComponent() { return _statComponent; }

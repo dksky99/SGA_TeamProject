@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ItemDataTable.h"
+#include "../Character/PlayerCharacter.h"
 #include "ItemBase.generated.h"
 
 UCLASS(Abstract)
@@ -32,7 +33,7 @@ public:
 	bool IsActive() { return _isActive; }
 	void SetActive(bool isActive) { _isActive = isActive; };
 
-	virtual void UseItem(class APlayerCharacter* player) PURE_VIRTUAL(AItemBase::UseItem, );
+	virtual void UseItem(class APlayerCharacter*) PURE_VIRTUAL(AItemBase::UseItem, );
 
 	UFUNCTION()
 	void OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);

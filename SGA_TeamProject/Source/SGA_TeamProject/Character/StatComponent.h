@@ -50,9 +50,14 @@ public:
 	void GetData(int value);
 	int32 GetCurHp() { return _curHp; }
 	int32 GetAtk() { return _atk; }
-	int32 AddCurHp(float amount, AActor* causer = nullptr);
-	int32 SetCurHP(float amount);
 	float GetSpeed() { return _speed; }
+
+	int32 SetCurHP(float amount);
+
+	int32 AddCurHp(float amount, AActor* causer = nullptr);
+	void AddMaxHp(float amount) { _maxHp += amount; }
+	void AddAtk(float amount) { _atk += amount; }
+	void AddSpeed(float amount) { _speed += amount; }
 
 	bool IsDead() { return _curHp <= 0; }
 
