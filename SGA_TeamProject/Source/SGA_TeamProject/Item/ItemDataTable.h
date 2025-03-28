@@ -42,6 +42,15 @@ struct FItemData : public FTableRowBase
 	EquipSlot equipSlot = EquipSlot::NONE;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 hp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 atk;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float speed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 price = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

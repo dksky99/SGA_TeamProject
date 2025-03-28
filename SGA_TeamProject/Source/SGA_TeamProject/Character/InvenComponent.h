@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../Item/itemBase.h"
+#include "../Item/ItemBase.h"
 #include "../Item/ItemDataTable.h"
 #include "InvenComponent.generated.h"
 
@@ -21,6 +21,15 @@ struct FItemSlotData
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 count = 0;
+};
+
+USTRUCT(BlueprintType)
+struct FEquipSlotMap
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EquipSlot, AItemBase*> map;
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -55,10 +64,15 @@ public:
 	FItemChangeEvent _itemChangeEvent;
 	FGoldChangeEvent _goldChangeEvent;
 
+	void EquipItem(class APlayerCharacter* player, AItemBase* item);
+	void UnequipItem(class APlayerCharacter* player, EquipSlot slot);
+
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	TArray<FItemSlotData> _items;
 
 	UPROPERTY(VisibleAnywhere)
+	TMap<class ACharacterBase*, FEquipSlotMap> _characterEquipMap;
 	int32 _gold = 0;
 };

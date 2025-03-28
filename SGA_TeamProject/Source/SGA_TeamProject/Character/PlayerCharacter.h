@@ -54,8 +54,6 @@ public:
 	UFUNCTION()
 	void InvenOpen(const  FInputActionValue& value);
 
-
-
 	UFUNCTION()
 	void NPCInteract(const  FInputActionValue& value);
 
@@ -91,7 +89,5 @@ private:
 	class USpringArmComponent* _springArm;
 
 	bool _isInvenOpen = false;
-
-	/*UPROPERTY(VisibleAnywhere)
-	TArray<class AItem*> _equipment;*/
+	
 };

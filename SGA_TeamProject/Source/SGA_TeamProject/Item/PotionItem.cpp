@@ -3,7 +3,6 @@
 
 #include "PotionItem.h"
 
-#include "../Character/PlayerCharacter.h"
 
 APotionItem::APotionItem()
 {

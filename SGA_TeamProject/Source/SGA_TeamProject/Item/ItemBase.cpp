@@ -5,7 +5,6 @@
 
 #include "Components/CapsuleComponent.h"
 
-#include "../Character/PlayerCharacter.h"
 #include "../Controller/CPlayerController.h"
 
 // Sets default values

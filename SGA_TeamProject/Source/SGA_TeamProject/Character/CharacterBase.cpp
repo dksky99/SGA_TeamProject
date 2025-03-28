@@ -363,6 +363,21 @@ float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 	return dmg;
 }
 
+void ACharacterBase::AddSpeed(int32 value)
+{
+	_statComponent->AddSpeed(value);
+}
+
+void ACharacterBase::AddMaxHp(int32 value)
+{
+	_statComponent->AddMaxHp(value);
+}
+
+void ACharacterBase::AddAtk(int32 value)
+{
+	_statComponent->AddAtk(value);
+}
+
 void ACharacterBase::AddHp(int32 value)
 {
 
