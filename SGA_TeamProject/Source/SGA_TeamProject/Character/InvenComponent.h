@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../Item/itemBase.h"
+#include "../Item/ItemBase.h"
 #include "../Item/ItemDataTable.h"
 #include "InvenComponent.generated.h"
 
@@ -29,7 +29,7 @@ struct FEquipSlotMap
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<EquipSlot, AItem*> equipSlot;
+	TMap<EquipSlot, AItemBase*> map;
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -64,7 +64,9 @@ public:
 	FItemChangeEvent _itemChangeEvent;
 	FGoldChangeEvent _goldChangeEvent;
 
-	void EquipItem(class ACharacterBase* character, AItem* item);
+	void EquipItem(class APlayerCharacter* player, AItemBase* item);
+	void UnequipItem(class APlayerCharacter* player, EquipSlot slot);
+
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))

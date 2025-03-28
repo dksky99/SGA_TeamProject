@@ -2,6 +2,7 @@
 
 
 #include "InvenComponent.h"
+#include "../Item/EquipItem.h"
 
 
 // Sets default values for this component's properties
@@ -147,23 +148,44 @@ bool UInvenComponent::IsFull()
 	return index == INDEX_NONE;
 }
 
-void UInvenComponent::EquipItem(ACharacterBase* character, AItem* item)
+void UInvenComponent::EquipItem(APlayerCharacter* player, AItemBase* item)
 {
-	if (!character || !item) return;
+	if (!player || !item) return;
 
 	EquipSlot slot = item->GetData().equipSlot;
 	if (slot == EquipSlot::NONE) return;
 
-	if (_characterEquipMap.Contains(character))
+	if (_characterEquipMap.Contains(player))
 	{
-		if (_characterEquipMap[character].equipSlot.Contains(slot))
+		if (_characterEquipMap[player].map.Contains(slot))
 		{
 			// 장착 슬롯에 아이템이 들어 있을 때
+			UnequipItem(player, slot); 
 		}
 	}
 
-	_characterEquipMap.FindOrAdd(character).equipSlot.Add(slot, item);
+	_characterEquipMap.FindOrAdd(player).map.Add(slot, item);
 
 
+	item->UseItem(player);
+}
+
+void UInvenComponent::UnequipItem(APlayerCharacter* player, EquipSlot slot)
+{
+	if (!player || IsFull()) return;
+	if (!_characterEquipMap.Contains(player)) return;
+
+	FEquipSlotMap& equipMap = _characterEquipMap[player];
+	if (!equipMap.map.Contains(slot)) return;
+
+	auto oldItem = Cast<AEquipItem>(equipMap.map[slot]);
+	if (!oldItem) return;
+
+	// 아이템 효과 제거
+	oldItem->RemoveItem(player);
+	// 인벤토리에 추가
+	AddItem(oldItem->GetData());
+	// 장착 목록에서 제거
+	equipMap.map.Remove(slot);
 }
 
