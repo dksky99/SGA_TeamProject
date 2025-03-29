@@ -52,7 +52,7 @@ public:
 	FItemSlotData GetItemSlot_Index(int32 index);
 	FItemData GetItemData_Index(int32 index);
 
-	void AddItem(FItemData itemdata, int32 count = 1);
+	void AddItem(FItemData itemdata, int32 count = 1, int32 index = -1);
 	FItemData RemoveItem();
 	FItemData RemoveItem(int32 index);
 
@@ -64,8 +64,8 @@ public:
 	FItemChangeEvent _itemChangeEvent;
 	FGoldChangeEvent _goldChangeEvent;
 
-	void EquipItem(class APlayerCharacter* player, AItemBase* item);
-	void UnequipItem(class APlayerCharacter* player, EquipSlot slot);
+	void EquipItem(class APlayerCharacter* player, AItemBase* item, int32 index);
+	void UnequipItem(class APlayerCharacter* player, EquipSlot slot, int32 index = -1);
 
 
 private:

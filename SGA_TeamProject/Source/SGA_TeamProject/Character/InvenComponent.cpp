@@ -57,30 +57,37 @@ FItemData UInvenComponent::GetItemData_Index(int32 index)
 	return _items[index].itemData;
 }
 
-void UInvenComponent::AddItem(FItemData item, int32 count)
+void UInvenComponent::AddItem(FItemData item, int32 count, int32 index)
 {
-	auto index = _items.IndexOfByPredicate([item](const FItemSlotData& slot) -> bool
-		{
-			return slot.itemData.id == item.id;
-		});
-
-	// 인벤에 해당 아이템 없을 경우
-	if (index == INDEX_NONE)
+	// 인덱스가 주어지지 않았을 경우
+	if (index == -1)
 	{
-		index = _items.IndexOfByPredicate([](const FItemSlotData& slot) -> bool
-			{
-				return slot.count == 0;
-			});
-	}
+		// 아이템이 장비가 아닐 경우 (장비는 겹치지 않게 저장)
+		if (item.type != ItemType::EQUIPMENT)
+		{
+			index = _items.IndexOfByPredicate([item](const FItemSlotData& slot) -> bool
+				{
+					return slot.itemData.id == item.id;
+				});
+		}
 
-	// 인벤에 빈 슬롯이 없을 경우
-	if (index == INDEX_NONE)
-		return;
+		// 인벤에 해당 아이템 없을 경우
+		if (index == INDEX_NONE)
+		{
+			index = _items.IndexOfByPredicate([](const FItemSlotData& slot) -> bool
+				{
+					return slot.count == 0;
+				});
+		}
+
+		// 인벤에 빈 슬롯이 없을 경우
+		if (index == INDEX_NONE)
+			return;
+	}
 
 	_items[index].itemData = item;
 	_items[index].count += count;
 	
-
 	if (_itemChangeEvent.IsBound())
 		_itemChangeEvent.Broadcast(index, _items[index]);
 }
@@ -148,7 +155,7 @@ bool UInvenComponent::IsFull()
 	return index == INDEX_NONE;
 }
 
-void UInvenComponent::EquipItem(APlayerCharacter* player, AItemBase* item)
+void UInvenComponent::EquipItem(APlayerCharacter* player, AItemBase* item, int32 index)
 {
 	if (!player || !item) return;
 
@@ -160,7 +167,7 @@ void UInvenComponent::EquipItem(APlayerCharacter* player, AItemBase* item)
 		if (_characterEquipMap[player].map.Contains(slot))
 		{
 			// 장착 슬롯에 아이템이 들어 있을 때
-			UnequipItem(player, slot); 
+			UnequipItem(player, slot, index); 
 		}
 	}
 
@@ -170,10 +177,12 @@ void UInvenComponent::EquipItem(APlayerCharacter* player, AItemBase* item)
 	item->UseItem(player);
 }
 
-void UInvenComponent::UnequipItem(APlayerCharacter* player, EquipSlot slot)
+void UInvenComponent::UnequipItem(APlayerCharacter* player, EquipSlot slot, int32 index)
 {
-	if (!player || IsFull()) return;
-	if (!_characterEquipMap.Contains(player)) return;
+	if (!player || !_characterEquipMap.Contains(player)) return;
+
+	// 장비 교체가 아닌 단순 해제이며, 인벤이 꽉 찼을 경우
+	if (index == -1 && IsFull()) return;
 
 	FEquipSlotMap& equipMap = _characterEquipMap[player];
 	if (!equipMap.map.Contains(slot)) return;
@@ -184,7 +193,7 @@ void UInvenComponent::UnequipItem(APlayerCharacter* player, EquipSlot slot)
 	// 아이템 효과 제거
 	oldItem->RemoveItem(player);
 	// 인벤토리에 추가
-	AddItem(oldItem->GetData());
+	AddItem(oldItem->GetData(), 1, index);
 	// 장착 목록에서 제거
 	equipMap.map.Remove(slot);
 }
