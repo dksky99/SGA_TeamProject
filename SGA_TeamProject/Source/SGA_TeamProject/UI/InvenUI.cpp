@@ -9,6 +9,7 @@
 #include "Components/Button.h"
 
 #include "ItemSlotUI.h"
+#include "ItemInfoUI.h"
 #include "../Character/InvenComponent.h"
 
 bool UInvenUI::Initialize()
@@ -27,6 +28,14 @@ bool UInvenUI::Initialize()
 			slot->_widget = this;
 			slot->_buttonIndex = index;
 
+			if (_toolTipClass)
+			{
+				auto toolTip = CreateWidget<UItemInfoUI>(GetWorld(), _toolTipClass);
+
+				slot->_toolTip = toolTip;
+				//slot->SetToolTip(nullptr);
+			}
+
 			_itemSlots.Add(slot);
 			index++;
 		}
@@ -43,7 +52,7 @@ void UInvenUI::SetItem_Index(int32 index, const FItemSlotData& item)
 	}
 	else
 	{
-		_itemSlots[index]->SetItem(item.count, item.itemData.icon);
+		_itemSlots[index]->SetItem(item);
 	}
 }
 

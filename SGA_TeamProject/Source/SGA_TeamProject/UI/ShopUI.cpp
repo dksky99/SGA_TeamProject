@@ -106,7 +106,7 @@ void UShopUI::SetSlot(TArray<class UItemSlotUI*> slots, int32 index, FItemSlotDa
 	}
 	else
 	{
-		slots[index]->SetItem(item.count, item.itemData.icon);
+		slots[index]->SetItem(item);
 	}
 }
 

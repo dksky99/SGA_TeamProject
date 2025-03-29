@@ -9,19 +9,26 @@
 #include "InvenUI.h"
 #include "ShopUI.h"
 
+#include "ItemInfoUI.h"
+#include "../Character/InvenComponent.h"
+
 void UItemSlotUI::SetDefault()
 {
 	Count->SetText(FText::FromString(TEXT("")));
 	Image->SetBrushFromTexture(_defaultTexture);
+	SetToolTip(nullptr);
 }
 
-void UItemSlotUI::SetItem(int32 count, TSoftObjectPtr<UTexture2D> itemIcon)
+void UItemSlotUI::SetItem(const FItemSlotData& item)
 {
-	FString text = FString::Printf(TEXT("%d"), count);
+	FString text = FString::Printf(TEXT("%d"), item.count);
 	Count->SetText(FText::FromString(text));
 
-	UTexture2D* image = itemIcon.LoadSynchronous();
+	UTexture2D* image = item.itemData.icon.LoadSynchronous();
 	Image->SetBrushFromTexture(image);
+
+	_toolTip->SetItemInfo(item.itemData);
+	SetToolTip(_toolTip);
 }
 
 void UItemSlotUI::SetInvenIndex()

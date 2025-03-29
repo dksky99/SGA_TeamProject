@@ -38,4 +38,8 @@ public:
 	TArray<class UItemSlotUI*> _itemSlots;
 
 	int32 _curIndex = -1;
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ToolTip", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> _toolTipClass;
 };
