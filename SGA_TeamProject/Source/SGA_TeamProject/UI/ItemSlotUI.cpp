@@ -27,8 +27,11 @@ void UItemSlotUI::SetItem(const FItemSlotData& item)
 	UTexture2D* image = item.itemData.icon.LoadSynchronous();
 	Image->SetBrushFromTexture(image);
 
-	_toolTip->SetItemInfo(item.itemData);
-	SetToolTip(_toolTip);
+	if (auto widget = Cast<UInvenUI>(_widget))
+	{
+		_toolTip->SetItemInfo(item.itemData);
+		SetToolTip(_toolTip);
+	}
 }
 
 void UItemSlotUI::SetInvenIndex()

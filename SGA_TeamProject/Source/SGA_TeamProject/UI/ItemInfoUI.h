@@ -15,6 +15,7 @@ class SGA_TEAMPROJECT_API UItemInfoUI : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	void SetDefault();
 	void SetItemInfo(struct FItemData data);
 
 
@@ -25,6 +26,6 @@ public:
 	class UTextBlock* Text;
 
 private:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	UTexture2D* _defaultTexture;
 };

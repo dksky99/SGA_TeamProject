@@ -14,12 +14,13 @@
 #include "../Character/InvenComponent.h"
 
 #include "ItemSlotUI.h"
+#include "ItemInfoUI.h"
 
 bool UShopUI::Initialize()
 {
 	Super::Initialize();
 
-	// Shop slot
+	//Shop slot
 	auto array = ShopGrid->GetAllChildren();
 
 	int32 index = 0;
@@ -29,7 +30,7 @@ bool UShopUI::Initialize()
 		if (slot)
 		{
 			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetShop_ShopIndex);
-			slot->Button->OnClicked.AddDynamic(this, &UShopUI::SetShopData);
+			slot->Button->OnClicked.AddDynamic(this, &UShopUI::SetShopItemInfo);
 			slot->_widget = this;
 			slot->_buttonIndex = index;
 
@@ -48,7 +49,7 @@ bool UShopUI::Initialize()
 		if (slot)
 		{
 			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetShop_InvenIndex);
-			slot->Button->OnClicked.AddDynamic(this, &UShopUI::SetInvenData);
+			slot->Button->OnClicked.AddDynamic(this, &UShopUI::SetInvenItemInfo);
 			slot->_widget = this;
 			slot->_buttonIndex = index;
 
@@ -79,8 +80,8 @@ void UShopUI::UpdateShop(UInvenComponent* inven, UInvenComponent* shop)
 		SetShopSlot(i, shopItem);
 	}
 
-	SetShopData();
-	SetInvenData();
+	SetShopItemInfo();
+	SetInvenItemInfo();
 
 	int32 gold = inven->GetGold();
 	FString text = FString::Printf(TEXT("%d"), gold);
@@ -110,50 +111,41 @@ void UShopUI::SetSlot(TArray<class UItemSlotUI*> slots, int32 index, FItemSlotDa
 	}
 }
 
-void UShopUI::SetShopData()
+void UShopUI::SetShopItemInfo()
 {
 	if (_getShopItemData.IsBound() == false)
 		return;
 
 	auto data = _getShopItemData.Execute(_curShopIndex);
 
-	SetData(ShopItemData, ShopItemImage, ShopPrice, data);
+	SetItemInfo(ShopItemInfo, ShopPrice, data);
 }
 
-void UShopUI::SetInvenData()
+void UShopUI::SetInvenItemInfo()
 {
 	if (_getInvenItemData.IsBound() == false)
 		return;
 
 	auto data = _getInvenItemData.Execute(_curInvenIndex);
 
-	SetData(InvenItemData, InvenItemImage, InvenPrice, data);
+	SetItemInfo(InvenItemInfo, InvenPrice, data);
 }
 
-void UShopUI::SetData(UTextBlock* itemData, UImage* itemImage, UTextBlock* itemPrice, FItemData data)
+void UShopUI::SetItemInfo(UItemInfoUI* itemInfoUI, UTextBlock* itemPriceUI, FItemData data)
 {
 	if (data.id == -1)
 	{
-		itemData->SetText(FText::FromString(TEXT("")));
-		itemImage->SetBrushFromTexture(_defaultTexture);
-		itemPrice->SetText(FText::FromString(TEXT("")));
+		itemInfoUI->SetDefault();
+		itemPriceUI->SetText(FText::FromString(TEXT("")));
 	}
 	else
 	{
-		UEnum* enumType = FindObject<UEnum>(ANY_PACKAGE, TEXT("ItemType"), true);
-		FString itemType = enumType->GetNameStringByIndex((int32)data.type);
-		FString itemName = data.name.ToString();
-
-		FString text = FString::Printf(TEXT("%s\nItemType : %s\nItemID : %d"), *itemName, *itemType, data.id);
-		itemData->SetText(FText::FromString(text));
-
-		UTexture2D* itemIcon = data.icon.LoadSynchronous();
-		itemImage->SetBrushFromTexture(itemIcon);
+		itemInfoUI->SetItemInfo(data);
 
 		int32 price = data.price;
-		if (itemPrice == InvenPrice && data.type != ItemType::NONE)
+		if (itemPriceUI == InvenPrice && data.type != ItemType::NONE)
 			price /= 2;
-		text = FString::Printf(TEXT("%d"), price);
-		itemPrice->SetText(FText::FromString(text));
+		FString text = FString::Printf(TEXT("%d"), price);
+		itemPriceUI->SetText(FText::FromString(text));
 	}
 }

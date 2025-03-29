@@ -35,10 +35,10 @@ public:
 
 	// 선택한 아이템 정보 표시
 	UFUNCTION()
-	void SetShopData();
+	void SetShopItemInfo();
 	UFUNCTION()
-	void SetInvenData();
-	void SetData(class UTextBlock* itemData, class UImage* itemImage, UTextBlock* price, FItemData data);
+	void SetInvenItemInfo();
+	void SetItemInfo(class UItemInfoUI* itemInfoUI, class UTextBlock* itemPriceUI, FItemData data);
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -63,16 +63,10 @@ public:
 
 	// 아이템 정보
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* ShopItemData;
+	class UItemInfoUI* ShopItemInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* InvenItemData;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UImage* ShopItemImage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UImage* InvenItemImage;
+	class UItemInfoUI* InvenItemInfo;
 
 	// 가격
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -89,8 +83,4 @@ public:
 
 	float _curInvenIndex = -1;
 	float _curShopIndex = -1;
-
-private:
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	UTexture2D* _defaultTexture;
 };

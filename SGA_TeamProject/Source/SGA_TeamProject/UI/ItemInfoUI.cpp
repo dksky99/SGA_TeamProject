@@ -8,6 +8,12 @@
 
 #include "../Item/ItemBase.h"
 
+void UItemInfoUI::SetDefault()
+{
+	Text->SetText(FText::FromString(TEXT("")));
+	Image->SetBrushFromTexture(_defaultTexture);
+}
+
 void UItemInfoUI::SetItemInfo(FItemData data)
 {
 	UEnum* enumType = FindObject<UEnum>(ANY_PACKAGE, TEXT("ItemType"), true);
@@ -25,6 +31,7 @@ void UItemInfoUI::SetItemInfo(FItemData data)
 			text += FString::Printf(TEXT("\nSpeed : +%f"), data.speed);
 	}
 	
+	if (!Text) return;
 	Text->SetText(FText::FromString(text));
 
 	UTexture2D* itemIcon = data.icon.LoadSynchronous();
