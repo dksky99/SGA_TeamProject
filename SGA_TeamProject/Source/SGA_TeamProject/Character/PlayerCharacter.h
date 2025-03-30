@@ -59,7 +59,7 @@ public:
 
 	void AddItem(class AItemBase* item);
 
-protected:
+private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* _moveAction;

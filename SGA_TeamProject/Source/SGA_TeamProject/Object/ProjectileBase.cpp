@@ -14,14 +14,12 @@ AProjectileBase::AProjectileBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//_loc = CreateDefaultSubobject<USceneComponent>("Loc");
-	_sceneComponent = CreateDefaultSubobject<USceneComponent>("Transform");
 	_collider = CreateDefaultSubobject<UCapsuleComponent>("Capsule");
 	_projectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>("projectileComponent");
 	_mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 
-	RootComponent = _sceneComponent;
-	_collider->SetupAttachment(RootComponent);
-	_mesh->SetupAttachment(_collider);
+	RootComponent = _collider;
+	_mesh->SetupAttachment(RootComponent);
 
 	
 
@@ -77,3 +75,4 @@ void AProjectileBase::SetOwner(ACharacterBase* owner)
 
 	_owner = owner;
 }
+
