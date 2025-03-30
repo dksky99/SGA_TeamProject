@@ -19,7 +19,6 @@ USkillComponent::USkillComponent()
 
 void USkillComponent::DrawSkill1()
 {
-	//공격중이거나 다른 스킬을 사용중일때 시전 불가.
 	if (_owner->IsAttack())
 		return;
 	if (_nowUsing != 0)
@@ -30,7 +29,7 @@ void USkillComponent::DrawSkill1()
 
 void USkillComponent::PlaySkill1()
 {
-	//DrawSkill
+
 	if (_owner->IsAttack())
 		return;
 	if (_nowUsing != 1)

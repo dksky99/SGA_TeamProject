@@ -182,11 +182,7 @@ void ACharacterBase::Dead()
 
 	if (_camp == ECamp::Enemy)
 	{
-		auto itemManager = Cast<UCGameInstance>(GetGameInstance())->ItemManager();
-		if (itemManager)
-		{
-			itemManager->SpawnItem(1, GetActorLocation());
-		}
+		DropRandomItem();
 	}
 
 	if (Controller)
@@ -390,22 +386,34 @@ void ACharacterBase::AddExp(int32 value)
 	_statComponent->AddExp(value);
 }
 
-void ACharacterBase::DropItem(FItemData item)
+void ACharacterBase::DropItem(int32 id)
 {
-	if (item.id == -1)
+	if (id == -1)
 		return;
 
 	FVector playerLocation = GetActorLocation();
 
 	float dropRadius = 200.0f;
-	FVector randomOffset = FMath::VRand() * FMath::FRandRange(100.0f, dropRadius);
-	FVector dropLocation = playerLocation + randomOffset;
+	FVector randOffset = FMath::VRand() * FMath::FRandRange(100.0f, dropRadius);
+	FVector dropLocation = playerLocation + randOffset;
 	dropLocation.Z = playerLocation.Z;
 
 	if (ITEM_M)
 	{
-		ITEM_M->SpawnItem(item.id, dropLocation);
+		ITEM_M->SpawnItem(id, dropLocation);
 	}
+}
+
+void ACharacterBase::DropRandomItem()
+{
+	float randNum = FMath::FRand();
+
+	if (randNum < 0.9f)
+		DropItem(101);
+	if (randNum < 0.7f)
+		DropItem(102);
+	if (randNum < 0.5f)
+		DropItem(103);
 }
 
 bool ACharacterBase::IsAlive()
