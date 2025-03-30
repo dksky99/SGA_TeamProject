@@ -12,14 +12,15 @@ AProjectileBase::AProjectileBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	_sceneComponent= CreateDefaultSubobject<USceneComponent>("Scene");
 	//_loc = CreateDefaultSubobject<USceneComponent>("Loc");
 	_collider = CreateDefaultSubobject<UCapsuleComponent>("Capsule");
 	_projectileComponent = CreateDefaultSubobject<UProjectileMovementComponent>("projectileComponent");
 	_mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 
-	RootComponent = _collider;
-	_mesh->SetupAttachment(RootComponent);
+	RootComponent = _sceneComponent;
+	_collider->SetupAttachment(RootComponent);
+	_mesh->SetupAttachment(_collider);
 
 	
 
@@ -42,6 +43,7 @@ void AProjectileBase::Tick(float DeltaTime)
 
 void AProjectileBase::FireDirection(const FVector& direction)
 {
+	SetActorRotation(direction.ToOrientationQuat());
 	_projectileComponent->Velocity = direction * _projectileComponent->InitialSpeed;
 }
 
