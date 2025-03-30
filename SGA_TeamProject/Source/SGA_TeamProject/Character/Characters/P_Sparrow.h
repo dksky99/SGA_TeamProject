@@ -13,15 +13,5 @@ UCLASS()
 class SGA_TEAMPROJECT_API AP_Sparrow : public APlayerCharacter
 {
 	GENERATED_BODY()
-
-public:
-
-
-	virtual void AttackHit() override;
 	
-protected:
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arrow", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AProjectileArrow> _arrow;
 };

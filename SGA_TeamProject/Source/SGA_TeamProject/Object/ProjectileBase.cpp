@@ -75,3 +75,4 @@ void AProjectileBase::SetOwner(ACharacterBase* owner)
 
 	_owner = owner;
 }
+
