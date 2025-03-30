@@ -11,7 +11,6 @@
  * 
  */
 #define ITEM_M Cast<UCGameInstance>(GetGameInstance())->ItemManager()
-#define ITEM_T Cast<UCGameInstance>(GetGameInstance())->ItemTable()
 
 UCLASS()
 class SGA_TEAMPROJECT_API UCGameInstance : public UGameInstance
@@ -28,7 +27,6 @@ public:
 	struct FItemData GetItemData_ID(int32 id);
 
 	class AItemManager* ItemManager() { return _itemManager; }
-	class UDataTable* ItemTable() { return _itemTable; }
 
 private:
 	// Stat

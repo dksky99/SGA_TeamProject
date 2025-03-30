@@ -22,9 +22,10 @@ protected:
 public:	
 	void StartAiming();
 	void FinishAiming();
+	void FinishAimRender();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	virtual void AISkillAiming(class ACharacterBase target);
 	virtual void DrawSkillAiming() ;
 
 	virtual void SKillBegin();

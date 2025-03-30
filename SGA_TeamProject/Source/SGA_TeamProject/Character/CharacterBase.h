@@ -56,10 +56,11 @@ public:
 
 	UFUNCTION()
 	void TryAttack();
-
+	//키를 땠을떄 스킬을 시전
 	UFUNCTION()
 	void TryAbility1();
 
+	//키를 눌렀을때 때기 전까지 조준을 위한 범위 장판을 표시
 	UFUNCTION()
 	void TryAbility1Aiming();
 	UFUNCTION()
@@ -90,8 +91,7 @@ public:
 	class UStatComponent* GetStatComponent() { return _statComponent; }
 	class USkillComponent* GetSkillComponent() { return _skillComponent; }
 
-	void DropItem(int32 id);
-	void DropRandomItem();
+	void DropItem(struct FItemData item);
 
 	bool IsAlive();
 	bool IsAttack() { return _isAttack; }

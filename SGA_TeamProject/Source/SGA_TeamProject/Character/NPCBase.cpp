@@ -180,16 +180,8 @@ void ANPCBase::ItemSell()
 			return;
 
 		_invenComponent->RemoveItem(index);
-
-		if (item.type == ItemType::NONE)
-		{
-			_invenComponent->SetGold(_invenComponent->GetGold() + (item.price));
-		}
-		else
-		{
-			_shopComponent->AddItem(item);
-			_invenComponent->SetGold(_invenComponent->GetGold() + (item.price / 2));
-		}
+		_shopComponent->AddItem(item);
+		_invenComponent->SetGold(_invenComponent->GetGold() + (item.price / 2));
 
 		shopUI->UpdateShop(_invenComponent, _shopComponent);
 		shopUI->SetShopData();

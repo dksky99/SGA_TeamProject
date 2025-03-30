@@ -44,5 +44,5 @@ private:
 	int32 itemIDCount = 3; // 아이템 종류 수 (아이디 개수)
 
 	UPROPERTY(EditAnywhere)
-	int32 itemPoolCount = 20; // 각 종류당 풀 개수
+	int32 itemPoolCount = 10; // 각 종류당 풀 개수
 };

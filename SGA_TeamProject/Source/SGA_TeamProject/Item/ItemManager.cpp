@@ -21,27 +21,24 @@ void AItemManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (ITEM_T)
+	auto gameInstance = Cast<UCGameInstance>(GetWorld()->GetGameInstance());
+	for (int32 i = 1; i <= itemIDCount; i++)
 	{
-		TArray<FItemData*> allRows;
-		ITEM_T->GetAllRows(TEXT(""), allRows);
+		int32 id = i;
+		_itemPool.Add(id);
+		auto itemData = gameInstance->GetItemData_ID(id);
+		auto itemClass = itemData.itemClass;
 
-		for (auto row : allRows)
+		for (int j = 0; j < itemPoolCount; j++)
 		{
-			if (!row->itemClass)
-				continue;
+			auto item = GetWorld()->SpawnActor<AItemBase>(itemClass, FVector::ZeroVector, FRotator::ZeroRotator);
+			item->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+			item->SetData(itemData);
+			item->Deactivate();
 
-			_itemPool.Add(row->id);
+			UE_LOG(LogTemp, Warning, TEXT("Spawned item: %s"), *item->GetClass()->GetName());
 			
-			for (int i = 0; i < itemPoolCount; i++)
-			{
-				auto item = GetWorld()->SpawnActor<AItemBase>(row->itemClass, FVector::ZeroVector, FRotator::ZeroRotator);
-				item->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-				item->SetData(*row);
-				item->Deactivate();
-
-				_itemPool[row->id]._items.Add(item);
-			}			
+			_itemPool[id]._items.Add(item);
 		}
 	}
 }

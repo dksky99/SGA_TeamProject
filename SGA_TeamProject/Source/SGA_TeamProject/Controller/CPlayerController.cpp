@@ -157,7 +157,7 @@ void ACPlayerController::DropItemByClick()
 	auto player = Cast<ACharacterBase>(GetPawn());
 	if (player)
 	{
-		player->DropItem(dropItem.id);
+		player->DropItem(dropItem);
 	}
 }
 

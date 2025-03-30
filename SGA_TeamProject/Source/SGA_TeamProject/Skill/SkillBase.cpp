@@ -47,6 +47,12 @@ void ASkillBase::StartAiming()
 void ASkillBase::FinishAiming()
 {
 	_bIsGuiding = false;
+	if(_owner->GetCamp()==ECamp::Player)
+		FinishAimRender();
+}
+
+void ASkillBase::FinishAimRender()
+{
 	_decalComponent->SetActive(false);
 	_splineComponent->SetActive(false);
 	_decalComponent->SetVisibility(false);
@@ -62,6 +68,11 @@ void ASkillBase::Tick(float DeltaTime)
 
 	if (_bIsGuiding)
 		DrawSkillAiming();
+
+}
+
+void ASkillBase::AISkillAiming(ACharacterBase target)
+{
 
 }
 
@@ -87,7 +98,7 @@ void ASkillBase::SkillHit()
 
 void ASkillBase::SkillEnd()
 {
-	
+	FinishAimRender();
 }
 
 void ASkillBase::SetOwner(ACharacterBase* owner)
