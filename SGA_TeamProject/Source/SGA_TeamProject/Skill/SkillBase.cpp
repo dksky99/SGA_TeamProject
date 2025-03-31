@@ -30,7 +30,8 @@ ASkillBase::ASkillBase()
 void ASkillBase::BeginPlay()
 {
 	Super::BeginPlay();
-	FinishAiming();
+	SkillEnd();
+	DrawingFinish();
 }
 
 void ASkillBase::StartAiming()
@@ -40,21 +41,22 @@ void ASkillBase::StartAiming()
 	DrawingStart();
 }
 
-void ASkillBase::StartPreCaution(ACharacterBase* target)
+void ASkillBase::AITargeting(ACharacterBase* target)
 {
+	
+	StartPreCaution();
+
+}
+
+void ASkillBase::StartPreCaution()
+{
+	UE_LOG(LogTemp, Error, TEXT("PrecautionStart"));
 	_state = ESkillState::Precaution;
 	DrawingStart();
 }
 
-void ASkillBase::FinishAiming()
-{
-	_state = ESkillState::Playing;
-	DrawingFinish();
-}
-
 void ASkillBase::DrawingStart()
 {
-	_bIsDrawing = true;
 	_decalComponent->SetActive(true);
 	_splineComponent->SetActive(true);
 	_decalComponent->SetVisibility(true);
@@ -63,7 +65,6 @@ void ASkillBase::DrawingStart()
 
 void ASkillBase::DrawingFinish()
 {
-	_bIsDrawing = false;
 	_decalComponent->SetActive(false);
 	_splineComponent->SetActive(false);
 	_decalComponent->SetVisibility(false);
@@ -81,11 +82,11 @@ void ASkillBase::Tick(float DeltaTime)
 	{
 	case ESkillState::Deactivate:
 		break;
-	case ESkillState::Precaution:
-		DrawSkillPrecaution();
-		break;
 	case ESkillState::Aiming:
 		DrawSkillAiming();
+		break;
+	case ESkillState::Precaution:
+		DrawSkillPrecaution();
 		break;
 	case ESkillState::Playing:
 		SkillTick();
@@ -100,7 +101,6 @@ void ASkillBase::Tick(float DeltaTime)
 void ASkillBase::DrawSkillAiming()
 {
 	UE_LOG(LogTemp, Error, TEXT("Aiming"));
-
 }
 
 void ASkillBase::DrawSkillPrecaution()
@@ -111,21 +111,16 @@ void ASkillBase::DrawSkillPrecaution()
 void ASkillBase::SKillBegin()
 {
 	_curTime = 0.0f;
-	if (_state == ESkillState::Precaution)
-	{
-
-	}
-	else if (_state == ESkillState::Aiming)
-	{
-		FinishAiming();
-
-	}
+	_state = ESkillState::Precaution;
 
 }
 
 void ASkillBase::SkillHit()
 {
 	UE_LOG(LogTemp, Error, TEXT("SkillDefaultHit"));
+	_state=ESkillState::Playing;
+	DrawingFinish();
+
 }
 
 void ASkillBase::SkillTick()

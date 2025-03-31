@@ -30,7 +30,7 @@ public:
 	bool CheckSkillAble(class ASkillBase* skill);
 	bool CheckSkillAble(int index);
 	bool SkillGuide(int index);
-	bool SkillPreCaution(int index);
+	bool SkillAITarget(int index,class ACharacterBase* target);
 	bool SkillRelease(int index);
 
 	void SkillActFinish();

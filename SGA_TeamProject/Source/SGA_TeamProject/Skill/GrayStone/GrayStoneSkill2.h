@@ -15,8 +15,10 @@ class SGA_TEAMPROJECT_API AGrayStoneSkill2 : public ASkillBase
 	GENERATED_BODY()
 	
 
-	// ASkillBase을(를) 통해 상속됨
-	void SkillHit() override;
-	void DrawSkillAiming() override;
+	virtual void SkillHit() override;
+	virtual void DrawSkillAiming() override;
+
+	virtual void DrawSkillPrecaution() override;
+	virtual void AITargeting(class ACharacterBase* target = nullptr) override;
 
 };

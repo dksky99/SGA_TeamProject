@@ -17,10 +17,10 @@ public:
 	USkillComponent();
 
 	bool DrawSkill1();
-	bool AITargetSkill1();
+	bool AITargetSkill1(class ACharacterBase* target);
 	bool PlaySkill1();
 	bool DrawSkill2();
-	bool AITargetSkill2();
+	bool AITargetSkill2(class ACharacterBase* target);
 	bool PlaySkill2();
 
 	void SkillUsingFinish();

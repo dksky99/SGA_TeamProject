@@ -33,6 +33,21 @@ bool USkillComponent::DrawSkill1()
 
 }
 
+bool USkillComponent::AITargetSkill1(ACharacterBase* target)
+{
+	if (_owner->IsAttack())
+		return false;
+	if (_nowUsing != 0)
+		return false;
+	if (_manager->SkillAITarget(1,target))
+	{
+		_nowUsing = 1;
+
+		return true;
+	}
+	return false;
+}
+
 bool USkillComponent::PlaySkill1()
 {
 
@@ -60,21 +75,6 @@ bool USkillComponent::PlaySkill1()
 	return false;
 }
 
-bool USkillComponent::AITargetSkill1()
-{
-	if (_owner->IsAttack())
-		return false;
-	if (_nowUsing != 0)
-		return false;
-	if (_manager->SkillGuide(1))
-	{
-		_nowUsing = 1;
-
-		return true;
-	}
-	return false;
-}
-
 bool USkillComponent::DrawSkill2()
 {
 	if (_owner->IsAttack())
@@ -82,6 +82,22 @@ bool USkillComponent::DrawSkill2()
 	if (_nowUsing != 0)
 		return false;
 	if (_manager->SkillGuide(2))
+	{
+		_nowUsing = 2;
+
+		return true;
+	}
+	return false;
+}
+
+bool USkillComponent::AITargetSkill2(ACharacterBase* target)
+{
+
+	if (_owner->IsAttack())
+		return false;
+	if (_nowUsing != 0)
+		return false;
+	if (_manager->SkillAITarget(2, target))
 	{
 		_nowUsing = 2;
 
@@ -118,10 +134,6 @@ bool USkillComponent::PlaySkill2()
 	return false;
 }
 
-bool USkillComponent::AITargetSkill2()
-{
-	return false;
-}
 
 void USkillComponent::SkillUsingFinish()
 {

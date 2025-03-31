@@ -11,8 +11,8 @@ UENUM()
 enum class ESkillState
 {
 	Deactivate=0,
-	Precaution,
 	Aiming,
+	Precaution,
 	Playing,
 	Max
 
@@ -32,23 +32,35 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	//플레이어가 스킬 시전을위해 장판을 보고 위치를 설정
 	void StartAiming();
-	void StartPreCaution(class ACharacterBase* target=nullptr);
-	void FinishAiming();
+	void StartPreCaution();
 	
 	void DrawingStart();
 	void DrawingFinish();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//AI가 타겟을 통해 스킬을 시전할 위치를 설정
+	// override후에 부모 함수 호출을 해주기
+	virtual void AITargeting(class ACharacterBase* target = nullptr);
+	//플레이어가 스킬을 사용할 범위를 그림
 	virtual void DrawSkillAiming() ;
+	//범위 지정이 완료되어 그 위치에 전조 장판을 그림.
 	virtual void DrawSkillPrecaution() ;
+
+	//스킬의 입력이 들어갔고 모션을 시작함.
+	// override후에 부모 함수 호출을 해주기
 
 	virtual void SKillBegin();
 
+	//스킬의 작동이 시작됨. override후에 부모 함수 호출을 해주기
 	virtual void SkillHit() ;
+	//작동이 시작한 후로 지속적으로 호출되는 함수. 이를 통해 일정시간 간격으로 시전되는 다단계 스킬을 구현가능.
 	virtual void SkillTick();
 
+	//스킬 동작이 완전히 끝남. 반드시 스킬 틱을 통해 순서대로 호출되는 함수 마지막에 꼭 호출해주기.
+	// override후에 부모 함수 호출을 해주기
 	virtual void SkillEnd();
 
 	float GetCoolTimeRatio() { return _curTime / _coolTime; }

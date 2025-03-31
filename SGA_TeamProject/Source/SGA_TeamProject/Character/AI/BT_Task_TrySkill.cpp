@@ -37,6 +37,21 @@ EBTNodeResult::Type UBT_Task_TrySkill::ExecuteTask(UBehaviorTreeComponent& Owner
 	if (target->IsValidLowLevel() == false)
 		return EBTNodeResult::Failed;
 
+	if (currentPawn->GetSkillComponent()->AITargetSkill1(target))
+	{
+		currentPawn->GetSkillComponent()->PlaySkill1();
+		return EBTNodeResult::Succeeded;
+	}
+	if (currentPawn->GetSkillComponent()->AITargetSkill2(target))
+	{
+
+		currentPawn->GetSkillComponent()->PlaySkill2();
+		return EBTNodeResult::Succeeded;
+	}
+
+
+	return EBTNodeResult::Failed;
+
 
 
 
