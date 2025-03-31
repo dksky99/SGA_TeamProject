@@ -161,7 +161,7 @@ void ANPCBase::ItemBuy()
 		_invenComponent->SetGold(_invenComponent->GetGold() - item.price);
 
 		shopUI->UpdateShop(_invenComponent, _shopComponent);
-		shopUI->SetShopData();
+		shopUI->SetShopItemInfo();
 	}
 }
 
@@ -192,6 +192,6 @@ void ANPCBase::ItemSell()
 		}
 
 		shopUI->UpdateShop(_invenComponent, _shopComponent);
-		shopUI->SetShopData();
+		shopUI->SetShopItemInfo();
 	}
 }

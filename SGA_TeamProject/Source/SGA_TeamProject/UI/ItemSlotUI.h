@@ -16,7 +16,7 @@ class SGA_TEAMPROJECT_API UItemSlotUI : public UUserWidget
 	
 public:
 	void SetDefault();
-	void SetItem(int32 count, TSoftObjectPtr<UTexture2D> itemIcon);
+	void SetItem(const struct FItemSlotData& item);
 
 	// 인벤토리
 	UFUNCTION()
@@ -37,6 +37,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* Image;
+
+	class UItemInfoUI* _toolTip;
 
 	class UUserWidget* _widget;
 
