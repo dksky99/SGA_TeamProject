@@ -177,7 +177,7 @@ void ACPlayerController::UseItemByClick()
 	auto player = Cast<APlayerCharacter>(GetPawn());
 	if (player && useItem && useItem->GetData().type == ItemType::EQUIPMENT)
 	{
-		_invenComponent->EquipItem(player, useItem);
+		_invenComponent->EquipItem(player, useItem, index);
 	}
 	else if (player && useItem)
 	{
