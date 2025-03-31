@@ -16,6 +16,7 @@ void AGrayStoneSkill1::BeginPlay()
 }
 void AGrayStoneSkill1::SkillHit()
 {
+	Super::SkillHit();
 	UE_LOG(LogTemp, Error, TEXT("Skill1Hit"));
 
 
@@ -47,15 +48,17 @@ void AGrayStoneSkill1::SkillHit()
 
 
 
+		ACharacterBase* victim = Cast<ACharacterBase>(hitResult.GetActor());
 		FDamageEvent damageEvent;
 
-		hitResult.GetActor()->TakeDamage(_owner->GetStatComponent()->GetAtk(), damageEvent, _owner->Controller, this);
+		int32 dmg = _owner->GetStatComponent()->GetAtk() * 3 + 10;
+		victim->TakeDamage(dmg, damageEvent, _owner->Controller, this);
 
 
 	}
 
 	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
-
+	SkillEnd();
 }
 
 void AGrayStoneSkill1::DrawSkillAiming()
@@ -69,4 +72,26 @@ void AGrayStoneSkill1::DrawSkillAiming()
 	UE_LOG(LogTemp, Error, TEXT("drawSkill"));
 	SetActorLocation(_loc);
 	SetActorRotation(_rot);
+}
+
+void AGrayStoneSkill1::DrawSkillPrecaution()
+{
+
+}
+
+void AGrayStoneSkill1::AITargeting(ACharacterBase* target)
+{
+	Super::AITargeting(target);
+	FVector start = _owner->GetActorLocation();
+	FVector	targetLoc = target->GetActorLocation();
+	targetLoc.Z = start.Z;
+	FVector end = start +(targetLoc-start).Normalize() * _attackRange;
+	_rot = (end - start).Rotation();
+	_loc = start + (end - start) * 0.5f;
+	SetLocOfFloor();
+
+	UE_LOG(LogTemp, Error, TEXT("drawSkill"));
+	SetActorLocation(_loc);
+	SetActorRotation(_rot);
+
 }

@@ -16,13 +16,16 @@ public:
 	// Sets default values for this component's properties
 	USkillComponent();
 
-	void DrawSkill1();
-	void PlaySkill1();
-	void DrawSkill2();
-	void PlaySkill2();
+	bool DrawSkill1();
+	bool AITargetSkill1(class ACharacterBase* target);
+	bool PlaySkill1();
+	bool DrawSkill2();
+	bool AITargetSkill2(class ACharacterBase* target);
+	bool PlaySkill2();
 
 	void SkillUsingFinish();
 	void SetUsingNone() { _nowUsing = 0; }
+	bool HasSkill() { return _manager != nullptr; }
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -108,6 +108,19 @@ bool ASkillManager::SkillGuide(int index)
 	return true;
 }
 
+bool ASkillManager::SkillAITarget(int index, class ACharacterBase* target)
+{
+	if (CheckSkillAble(index) == false)
+		return false;
+	if (TryUseSkill(index) == false)
+		return false;
+
+	_nowUsing->AITargeting(target);
+
+	return true;
+}
+
+
 bool ASkillManager::SkillRelease(int index)
 {
 	if (CheckSkillAble(index) == false)
