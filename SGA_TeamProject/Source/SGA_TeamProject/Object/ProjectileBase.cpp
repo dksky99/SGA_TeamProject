@@ -22,7 +22,6 @@ AProjectileBase::AProjectileBase()
 	_collider->SetupAttachment(RootComponent);
 	_mesh->SetupAttachment(_collider);
 
-	
 
 
 }
@@ -31,7 +30,9 @@ AProjectileBase::AProjectileBase()
 void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	_collider->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnProjectileOverlap);
+
 }
 
 // Called every frame
@@ -44,7 +45,7 @@ void AProjectileBase::Tick(float DeltaTime)
 void AProjectileBase::FireDirection(const FVector& direction)
 {
 	SetActorRotation(direction.ToOrientationQuat());
-	_projectileComponent->Velocity = direction * _projectileComponent->InitialSpeed;
+	_projectileComponent->Velocity = GetActorRotation().Vector() * _projectileComponent->InitialSpeed;
 }
 
 void AProjectileBase::OnProjectileOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult)

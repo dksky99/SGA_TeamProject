@@ -108,6 +108,18 @@ bool ASkillManager::SkillGuide(int index)
 	return true;
 }
 
+bool ASkillManager::SkillPreCaution(int index)
+{
+	if (CheckSkillAble(index) == false)
+		return false;
+	if (TryUseSkill(index) == false)
+		return false;
+
+	_nowUsing->StartAiming();
+
+	return true;
+}
+
 bool ASkillManager::SkillRelease(int index)
 {
 	if (CheckSkillAble(index) == false)

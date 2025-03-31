@@ -17,23 +17,29 @@ USkillComponent::USkillComponent()
 	// ...
 }
 
-void USkillComponent::DrawSkill1()
+bool USkillComponent::DrawSkill1()
 {
 	if (_owner->IsAttack())
-		return;
+		return false;
 	if (_nowUsing != 0)
-		return;
-	_manager->SkillGuide(1);
-	_nowUsing = 1;
+		return false;
+	if (_manager->SkillGuide(1))
+	{
+		_nowUsing = 1;
+
+		return true;
+	}
+		return false;
+
 }
 
-void USkillComponent::PlaySkill1()
+bool USkillComponent::PlaySkill1()
 {
 
 	if (_owner->IsAttack())
-		return;
+		return false;
 	if (_nowUsing != 1)
-		return;
+		return false;
 
 	UE_LOG(LogTemp, Log, TEXT(" Ability1"));
 	if (_animInstance)
@@ -42,34 +48,56 @@ void USkillComponent::PlaySkill1()
 		{
 			_owner->SetAttack();
 			_animInstance->PlayAnimMontage(_firstMontage);
+			return true;
 
 		}
 		else
 		{
 			UE_LOG(LogTemp, Log, TEXT(" Ability Time Remain %f"), _manager->GetFirstSkill()->GetRemainCoolTime());
-
+			return false;
 		}
 	}
+	return false;
 }
 
-void USkillComponent::DrawSkill2()
+bool USkillComponent::AITargetSkill1()
 {
 	if (_owner->IsAttack())
-		return;
+		return false;
 	if (_nowUsing != 0)
-		return;
-	_manager->SkillGuide(2);
-	_nowUsing = 2;
+		return false;
+	if (_manager->SkillGuide(1))
+	{
+		_nowUsing = 1;
+
+		return true;
+	}
+	return false;
 }
 
-void USkillComponent::PlaySkill2()
+bool USkillComponent::DrawSkill2()
+{
+	if (_owner->IsAttack())
+		return false;
+	if (_nowUsing != 0)
+		return false;
+	if (_manager->SkillGuide(2))
+	{
+		_nowUsing = 2;
+
+		return true;
+	}
+	return false;
+}
+
+bool USkillComponent::PlaySkill2()
 {
 
 	if (_owner->IsAttack())
-		return;
+		return false;
 
 	if (_nowUsing != 2)
-		return;
+		return false;
 	UE_LOG(LogTemp, Log, TEXT(" Ability1"));
 	if (_animInstance)
 	{
@@ -78,14 +106,21 @@ void USkillComponent::PlaySkill2()
 			_nowUsing = 2;
 			_owner->SetAttack();
 			_animInstance->PlayAnimMontage(_secondMontage);
-
+			return true;
 		}
 		else
 		{
 			UE_LOG(LogTemp, Log, TEXT(" Ability Time Remain %f"), _manager->GetSecondSkill()->GetRemainCoolTime());
+			return false;
 			
 		}
 	}
+	return false;
+}
+
+bool USkillComponent::AITargetSkill2()
+{
+	return false;
 }
 
 void USkillComponent::SkillUsingFinish()

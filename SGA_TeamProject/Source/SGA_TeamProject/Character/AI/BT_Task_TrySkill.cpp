@@ -9,6 +9,9 @@
 
 #include "Kismet/KismetMathLibrary.h"
 #include "../CharacterBase.h"
+#include "../SkillComponent.h"
+#include "../../Skill/SkillManager.h"
+
 
 EBTNodeResult::Type UBT_Task_TrySkill::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -23,6 +26,12 @@ EBTNodeResult::Type UBT_Task_TrySkill::ExecuteTask(UBehaviorTreeComponent& Owner
 
 	if (currentPawn->IsAttack())
 		return EBTNodeResult::Failed;
+
+	if(currentPawn->GetSkillComponent()->HasSkill()==false)
+		return EBTNodeResult::Failed;
+		
+		
+
 
 	auto target = Cast<ACharacterBase>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
 	if (target->IsValidLowLevel() == false)

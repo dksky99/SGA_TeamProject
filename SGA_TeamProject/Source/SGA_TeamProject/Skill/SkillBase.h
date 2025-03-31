@@ -6,6 +6,18 @@
 #include "GameFramework/Actor.h"
 #include "SkillBase.generated.h"
 
+
+UENUM()
+enum class ESkillState
+{
+	Deactivate=0,
+	Precaution,
+	Aiming,
+	Playing,
+	Max
+
+};
+
 UCLASS()
 class SGA_TEAMPROJECT_API ASkillBase : public AActor
 {
@@ -21,15 +33,21 @@ protected:
 
 public:	
 	void StartAiming();
+	void StartPreCaution(class ACharacterBase* target=nullptr);
 	void FinishAiming();
+	
+	void DrawingStart();
+	void DrawingFinish();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void DrawSkillAiming() ;
+	virtual void DrawSkillPrecaution() ;
 
 	virtual void SKillBegin();
 
 	virtual void SkillHit() ;
+	virtual void SkillTick();
 
 	virtual void SkillEnd();
 
@@ -39,8 +57,10 @@ public:
 
 	void SetOwner(class ACharacterBase* owner);
 	void SetLocOfFloor();
-private:
+	ESkillState GetState() { return _state; }
+ private:
 	void CoolTimeFlow(float DeltaTime);
+	
 protected:
 	
 
@@ -54,17 +74,19 @@ protected:
 
 	class ACharacterBase* _owner;
 
+	class ACharacterBase* _target;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	float _coolTime=1.0f;
 	
 	float _curTime;
 
+
+	ESkillState _state;
+
 	FVector _loc;
 	FRotator _rot;
 
-	bool _bIsPlaying = false;
-	bool _bIsGuiding = false;
-
+	bool _bIsDrawing = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	float _attackRange=0.0f;
 

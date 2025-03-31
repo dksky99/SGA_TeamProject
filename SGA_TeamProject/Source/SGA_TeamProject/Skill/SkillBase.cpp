@@ -36,17 +36,34 @@ void ASkillBase::BeginPlay()
 void ASkillBase::StartAiming()
 {
 	UE_LOG(LogTemp, Error, TEXT("AimingStart"));
-	_bIsGuiding = true;
+	_state = ESkillState::Aiming;
+	DrawingStart();
+}
 
+void ASkillBase::StartPreCaution(ACharacterBase* target)
+{
+	_state = ESkillState::Precaution;
+	DrawingStart();
+}
+
+void ASkillBase::FinishAiming()
+{
+	_state = ESkillState::Playing;
+	DrawingFinish();
+}
+
+void ASkillBase::DrawingStart()
+{
+	_bIsDrawing = true;
 	_decalComponent->SetActive(true);
 	_splineComponent->SetActive(true);
 	_decalComponent->SetVisibility(true);
 	_splineComponent->SetVisibility(true);
 }
 
-void ASkillBase::FinishAiming()
+void ASkillBase::DrawingFinish()
 {
-	_bIsGuiding = false;
+	_bIsDrawing = false;
 	_decalComponent->SetActive(false);
 	_splineComponent->SetActive(false);
 	_decalComponent->SetVisibility(false);
@@ -60,21 +77,49 @@ void ASkillBase::Tick(float DeltaTime)
 
 	CoolTimeFlow(DeltaTime);
 
-	if (_bIsGuiding)
+	switch (_state)
+	{
+	case ESkillState::Deactivate:
+		break;
+	case ESkillState::Precaution:
+		DrawSkillPrecaution();
+		break;
+	case ESkillState::Aiming:
 		DrawSkillAiming();
+		break;
+	case ESkillState::Playing:
+		SkillTick();
+		break;
+	default:
+		break;
+	}
+	
 
 }
 
 void ASkillBase::DrawSkillAiming()
 {
-	UE_LOG(LogTemp, Error, TEXT("Drawing"));
+	UE_LOG(LogTemp, Error, TEXT("Aiming"));
 
+}
+
+void ASkillBase::DrawSkillPrecaution()
+{
+	UE_LOG(LogTemp, Error, TEXT("Precaution"));
 }
 
 void ASkillBase::SKillBegin()
 {
 	_curTime = 0.0f;
-	FinishAiming();
+	if (_state == ESkillState::Precaution)
+	{
+
+	}
+	else if (_state == ESkillState::Aiming)
+	{
+		FinishAiming();
+
+	}
 
 }
 
@@ -83,11 +128,18 @@ void ASkillBase::SkillHit()
 	UE_LOG(LogTemp, Error, TEXT("SkillDefaultHit"));
 }
 
+void ASkillBase::SkillTick()
+{
+	UE_LOG(LogTemp, Error, TEXT("SkillTick"));
+}
+
 
 
 void ASkillBase::SkillEnd()
 {
-	
+	_target = nullptr;
+	_state = ESkillState::Deactivate;
+
 }
 
 void ASkillBase::SetOwner(ACharacterBase* owner)
