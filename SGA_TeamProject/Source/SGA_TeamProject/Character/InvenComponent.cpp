@@ -173,6 +173,8 @@ void UInvenComponent::EquipItem(APlayerCharacter* player, AItemBase* item, int32
 
 	_characterEquipMap.FindOrAdd(player).map.Add(slot, item);
 
+	if (_equipChangeEvent.IsBound())
+		_equipChangeEvent.Broadcast(item);
 
 	item->UseItem(player);
 }
@@ -198,3 +200,19 @@ void UInvenComponent::UnequipItem(APlayerCharacter* player, EquipSlot slot, int3
 	equipMap.map.Remove(slot);
 }
 
+void UInvenComponent::CharacterChange(APlayerCharacter* player)
+{
+	auto equipMap = _characterEquipMap.Find(player);
+	if (!equipMap)
+		return;
+
+	for (const auto& equip : equipMap->map)
+	{
+		auto item = equip.Value;
+
+		if (item && _equipChangeEvent.IsBound())
+		{
+			_equipChangeEvent.Broadcast(item);
+		}
+	}
+}

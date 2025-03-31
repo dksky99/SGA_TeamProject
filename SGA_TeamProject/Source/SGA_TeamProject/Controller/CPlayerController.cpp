@@ -14,8 +14,9 @@
 #include "../Character/PlayerCharacter.h"
 #include "../Character/InvenComponent.h"
 
-#include "../UI/PartyListUI.h"
 #include "../UI/InvenUI.h"
+#include "../UI/EquipUI.h"
+#include "../UI/PartyListUI.h"
 #include "../TeamManager.h"
 
 #include "../CGameInstance.h"
@@ -46,6 +47,12 @@ void ACPlayerController::PostInitializeComponents()
 		_invenComponent->_goldChangeEvent.AddUObject(_invenWidget, &UInvenUI::SetGold);
 		_invenWidget->Drop->OnClicked.AddDynamic(this, &ACPlayerController::DropItemByClick);
 		_invenWidget->Use->OnClicked.AddDynamic(this, &ACPlayerController::UseItemByClick);
+	}
+
+	if (_equipWidgetClass)
+	{
+		_equipWidget = CreateWidget<UEquipUI>(GetWorld(), _equipWidgetClass);
+		_invenComponent->_equipChangeEvent.AddUObject(_equipWidget, &UEquipUI::UpdateEquip);
 	}
 }
 
@@ -144,6 +151,14 @@ void ACPlayerController::CharacterChange()
 	// UI/리더 갱신
 	_curCamp->_characterChanged.Broadcast(targetCharacter);
 	_curCamp->LeaderChange(targetCharacter);
+
+	// 장비 UI 갱신
+	auto target = Cast<APlayerCharacter>(targetCharacter);
+	if (target)
+	{
+		_equipWidget->ResetEquip();
+		_invenComponent->CharacterChange(target);
+	}
 }
 
 void ACPlayerController::DropItemByClick()

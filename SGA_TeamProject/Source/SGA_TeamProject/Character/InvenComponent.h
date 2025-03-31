@@ -10,6 +10,7 @@
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FItemChangeEvent, int32, const FItemSlotData&);
 DECLARE_MULTICAST_DELEGATE_OneParam(FGoldChangeEvent, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(FEquipChangeEvent, AItemBase*);
 
 USTRUCT(BlueprintType)
 struct FItemSlotData
@@ -63,10 +64,12 @@ public:
 
 	FItemChangeEvent _itemChangeEvent;
 	FGoldChangeEvent _goldChangeEvent;
+	FEquipChangeEvent _equipChangeEvent;
 
 	void EquipItem(class APlayerCharacter* player, AItemBase* item, int32 index);
 	void UnequipItem(class APlayerCharacter* player, EquipSlot slot, int32 index = -1);
 
+	void CharacterChange(APlayerCharacter* player);
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
@@ -74,5 +77,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TMap<class ACharacterBase*, FEquipSlotMap> _characterEquipMap;
+
 	int32 _gold = 0;
 };
