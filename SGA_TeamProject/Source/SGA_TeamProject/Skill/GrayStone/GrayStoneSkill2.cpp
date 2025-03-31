@@ -72,15 +72,14 @@ void AGrayStoneSkill2::DrawSkillAiming()
 
 void AGrayStoneSkill2::DrawSkillPrecaution()
 {
+
 }
 
 void AGrayStoneSkill2::AITargeting(ACharacterBase* target)
 {
 	Super::AITargeting(target);
 	FVector start = _owner->GetActorLocation();
-	FVector	targetLoc = target->GetActorLocation();
-	targetLoc.Z = start.Z;
-	FVector end = start + (targetLoc - start).Normalize() * _attackRange;
+	FVector end = start + _owner->GetActorForwardVector() * _attackRange;
 	_rot = (end - start).Rotation();
 	_loc = start + (end - start) * 0.5f;
 	SetLocOfFloor();
