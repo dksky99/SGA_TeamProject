@@ -13,11 +13,11 @@ ASkillManager::ASkillManager()
 
 }
 
-void ASkillManager::SetOwner(ACharacterBase* owner)
+void ASkillManager::Set_Owner(ACharacterBase* owner)
 {
 	_owner = owner;
-	_firstAbility->SetOwner(owner);
-	_secondAbility->SetOwner(owner);
+	_firstAbility->Set_Owner(owner);
+	_secondAbility->Set_Owner(owner);
 	SetActorLocationAndRotation(owner->GetActorLocation(),owner->GetActorRotation());
 	
 }

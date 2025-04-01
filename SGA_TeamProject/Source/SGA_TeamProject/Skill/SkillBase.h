@@ -67,7 +67,7 @@ public:
 	float GetRemainCoolTime() { return _coolTime - _curTime; }
 	bool IsReady() { return _curTime >= _coolTime; }
 
-	void SetOwner(class ACharacterBase* owner);
+	void Set_Owner(class ACharacterBase* owner);
 	void SetLocOfFloor();
 	ESkillState GetState() { return _state; }
  private:

@@ -137,7 +137,7 @@ void ASkillBase::SkillEnd()
 
 }
 
-void ASkillBase::SetOwner(ACharacterBase* owner)
+void ASkillBase::Set_Owner(ACharacterBase* owner)
 {
 	_owner = owner;
 	SetActorLocationAndRotation(owner->GetActorLocation(), owner->GetActorRotation());

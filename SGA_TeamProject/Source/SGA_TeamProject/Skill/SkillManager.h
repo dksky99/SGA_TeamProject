@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	ASkillManager();
 
-	void SetOwner(class ACharacterBase* owner);
+	void Set_Owner(class ACharacterBase* owner);
 
 protected:
 	// Called when the game starts or when spawned

@@ -163,7 +163,7 @@ void USkillComponent::BeginPlay()
 	if (_manager)
 	{
 		_manager->AttachToActor(_owner, FAttachmentTransformRules::KeepRelativeTransform);
-		_manager->SetOwner(_owner);
+		_manager->Set_Owner(_owner);
 		_animInstance->_skill1HitDelegate.AddUObject(_manager->GetFirstSkill(), &ASkillBase::SkillHit);
 		_animInstance->_skill2HitDelegate.AddUObject(_manager->GetSecondSkill(), &ASkillBase::SkillHit);
 	}

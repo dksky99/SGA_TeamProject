@@ -26,9 +26,10 @@ public:
 
 private:
 
-	float MinRange = 200.0f; // 최소 사거리
-	float MaxRange = 1000.0f; // 최대 사거리
-	float PitchAngle = 45.0f; // 위로 올리는 각도 (도 단위)
-
-
+	float _maxRange = 1000.0f; // 최대 사거리
+	float _minRange = 200.0f; // 최소 사거리
+	float _maxAngle = 45.0f; // 위로 올리는 각도 (도 단위)
+	float _minAngle = -45.0f;
+	float _delayTime = 1.0f;
+	float _radius = 300.0f;
 };

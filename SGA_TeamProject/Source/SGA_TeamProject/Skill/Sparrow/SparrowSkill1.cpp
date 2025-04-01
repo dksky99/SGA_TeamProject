@@ -18,12 +18,20 @@ void ASparrowSkill1::SkillHit()
 
 void ASparrowSkill1::DrawSkillAiming()
 {
-	FVector CameraLocation;
-	FRotator CameraRotation;
+	FVector		cameraLocation;
+	FRotator	cameraRotation;
 
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(cameraLocation, cameraRotation);
 
+	float p = cameraRotation.Pitch - _minAngle;
+	p = FMath::Clamp(p, 0.0f, _maxAngle - _minAngle);
+	float dist = _minRange + (_maxRange - _minRange) * (p / (_maxAngle - _minAngle));
+	_loc = _owner->GetActorLocation()+_owner->GetActorForwardVector() * dist;
+	_rot = _owner->GetActorRotation();
+	SetLocOfFloor();
 
+	SetActorLocation(_loc);
+	SetActorRotation(_rot);
 }
 
 void ASparrowSkill1::DrawSkillPrecaution()
@@ -33,4 +41,5 @@ void ASparrowSkill1::DrawSkillPrecaution()
 void ASparrowSkill1::AITargeting(ACharacterBase* target)
 {
 	Super::AITargeting(target);
+	
 }

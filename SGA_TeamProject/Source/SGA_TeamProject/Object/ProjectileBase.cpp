@@ -68,7 +68,7 @@ void AProjectileBase::OnProjectileOverlap(UPrimitiveComponent* OverlappedCompone
 	}
 }
 
-void AProjectileBase::SetOwner(ACharacterBase* owner)
+void AProjectileBase::Set_Owner(ACharacterBase* owner)
 {
 	if (owner == nullptr)
 	{

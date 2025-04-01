@@ -29,7 +29,7 @@ public:
 	UFUNCTION()
 	void OnProjectileOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 
-	void SetOwner(class ACharacterBase* owner);
+	void Set_Owner(class ACharacterBase* owner);
 	void SetDamage(uint32 dmg) { _damage = dmg; }
 
 protected:
