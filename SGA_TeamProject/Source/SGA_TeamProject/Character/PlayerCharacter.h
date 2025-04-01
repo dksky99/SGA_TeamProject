@@ -58,7 +58,6 @@ public:
 	void NPCInteract(const  FInputActionValue& value);
 
 	void AddItem(class AItemBase* item);
-	FRotator GetCamRotate();
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))

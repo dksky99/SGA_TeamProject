@@ -280,7 +280,3 @@ void APlayerCharacter::AddItem(AItemBase* item)
 	}
 }
 
-FRotator APlayerCharacter::GetCamRotate()
-{
-	return _camera->GetComponentRotation();
-}
