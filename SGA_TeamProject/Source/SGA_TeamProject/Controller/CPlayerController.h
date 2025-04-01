@@ -11,6 +11,7 @@
  */
 #define INVEN_COMP Cast<ACPlayerController>(GetWorld()->GetFirstPlayerController())->GetInvenComponent()
 #define INVEN_UI Cast<ACPlayerController>(GetWorld()->GetFirstPlayerController())->GetInvenWidget()
+#define EQUIP_UI Cast<ACPlayerController>(GetWorld()->GetFirstPlayerController())->GetEquipWidget()
 
 UCLASS()
 class SGA_TEAMPROJECT_API ACPlayerController : public APlayerController
@@ -37,6 +38,7 @@ public:
 	class UInvenComponent* GetInvenComponent() { return _invenComponent; }
 	class UInvenUI* GetInvenWidget() { return _invenWidget; }
 	class UPartyListUI* GetPartyListWidget() { return _partyListWidget; }
+	class UEquipUI* GetEquipWidget() { return _equipWidget; }
 
 	UFUNCTION()
 	void DropItemByClick();
@@ -62,6 +64,13 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	class UInvenComponent* _invenComponent;
+
+	// 장비
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UUserWidget> _equipWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
+	class UEquipUI* _equipWidget;
 
 	// 팀원 리스트
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PartyList", meta = (AllowPrivateAccess = "true"))

@@ -31,6 +31,7 @@
 
 #include "InvenComponent.h"
 #include "../UI/InvenUI.h"
+#include "../UI/EquipUI.h"
 
 #include "NPCBase.h"
 
@@ -202,12 +203,14 @@ void APlayerCharacter::InvenOpen(const FInputActionValue& value)
 			if (controller)
 				controller->HideUI();
 			INVEN_UI->RemoveFromViewport();
+			EQUIP_UI->RemoveFromViewport();
 		}
 		else
 		{
 			if (controller)
 				controller->ShowUI();
 			INVEN_UI->AddToViewport();
+			EQUIP_UI->AddToViewport();
 		}
 
 		_isInvenOpen = !_isInvenOpen;
