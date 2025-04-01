@@ -47,7 +47,7 @@ void AGrayStoneSkill2::SkillHit()
 
 		FDamageEvent damageEvent;
 		int32 dmg = _owner->GetStatComponent()->GetAtk() * 5 + 20;
-		victim->TakeDamage(dmg, damageEvent, _owner->Controller, this);
+		victim->TakeDamage(dmg, damageEvent, _owner->Controller, _owner);
 
 
 	}
