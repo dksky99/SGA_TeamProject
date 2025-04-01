@@ -276,3 +276,8 @@ void APlayerCharacter::AddItem(AItemBase* item)
 		item->Deactivate();
 	}
 }
+
+FRotator APlayerCharacter::GetCamRotate()
+{
+	return _camera->GetComponentRotation();
+}

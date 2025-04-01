@@ -20,7 +20,5 @@ public:
 
 protected:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AProjectileBase> _projectileClass;
 	
 };
