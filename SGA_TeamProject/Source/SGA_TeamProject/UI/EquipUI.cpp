@@ -1,18 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "InvenUI.h"
+#include "EquipUI.h"
 
 #include "Components/UniformGridPanel.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 
+#include "../Character/PlayerCharacter.h"
+#include "../Item/ItemBase.h"
+
 #include "ItemSlotUI.h"
 #include "ItemInfoUI.h"
-#include "../Character/InvenComponent.h"
 
-bool UInvenUI::Initialize()
+bool UEquipUI::Initialize()
 {
 	Super::Initialize();
 
@@ -24,40 +26,42 @@ bool UInvenUI::Initialize()
 		auto slot = Cast<UItemSlotUI>(widget);
 		if (slot)
 		{
-			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetIndex);
+			slot->Button->OnClicked.AddDynamic(Armor, &UItemSlotUI::SetIndex);
 			slot->_widget = this;
 			slot->_buttonIndex = index;
 
 			if (_toolTipClass)
 			{
 				auto toolTip = CreateWidget<UItemInfoUI>(GetWorld(), _toolTipClass);
-
 				slot->_toolTip = toolTip;
-				//slot->SetToolTip(nullptr);
 			}
 
-			_itemSlots.Add(slot);
+			_equipSlots.Add(slot);
 			index++;
 		}
 	}
-
+	
 	return true;
 }
 
-void UInvenUI::SetItem_Index(int32 index, const FItemSlotData& item)
+void UEquipUI::ResetEquip()
 {
-	if (item.count == 0)
+	for (auto slot : _equipSlots)
 	{
-		_itemSlots[index]->SetDefault();
-	}
-	else
-	{
-		_itemSlots[index]->SetItem(item);
+		slot->SetDefault();
 	}
 }
 
-void UInvenUI::SetGold(int32 gold)
+void UEquipUI::UpdateEquip(AItemBase* item)
 {
-	FString text = FString::Printf(TEXT("%d"), gold);
-	Gold->SetText(FText::FromString(text));
+	auto data = item->GetData();
+	if (data.equipSlot == EquipSlot::WEAPON)
+	{
+		Weapon->SetItem(data);
+	}
+
+	if (data.equipSlot == EquipSlot::ARMOR)
+	{
+		Armor->SetItem(data);
+	}
 }

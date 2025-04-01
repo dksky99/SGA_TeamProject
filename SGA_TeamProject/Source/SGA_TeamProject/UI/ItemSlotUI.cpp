@@ -8,6 +8,7 @@
 
 #include "InvenUI.h"
 #include "ShopUI.h"
+#include "EquipUI.h"
 
 #include "ItemInfoUI.h"
 #include "../Character/InvenComponent.h"
@@ -24,23 +25,35 @@ void UItemSlotUI::SetItem(const FItemSlotData& item)
 	FString text = FString::Printf(TEXT("%d"), item.count);
 	Count->SetText(FText::FromString(text));
 
-	UTexture2D* image = item.itemData.icon.LoadSynchronous();
+	SetItem(item.itemData);
+}
+
+void UItemSlotUI::SetItem(const FItemData& item)
+{
+	UTexture2D* image = item.icon.LoadSynchronous();
 	Image->SetBrushFromTexture(image);
 
-	if (auto widget = Cast<UInvenUI>(_widget))
+	if (_widget->IsA<UInvenUI>() || _widget->IsA<UEquipUI>())
 	{
-		_toolTip->SetItemInfo(item.itemData);
+		_toolTip->SetItemInfo(item);
 		SetToolTip(_toolTip);
 	}
 }
 
-void UItemSlotUI::SetInvenIndex()
+void UItemSlotUI::SetIndex()
 {
 	if (_widget == nullptr)
 		return;
 
-	auto widget = Cast<UInvenUI>(_widget);
-	if (widget)
+	//auto widget = Cast<UInvenUI>(_widget);
+	if (auto widget = Cast<UInvenUI>(_widget))
+	{
+		widget->_curIndex = _buttonIndex;
+		return;
+	}
+
+	//widget = Cast<UEquipUI>(_widget);
+	if (auto widget = Cast<UEquipUI>(_widget))
 	{
 		widget->_curIndex = _buttonIndex;
 		return;

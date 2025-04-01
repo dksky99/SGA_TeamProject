@@ -17,10 +17,11 @@ class SGA_TEAMPROJECT_API UItemSlotUI : public UUserWidget
 public:
 	void SetDefault();
 	void SetItem(const struct FItemSlotData& item);
+	void SetItem(const struct FItemData& item);
 
 	// 인벤토리
 	UFUNCTION()
-	void SetInvenIndex();
+	void SetIndex();
 
 	// 상점
 	UFUNCTION()
