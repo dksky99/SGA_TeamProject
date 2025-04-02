@@ -142,7 +142,7 @@ void ACPlayerController::CharacterChange()
 	if (aiController) aiController->UnPossess();
 
 	playerController->Possess(targetCharacter);
-	aiController->Possess(playerCharacter);
+	if (playerCharacter->IsAlive()) aiController->Possess(playerCharacter);
 
 	// Ä·ÇÁ ±³Ã¼
 	playerCharacter->SetCamp_Ally();
