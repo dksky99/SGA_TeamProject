@@ -59,6 +59,9 @@ public:
 
 	void AddItem(class AItemBase* item);
 
+	bool _isTurnLeft = false;
+	bool _isTurnRight = false;
+
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))

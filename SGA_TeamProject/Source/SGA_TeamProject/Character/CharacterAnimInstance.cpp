@@ -4,8 +4,10 @@
 #include "CharacterAnimInstance.h"
 
 #include "CharacterBase.h"
+#include "PlayerCharacter.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Animation/AnimMontage.h"
+#include "Math/UnrealMathUtility.h"
 
 UCharacterAnimInstance::UCharacterAnimInstance()
 {
@@ -26,6 +28,18 @@ void UCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 			_vertical = character->MyVertical();
 			_horizontal = character->MyHorizontal();
+
+			FRotator controlRotation = character->GetControlRotation();
+			FRotator actorRotation = character->GetActorRotation();
+			_yaw = FMath::FindDeltaAngleDegrees(actorRotation.Yaw, controlRotation.Yaw);
+			_pitch = FMath::FindDeltaAngleDegrees(actorRotation.Pitch, controlRotation.Pitch);
+
+			auto player = Cast<APlayerCharacter>(character);
+			if (player)
+			{
+				_isTurnLeft = player->_isTurnLeft;
+				_isTurnRight = player->_isTurnRight;
+			}
 		}
 	}
 }
