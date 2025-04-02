@@ -167,19 +167,19 @@ void UInvenComponent::EquipItem(APlayerCharacter* player, AItemBase* item, int32
 		if (_characterEquipMap[player].map.Contains(slot))
 		{
 			// 장착 슬롯에 아이템이 들어 있을 때
-			UnequipItem(player, slot, index); 
+			UnequipItem(player, item, index); 
 		}
 	}
 
 	_characterEquipMap.FindOrAdd(player).map.Add(slot, item);
 
 	if (_equipChangeEvent.IsBound())
-		_equipChangeEvent.Broadcast(item);
+		_equipChangeEvent.Broadcast(item, false);
 
 	item->UseItem(player);
 }
 
-void UInvenComponent::UnequipItem(APlayerCharacter* player, EquipSlot slot, int32 index)
+void UInvenComponent::UnequipItem(APlayerCharacter* player, AItemBase* item, int32 index)
 {
 	if (!player || !_characterEquipMap.Contains(player)) return;
 
@@ -187,7 +187,11 @@ void UInvenComponent::UnequipItem(APlayerCharacter* player, EquipSlot slot, int3
 	if (index == -1 && IsFull()) return;
 
 	FEquipSlotMap& equipMap = _characterEquipMap[player];
-	if (!equipMap.map.Contains(slot)) return;
+	auto slot = item->GetData().equipSlot;
+
+	// 단순 해제일 경우
+	if (!equipMap.map.Contains(slot))
+		return;
 
 	auto oldItem = Cast<AEquipItem>(equipMap.map[slot]);
 	if (!oldItem) return;
@@ -198,6 +202,9 @@ void UInvenComponent::UnequipItem(APlayerCharacter* player, EquipSlot slot, int3
 	AddItem(oldItem->GetData(), 1, index);
 	// 장착 목록에서 제거
 	equipMap.map.Remove(slot);
+
+	if (_equipChangeEvent.IsBound())
+		_equipChangeEvent.Broadcast(item, true);
 }
 
 void UInvenComponent::CharacterChange(APlayerCharacter* player)
@@ -212,7 +219,7 @@ void UInvenComponent::CharacterChange(APlayerCharacter* player)
 
 		if (item && _equipChangeEvent.IsBound())
 		{
-			_equipChangeEvent.Broadcast(item);
+			_equipChangeEvent.Broadcast(item, false);
 		}
 	}
 }

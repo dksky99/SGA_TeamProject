@@ -26,7 +26,7 @@ bool UEquipUI::Initialize()
 		auto slot = Cast<UItemSlotUI>(widget);
 		if (slot)
 		{
-			slot->Button->OnClicked.AddDynamic(Armor, &UItemSlotUI::SetIndex);
+			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetIndex);
 			slot->_widget = this;
 			slot->_buttonIndex = index;
 
@@ -41,6 +41,8 @@ bool UEquipUI::Initialize()
 		}
 	}
 	
+	_equipItems.SetNum(index);
+
 	return true;
 }
 
@@ -52,16 +54,25 @@ void UEquipUI::ResetEquip()
 	}
 }
 
-void UEquipUI::UpdateEquip(AItemBase* item)
+void UEquipUI::UpdateEquip(AItemBase* item, bool _isUnequip)
 {
 	auto data = item->GetData();
-	if (data.equipSlot == EquipSlot::WEAPON)
-	{
-		Weapon->SetItem(data);
-	}
+	int32 index = static_cast<int32>(data.equipSlot);
 
-	if (data.equipSlot == EquipSlot::ARMOR)
+	if (index == 0)
+		return;
+
+	// 장비 해제일 경우
+	if (_isUnequip == true)
 	{
-		Armor->SetItem(data);
+		_equipSlots[index - 1]->SetDefault();
+		_equipItems[index - 1] = nullptr;
+	}
+	
+	// 장비 장착일 경우
+	else
+	{
+		_equipSlots[index - 1]->SetItem(data);
+		_equipItems[index - 1] = item;
 	}
 }

@@ -19,7 +19,7 @@ public:
 	virtual bool Initialize() override;
 
 	void ResetEquip();
-	void UpdateEquip(class AItemBase* item);
+	void UpdateEquip(class AItemBase* item, bool _isUnequip);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UUniformGridPanel* Grid;
@@ -30,11 +30,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UItemSlotUI* Weapon;
 
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* Text;*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Unequip;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<class UItemSlotUI*> _equipSlots;
+
+	TArray<class AItemBase*> _equipItems;
 
 	int32 _curIndex = -1;
 
