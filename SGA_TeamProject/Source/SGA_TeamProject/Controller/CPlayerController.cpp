@@ -207,6 +207,9 @@ void ACPlayerController::UnequipItemByClick()
 	if (_equipWidget)
 		index = _equipWidget->_curIndex;
 
+	if (index == -1)
+		return;
+
 	auto player = Cast<APlayerCharacter>(GetPawn());
 	auto item = _equipWidget->_equipItems[index];
 	if (player && item)
