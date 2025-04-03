@@ -12,12 +12,11 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/Button.h"
 
-
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 #include "Camera/CameraComponent.h"
 #include "Camera/CameraActor.h"
-
 
 #include "Engine/DamageEvents.h"
 #include "Engine/OverlapResult.h"
@@ -50,6 +49,8 @@ APlayerCharacter::APlayerCharacter()
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
 	_springArm->bUsePawnControlRotation = true;
 
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
 }
 
 void APlayerCharacter::PostInitializeComponents()
@@ -109,6 +110,7 @@ void APlayerCharacter::Move(const FInputActionValue& value)
 			UpDown(moveVector.Y);
 			RightLeft(moveVector.X);
 
+			GetCharacterMovement()->bUseControllerDesiredRotation = true;
 		}
 	}
 }
@@ -120,6 +122,33 @@ void APlayerCharacter::Look(const FInputActionValue& value)
 	{
 		AddControllerYawInput(lookAxisVector.X);
 		AddControllerPitchInput(-lookAxisVector.Y);
+
+		float degree = FMath::FindDeltaAngleDegrees(GetActorRotation().Yaw, GetControlRotation().Yaw);
+
+		// 카메라 오른쪽을 넘어감, 나는 정면
+		if (degree > 90.0f)
+		{
+			_isTurnRight = true;
+			GetCharacterMovement()->bUseControllerDesiredRotation = true;
+		}
+		// 카메라 왼쪽을 넘어감, 나는 정면
+		else if (degree < -90.0f)
+		{
+			_isTurnLeft = true;
+			GetCharacterMovement()->bUseControllerDesiredRotation = true;
+		}
+		// 움직이거나, 공격
+		else if (GetCharacterMovement()->Velocity.Size() > 0.1f || _isAttack)
+		{
+			GetCharacterMovement()->bUseControllerDesiredRotation = true;
+		}
+		// 카메라, 정면 각도 차이의 절대값이 0.1 미만
+		else if (FMath::Abs(degree) < 0.1f)
+		{
+			_isTurnLeft = false;
+			_isTurnRight = false;
+			GetCharacterMovement()->bUseControllerDesiredRotation = false;
+		}
 	}
 }
 
@@ -144,8 +173,9 @@ void APlayerCharacter::Attack(const FInputActionValue& value)
 	bool isPress = value.Get<bool>();
 	if (isPress)
 	{
-		TryAttack();
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
 
+		TryAttack();
 	}
 }
 

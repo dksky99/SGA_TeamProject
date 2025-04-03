@@ -53,6 +53,7 @@ void ACPlayerController::PostInitializeComponents()
 	{
 		_equipWidget = CreateWidget<UEquipUI>(GetWorld(), _equipWidgetClass);
 		_invenComponent->_equipChangeEvent.AddUObject(_equipWidget, &UEquipUI::UpdateEquip);
+		_equipWidget->Unequip->OnClicked.AddDynamic(this, &ACPlayerController::UnequipItemByClick);
 	}
 }
 
@@ -142,7 +143,7 @@ void ACPlayerController::CharacterChange()
 	if (aiController) aiController->UnPossess();
 
 	playerController->Possess(targetCharacter);
-	aiController->Possess(playerCharacter);
+	if (playerCharacter->IsAlive()) aiController->Possess(playerCharacter);
 
 	// Ä·ÇÁ ±³Ã¼
 	playerCharacter->SetCamp_Ally();
@@ -197,5 +198,22 @@ void ACPlayerController::UseItemByClick()
 	else if (player && useItem)
 	{
 		useItem->UseItem(player);
+	}
+}
+
+void ACPlayerController::UnequipItemByClick()
+{
+	int32 index = -1;
+	if (_equipWidget)
+		index = _equipWidget->_curIndex;
+
+	if (index == -1)
+		return;
+
+	auto player = Cast<APlayerCharacter>(GetPawn());
+	auto item = _equipWidget->_equipItems[index];
+	if (player && item)
+	{
+		_invenComponent->UnequipItem(player, item);
 	}
 }

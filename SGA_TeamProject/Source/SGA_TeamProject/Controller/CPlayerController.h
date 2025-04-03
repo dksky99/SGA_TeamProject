@@ -51,6 +51,9 @@ public:
 	UFUNCTION()
 	void UseItemByClick();
 
+	UFUNCTION()
+	void UnequipItemByClick();
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;

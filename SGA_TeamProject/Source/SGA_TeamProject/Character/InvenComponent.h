@@ -10,7 +10,7 @@
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FItemChangeEvent, int32, const FItemSlotData&);
 DECLARE_MULTICAST_DELEGATE_OneParam(FGoldChangeEvent, int32);
-DECLARE_MULTICAST_DELEGATE_OneParam(FEquipChangeEvent, AItemBase*);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FEquipChangeEvent, AItemBase*, bool);
 
 USTRUCT(BlueprintType)
 struct FItemSlotData
@@ -67,7 +67,7 @@ public:
 	FEquipChangeEvent _equipChangeEvent;
 
 	void EquipItem(class APlayerCharacter* player, AItemBase* item, int32 index);
-	void UnequipItem(class APlayerCharacter* player, EquipSlot slot, int32 index = -1);
+	void UnequipItem(class APlayerCharacter* player, AItemBase* item, int32 index = -1);
 
 	void CharacterChange(APlayerCharacter* player);
 

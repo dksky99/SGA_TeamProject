@@ -148,7 +148,7 @@ void ACharacterBase::UpDown(float value)
 		return;
 	}
 	_vertical = value;
-	FVector forward = GetActorForwardVector();
+	FVector forward = GetControlRotation().Vector();
 	AddMovementInput(forward * value * _statComponent->GetSpeed());
 }
 
@@ -163,7 +163,8 @@ void ACharacterBase::RightLeft(float value)
 		return;
 	}
 	_horizontal = value;
-	FVector right = GetActorRightVector();
+	FRotator controlRot = GetControlRotation();
+	FVector right = FRotationMatrix(controlRot).GetUnitAxis(EAxis::Y);
 	AddMovementInput(right * value * _statComponent->GetSpeed());
 }
 
@@ -200,9 +201,9 @@ void ACharacterBase::DeadActionEnd()
 
 void ACharacterBase::TryAttack()
 {
-	if (_isAttack)
+	if (_isAttack || _statComponent->IsDead())
 		return;
-	
+
 	_isAttack = true;
 	UE_LOG(LogTemp, Log, TEXT(" curAttack %d"), _curAttackSection);
 	if (_animInstance)
@@ -217,7 +218,7 @@ void ACharacterBase::TryAttack()
 void ACharacterBase::TryAbility1()
 {
 
-	if (_isAttack)
+	if (_isAttack || _statComponent->IsDead())
 		return;
 
 	_skillComponent->PlaySkill1();
@@ -225,7 +226,7 @@ void ACharacterBase::TryAbility1()
 
 void ACharacterBase::TryAbility1Aiming()
 {
-	if (_isAttack)
+	if (_isAttack || _statComponent->IsDead())
 		return;
 
 	_skillComponent->DrawSkill1();
@@ -233,7 +234,7 @@ void ACharacterBase::TryAbility1Aiming()
 
 void ACharacterBase::TryAbility2()
 {
-	if (_isAttack)
+	if (_isAttack || _statComponent->IsDead())
 		return;
 
 	_skillComponent->PlaySkill2();
@@ -241,7 +242,7 @@ void ACharacterBase::TryAbility2()
 
 void ACharacterBase::TryAbility2Aiming()
 {
-	if (_isAttack)
+	if (_isAttack || _statComponent->IsDead())
 		return;
 
 	_skillComponent->DrawSkill2();
