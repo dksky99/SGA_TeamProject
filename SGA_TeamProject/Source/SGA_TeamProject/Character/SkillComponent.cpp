@@ -23,6 +23,8 @@ bool USkillComponent::DrawSkill1()
 		return false;
 	if (_nowUsing != 0)
 		return false;
+	if (_manager == nullptr)
+		return false;
 	if (_manager->SkillGuide(1))
 	{
 		_nowUsing = 1;
@@ -38,6 +40,8 @@ bool USkillComponent::AITargetSkill1(ACharacterBase* target)
 	if (_owner->IsAttack())
 		return false;
 	if (_nowUsing != 0)
+		return false;
+	if (_manager == nullptr)
 		return false;
 	if (_manager->SkillAITarget(1,target))
 	{
@@ -56,6 +60,8 @@ bool USkillComponent::PlaySkill1()
 	if (_nowUsing != 1)
 		return false;
 
+	if (_manager == nullptr)
+		return false;
 	UE_LOG(LogTemp, Log, TEXT(" Ability1"));
 	if (_animInstance)
 	{
@@ -81,6 +87,8 @@ bool USkillComponent::DrawSkill2()
 		return false;
 	if (_nowUsing != 0)
 		return false;
+	if (_manager == nullptr)
+		return false;
 	if (_manager->SkillGuide(2))
 	{
 		_nowUsing = 2;
@@ -96,6 +104,8 @@ bool USkillComponent::AITargetSkill2(ACharacterBase* target)
 	if (_owner->IsAttack())
 		return false;
 	if (_nowUsing != 0)
+		return false;
+	if (_manager == nullptr)
 		return false;
 	if (_manager->SkillAITarget(2, target))
 	{
@@ -113,6 +123,8 @@ bool USkillComponent::PlaySkill2()
 		return false;
 
 	if (_nowUsing != 2)
+		return false;
+	if (_manager == nullptr)
 		return false;
 	UE_LOG(LogTemp, Log, TEXT(" Ability1"));
 	if (_animInstance)

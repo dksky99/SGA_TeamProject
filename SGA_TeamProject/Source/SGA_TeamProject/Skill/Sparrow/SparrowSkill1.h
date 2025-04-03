@@ -15,14 +15,20 @@ class SGA_TEAMPROJECT_API ASparrowSkill1 : public ASkillBase
 	GENERATED_BODY()
 
 public:
-
-
+	ASparrowSkill1();
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 	// ASkillBase을(를) 통해 상속됨
 	virtual void SkillHit() override;
 	virtual void DrawSkillAiming() override;
 
 	virtual void DrawSkillPrecaution() override;
 	virtual void AITargeting(class ACharacterBase* target = nullptr) override;
+
+private:
+	void Section1();
+	void Section2();
+	void Section3();
 
 private:
 
@@ -32,4 +38,5 @@ private:
 	float _minAngle = -45.0f;
 	float _delayTime = 1.0f;
 	float _radius = 300.0f;
+
 };

@@ -18,6 +18,9 @@ enum class ESkillState
 
 };
 
+DECLARE_DELEGATE(FSections)
+
+
 UCLASS()
 class SGA_TEAMPROJECT_API ASkillBase : public AActor
 {
@@ -63,6 +66,8 @@ public:
 	// override후에 부모 함수 호출을 해주기
 	virtual void SkillEnd();
 
+	bool CheckSection();
+
 	float GetCoolTimeRatio() { return _curTime / _coolTime; }
 	float GetRemainCoolTime() { return _coolTime - _curTime; }
 	bool IsReady() { return _curTime >= _coolTime; }
@@ -71,7 +76,7 @@ public:
 	void SetLocOfFloor();
 	ESkillState GetState() { return _state; }
  private:
-	void CoolTimeFlow(float DeltaTime);
+	void TimeFlow(float DeltaTime);
 	
 protected:
 	
@@ -90,7 +95,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	float _coolTime=1.0f;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	float _curTime;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	float _playTime=0.0f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	float _precautionTime=0.0f;
 
 
 	ESkillState _state;
@@ -101,6 +112,11 @@ protected:
 	bool _bIsDrawing = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 	float _attackRange=0.0f;
+
+	TArray<FSections> _playSections;
+	TArray<float> _playSectionTime;
+	int32 _curSection = 0;
+
 
 
 

@@ -24,14 +24,16 @@ ASkillBase::ASkillBase()
 
 	_decalComponent->SetVisibility(false);
 	_splineComponent->SetVisibility(false);
+
+	_decalComponent->SetRelativeLocation(FVector(0, 0, -88));
 }
 
 // Called when the game starts or when spawned
 void ASkillBase::BeginPlay()
 {
 	Super::BeginPlay();
+	_curTime = _coolTime;
 	SkillEnd();
-	DrawingFinish();
 }
 
 void ASkillBase::StartAiming()
@@ -76,7 +78,7 @@ void ASkillBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CoolTimeFlow(DeltaTime);
+	TimeFlow(DeltaTime);
 
 	switch (_state)
 	{
@@ -112,6 +114,7 @@ void ASkillBase::SKillBegin()
 {
 	_curTime = 0.0f;
 	_state = ESkillState::Precaution;
+	_precautionTime = 0.0f;
 
 }
 
@@ -120,12 +123,24 @@ void ASkillBase::SkillHit()
 	UE_LOG(LogTemp, Error, TEXT("SkillDefaultHit"));
 	_state=ESkillState::Playing;
 	DrawingFinish();
+	_curSection = 0;
+	_playTime = 0.0f;
 
 }
 
 void ASkillBase::SkillTick()
 {
 	UE_LOG(LogTemp, Error, TEXT("SkillTick"));
+	
+	if (CheckSection())
+	{
+		if (_playSections.Num() <= _curSection - 1)
+			return;
+		if (_playSections[_curSection - 1].IsBound())
+			_playSections[_curSection - 1].Execute();
+
+	}
+
 }
 
 
@@ -134,6 +149,20 @@ void ASkillBase::SkillEnd()
 {
 	_target = nullptr;
 	_state = ESkillState::Deactivate;
+	DrawingFinish();
+
+}
+
+bool ASkillBase::CheckSection()
+{
+	if(_curSection>=_playSectionTime.Num())
+		return false;
+
+	if (_playSectionTime[_curSection] > _playTime)
+		return false;
+	_curSection++;
+	return true;
+
 
 }
 
@@ -153,9 +182,16 @@ void ASkillBase::SetLocOfFloor()
 	UE_LOG(LogTemp, Error, TEXT("Drawing: %f %f %f"),_loc.X,_loc.Y,_loc.Z);
 }
 
-void ASkillBase::CoolTimeFlow(float DeltaTime)
+void ASkillBase::TimeFlow(float DeltaTime)
 {
 	_curTime += DeltaTime;
 	_curTime = FMath::Min(_curTime, _coolTime);
+
+	if (_state == ESkillState::Precaution)
+		_precautionTime += DeltaTime;
+
+	if (_state == ESkillState::Playing)
+		_playTime += DeltaTime;
+
 }
 

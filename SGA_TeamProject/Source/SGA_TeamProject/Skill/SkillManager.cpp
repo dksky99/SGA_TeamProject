@@ -134,6 +134,8 @@ bool ASkillManager::SkillRelease(int index)
 
 void ASkillManager::SkillActFinish()
 {
+	if(_nowUsing!=nullptr)
+		_nowUsing->DrawingFinish();
 	_nowUsing = nullptr;
 	_bIsPlaying = false;
 }
