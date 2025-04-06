@@ -10,6 +10,7 @@
 
 #include "Components/DecalComponent.h"
 #include "Materials/MaterialInterface.h"
+#include "../../Effect/EffectBase.h"
 
 ASparrowSkill1::ASparrowSkill1()
 {
@@ -30,18 +31,31 @@ void ASparrowSkill1::BeginPlay()
 	_playSections.Add(temp2);
 	_playSections.Add(temp3);
 
+	_decalComponent->DecalSize = FVector(_radius, _radius, 5.0f);
+
+
+	if (_effectClass == nullptr)
+		return;
+	for (int i = 0; i < _playSections.Num(); i++)
+	{
+		auto effect = GetWorld()->SpawnActor<AEffectBase>(_effectClass);
+
+		effect->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+		effect->Stop();
+		_effects.Add(effect);
+
+	}
 }
 
 void ASparrowSkill1::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UE_LOG(LogTemp, Error, TEXT("SparrowTick"));
 }
 
 void ASparrowSkill1::SkillHit()
 {
 	Super::SkillHit();
-
+	DrawingStart();
 
 }
 
@@ -73,11 +87,15 @@ void ASparrowSkill1::AITargeting(ACharacterBase* target)
 
 	_loc = target->GetActorLocation();
 	_rot = _owner->GetActorForwardVector().Rotation();
+	SetLocOfFloor();
+
+	SetActorLocation(_loc);
+	SetActorRotation(_rot);
 }
 
 void ASparrowSkill1::Section1()
 {
-
+	DrawingFinish();
 	TArray <FHitResult> hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
@@ -108,10 +126,11 @@ void ASparrowSkill1::Section1()
 			{
 
 
+				ACharacterBase* victim = Cast<ACharacterBase>(hit.GetActor());
 
 				FDamageEvent damageEvent;
 				int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 + 10;
-				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), this);
+				victim->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 
 
 			}
@@ -119,8 +138,7 @@ void ASparrowSkill1::Section1()
 		}
 
 	}
-
-	UE_LOG(LogTemp, Error, TEXT("BossAttack %f %f %f"), center.X, center.Y, center.Z);
+	_effects[0]->Play(_loc);
 
 
 	DrawDebugSphere(GetWorld(), center, attackRadius ,32 , drawColor, false, 3.0f);
@@ -159,10 +177,11 @@ void ASparrowSkill1::Section2()
 			{
 
 
+				ACharacterBase* victim = Cast<ACharacterBase>(hit.GetActor());
 
 				FDamageEvent damageEvent;
 				int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 + 15;
-				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), this);
+				victim->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 
 
 			}
@@ -170,8 +189,8 @@ void ASparrowSkill1::Section2()
 		}
 
 	}
+	_effects[1]->Play(_loc);
 
-	UE_LOG(LogTemp, Error, TEXT("BossAttack %f %f %f"), center.X, center.Y, center.Z);
 
 
 	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
@@ -210,10 +229,11 @@ void ASparrowSkill1::Section3()
 			{
 
 
+				ACharacterBase* victim = Cast<ACharacterBase>(hit.GetActor());
 
 				FDamageEvent damageEvent;
 				int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 + 5;
-				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), this);
+				victim->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 
 
 			}
@@ -222,9 +242,9 @@ void ASparrowSkill1::Section3()
 
 	}
 
-	UE_LOG(LogTemp, Error, TEXT("BossAttack %f %f %f"), center.X, center.Y, center.Z);
-
+	_effects[2]->Play(_loc);
 
 	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
 
+	SkillEnd();
 }

@@ -47,9 +47,11 @@ private:
 	TSubclassOf<class ASkillBase> _secondAbilityClass;
 
 
+	UPROPERTY()
 	class ASkillBase* _firstAbility;
 
 
+	UPROPERTY()
 	class ASkillBase* _secondAbility;
 
 

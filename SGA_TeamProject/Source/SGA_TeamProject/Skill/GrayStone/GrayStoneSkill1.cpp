@@ -20,18 +20,18 @@ void AGrayStoneSkill1::SkillHit()
 	UE_LOG(LogTemp, Error, TEXT("Skill1Hit"));
 
 
-	FHitResult hitResult;
+	TArray <FHitResult> hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
 	float attackRange = _attackRange;
-	float attackRadius = 25.0f;
+	float attackRadius = _attackRadius;
 	FVector fwd = _owner->GetActorForwardVector();
 	FQuat qRot = FQuat::FindBetweenVectors(FVector::UpVector, fwd);
 	FVector start = _owner->GetActorLocation();
 	FVector end = start + fwd * attackRange;
 	FVector center = start + (end - start) * 0.5;
 
-	bool bResult = GetWorld()->SweepSingleByChannel(
+	bool bResult = GetWorld()->SweepMultiByChannel(
 		OUT hitResult,
 		start,
 		end,
@@ -41,21 +41,30 @@ void AGrayStoneSkill1::SkillHit()
 		params
 	);
 
+
 	FColor drawColor = FColor::Green;
-	if (bResult && hitResult.GetActor()->IsValidLowLevel())
+	if (bResult)
 	{
 		drawColor = FColor::Red;
+		for (auto hit : hitResult)
+		{
+			if (hit.GetActor()->IsValidLowLevel())
+			{
 
 
 
-		ACharacterBase* victim = Cast<ACharacterBase>(hitResult.GetActor());
-		FDamageEvent damageEvent;
+				FDamageEvent damageEvent;
+				int32 dmg = _owner->GetStatComponent()->GetAtk() * 2 + 10;
+				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 
-		int32 dmg = _owner->GetStatComponent()->GetAtk() * 3 + 10;
-		victim->TakeDamage(dmg, damageEvent, _owner->Controller, _owner);
 
+			}
+
+		}
 
 	}
+
+
 
 	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
 	SkillEnd();

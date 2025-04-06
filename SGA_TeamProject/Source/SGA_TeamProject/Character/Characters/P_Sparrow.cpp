@@ -8,6 +8,7 @@
 
 #include "../StatComponent.h"
 #include "../../Object/ProjectileArrow.h"
+#include "../../Object/ProjectileBase.h"
 
 
 #include "Engine/DamageEvents.h"
@@ -18,65 +19,29 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
 #include "Particles/ParticleSystemComponent.h"
+void AP_Sparrow::BeginPlay()
+{
+	Super::BeginPlay();
+
+	for (int i = 0; i < 5; i++)
+	{
+		auto projectile = GetWorld()->SpawnActor<AProjectileBase>(_projectileClass);
+
+		projectile->SetOwner(this);
+		int32 dmg = GetStatComponent()->GetAtk();
+		projectile->SetDamage(dmg);
+		_projectiles.Add(projectile);
+	}
+}
 void AP_Sparrow::AttackHit()
 {
 
-	FHitResult hitResult;
-	FCollisionQueryParams params(NAME_None, false, this);
+	_curFire = _curFire % _projectiles.Num();
 
-	float attackRange = _attackRange;
-	float attackRadius = 25.0f;
-	FVector fwd = GetActorForwardVector();
-	FQuat qRot = FQuat::FindBetweenVectors(FVector::UpVector, fwd);
-	FVector start = GetActorLocation();
-	FVector end = start + fwd * attackRange;
-	FVector center = start + (end - start) * 0.5;
+	_projectiles[_curFire]->SetOwner(this);
+	int32 dmg = GetStatComponent()->GetAtk();
+	_projectiles[_curFire]->SetDamage(dmg);
 
-	bool bResult = GetWorld()->SweepSingleByChannel(
-		OUT hitResult,
-		start,
-		end,
-		FQuat::Identity,
-		_channel,
-		FCollisionShape::MakeCapsule(attackRadius, attackRange * 0.5f),
-		params
-	);
-
-	FColor drawColor = FColor::Green;
-	if (bResult && hitResult.GetActor()->IsValidLowLevel())
-	{
-		drawColor = FColor::Red;
-		ACharacterBase* victim = Cast<ACharacterBase>(hitResult.GetActor());
-		if (victim)
-		{
-			FDamageEvent damageEvent = FDamageEvent();
-
-			FVector hitPoint = hitResult.ImpactPoint;
-			//EFFECT_M->PlayEffect("MeleeAttack", hitPoint);
-			victim->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
-
-			if (_particleEffect)
-			{
-				UGameplayStatics::SpawnEmitterAtLocation
-				(
-					GetWorld(),            
-					_particleEffect,       
-					hitPoint,			   
-					FRotator::ZeroRotator, 
-					FVector(1.0f),         
-					true                   
-				);
-			}
-		}
-
-
-		FDamageEvent damageEvent;
-
-		hitResult.GetActor()->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
-
-
-	}
-
-	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
+	_projectiles[_curFire++]->ProjectileFire(GetMesh()->GetSocketLocation(TEXT("FirePos")), GetActorForwardVector());
 
 }

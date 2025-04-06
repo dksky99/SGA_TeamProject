@@ -22,16 +22,22 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	void ProjectileFire(FVector Start, FVector direction);
 	UFUNCTION(BlueprintCallable)
 	void FireDirection(const FVector& direction);
 
 	UFUNCTION()
-	void OnProjectileOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
+	virtual void OnProjectileOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 
 	void SetOwner(class ACharacterBase* owner);
-	void SetDamage(uint32 dmg) { _damage = dmg; }
+	void SetDamage(int32 dmg) { _damage = dmg; }
 
+	void Activate();
+	void Deactivate();
+
+	void SetStartPos(FVector start);
+	bool CheckDistance();
+	void MeshRotating(float deltaTime);
 protected:
 	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Transform", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* _loc;*/
@@ -49,8 +55,18 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* _projectileComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	float _maxDistance=1000.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	FRotator _rotating=FRotator::ZeroRotator;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	float _rotateSpeed=1.0f;
+
+	FVector _startPos;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* _mesh;
+
+	bool _bisFire = false;
 
 };

@@ -24,5 +24,10 @@ public:
 	
 	virtual void DrawSkillPrecaution() override;
 	virtual void AITargeting(class ACharacterBase* target = nullptr) override;
+	
+private:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	float _attackRadius = 200.0f;
 
 };

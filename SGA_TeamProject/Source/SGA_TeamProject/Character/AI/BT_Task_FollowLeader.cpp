@@ -15,6 +15,15 @@ EBTNodeResult::Type UBT_Task_FollowLeader::ExecuteTask(UBehaviorTreeComponent& O
 
 	EBTNodeResult::Type result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
+
+	auto  curPawn = Cast<ACharacterBase>(OwnerComp.GetAIOwner()->GetPawn());
+
+	if (curPawn->IsValidLowLevel() == false)
+		return EBTNodeResult::Failed;
+
+	float detectRadius = curPawn->GetDetectRange();
+
+
 	//현재 리더 찾기
 	auto leader = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Leader"))));
 
@@ -35,7 +44,7 @@ EBTNodeResult::Type UBT_Task_FollowLeader::ExecuteTask(UBehaviorTreeComponent& O
 	//반환받을 랜덤한 위치.
 	FNavLocation randLocation;
 	//일정 반경안의 랜덤한 지점을 가져오는 함수
-	if (naviSystem->GetRandomPointInNavigableRadius(pos, 1000.0f, randLocation))
+	if (naviSystem->GetRandomPointInNavigableRadius(pos,detectRadius , randLocation))
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(FName(TEXT("RandPos")), randLocation);
 

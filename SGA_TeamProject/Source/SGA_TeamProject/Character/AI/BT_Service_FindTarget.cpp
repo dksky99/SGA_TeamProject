@@ -27,7 +27,7 @@ void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 	if (curPawn->IsValidLowLevel() == false)
 		return;
 	FVector pos = curPawn->GetActorLocation();
-
+	//탐색
 	TArray<FOverlapResult> overlapResults;
 	FCollisionQueryParams params(NAME_None, false, curPawn);
 	bool result = GetWorld()->OverlapMultiByChannel(
@@ -48,6 +48,15 @@ void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 		if (remain)
 			reset = true;
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), nullptr);
+
+		//만약 자신이 Follow하는 캐릭터가 있을경우 거리가 일정이상 멀어지면 따라감.
+		
+		auto leader = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Leader"))));
+		if (leader)
+		{
+			if (leader->GetDistanceTo(curPawn) > detectRadius)
+				reset = true;
+		}
 
 		if (reset)
 			OwnerComp.RestartTree();
