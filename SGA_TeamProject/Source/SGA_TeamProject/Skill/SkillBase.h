@@ -39,8 +39,8 @@ public:
 	void StartAiming();
 	void StartPreCaution();
 	
-	void DrawingStart();
-	void DrawingFinish();
+	virtual void DrawingStart();
+	virtual void DrawingFinish();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
