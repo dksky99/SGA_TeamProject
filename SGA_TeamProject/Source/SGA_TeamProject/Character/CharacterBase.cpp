@@ -272,7 +272,7 @@ void ACharacterBase::AttackHit()
 	FCollisionQueryParams params(NAME_None, false, this);
 
 	float attackRange = _attackRange;
-	float attackRadius = 25.0f;
+	float attackRadius = _attackRadius;
 	FVector fwd = GetActorForwardVector();
 	FQuat qRot = FQuat::FindBetweenVectors(FVector::UpVector, fwd);
 	FVector start = GetActorLocation();

@@ -149,6 +149,8 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float _attackRange = 400.0f;
+	UPROPERTY(EditAnywhere)
+	float _attackRadius = 25.0f;
 
 
 	UPROPERTY(EditAnywhere)

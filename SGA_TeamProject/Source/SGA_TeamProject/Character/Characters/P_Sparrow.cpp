@@ -28,7 +28,8 @@ void AP_Sparrow::AttackHit()
 	float attackRadius = 25.0f;
 	FVector fwd = GetActorForwardVector();
 	FQuat qRot = FQuat::FindBetweenVectors(FVector::UpVector, fwd);
-	FVector start = GetActorLocation();
+	FVector start = GetMesh()->GetSocketLocation(TEXT("FirePos"));
+
 	FVector end = start + fwd * attackRange;
 	FVector center = start + (end - start) * 0.5;
 

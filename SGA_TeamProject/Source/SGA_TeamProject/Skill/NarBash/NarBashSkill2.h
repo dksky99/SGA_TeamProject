@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "../SkillBase.h"
-#include "SparrowSkill2.generated.h"
+#include "NarBashSkill2.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SGA_TEAMPROJECT_API ASparrowSkill2 : public ASkillBase
+class SGA_TEAMPROJECT_API ANarBashSkill2 : public ASkillBase
 {
 	GENERATED_BODY()
 
@@ -23,16 +23,14 @@ public:
 	virtual void DrawSkillPrecaution() override;
 	virtual void AITargeting(class ACharacterBase* target = nullptr) override;
 
-private:
-	void Section1();
-	void Section2();
 
 private:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
 
-	float _delayTime = 1.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	float _attackRadius = 100.0f;
 
-	float _attackRadius = 50.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AProjectileMultiple> _projectileClass;
+	class AProjectileMultiple* _projectile;
 };

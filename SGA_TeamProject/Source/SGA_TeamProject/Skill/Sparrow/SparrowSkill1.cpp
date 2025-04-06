@@ -30,18 +30,18 @@ void ASparrowSkill1::BeginPlay()
 	_playSections.Add(temp2);
 	_playSections.Add(temp3);
 
+	_decalComponent->DecalSize = FVector(_radius, _radius, 5.0f);
 }
 
 void ASparrowSkill1::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UE_LOG(LogTemp, Error, TEXT("SparrowTick"));
 }
 
 void ASparrowSkill1::SkillHit()
 {
 	Super::SkillHit();
-
+	DrawingStart();
 
 }
 
@@ -73,11 +73,15 @@ void ASparrowSkill1::AITargeting(ACharacterBase* target)
 
 	_loc = target->GetActorLocation();
 	_rot = _owner->GetActorForwardVector().Rotation();
+	SetLocOfFloor();
+
+	SetActorLocation(_loc);
+	SetActorRotation(_rot);
 }
 
 void ASparrowSkill1::Section1()
 {
-
+	DrawingFinish();
 	TArray <FHitResult> hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
@@ -227,4 +231,5 @@ void ASparrowSkill1::Section3()
 
 	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
 
+	SkillEnd();
 }

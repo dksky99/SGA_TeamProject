@@ -21,7 +21,6 @@ public:
 
 	void DamageLogUpdate();
 
-	virtual void AttackHit() override;
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DamageLog", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<UUserWidget> _damageLogClass;

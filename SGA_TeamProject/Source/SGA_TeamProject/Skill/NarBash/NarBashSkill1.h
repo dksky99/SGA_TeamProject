@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "../SkillBase.h"
-#include "SparrowSkill2.generated.h"
+#include "NarBashSkill1.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SGA_TEAMPROJECT_API ASparrowSkill2 : public ASkillBase
+class SGA_TEAMPROJECT_API ANarBashSkill1 : public ASkillBase
 {
 	GENERATED_BODY()
 
@@ -22,17 +22,23 @@ public:
 
 	virtual void DrawSkillPrecaution() override;
 	virtual void AITargeting(class ACharacterBase* target = nullptr) override;
-
-private:
 	void Section1();
 	void Section2();
-
-private:
+	void SpawnArea();
+protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AAreaObject> _areaClass;
+	TArray<class AAreaObject*> _areas;
 
-	float _delayTime = 1.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	int32 _attackNum=20;
 
-	float _attackRadius = 50.0f;
+	int32 _curAttack = 0;
+	int32 _curSpawn = 0;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill", meta = (AllowPrivateAccess = "true"))
+	float _attackRadius = 100.0f;
+
 };

@@ -22,7 +22,7 @@ AProjectileBase::AProjectileBase()
 	_collider->SetupAttachment(RootComponent);
 	_mesh->SetupAttachment(_collider);
 
-
+	Deactivate();
 
 }
 
@@ -30,7 +30,7 @@ AProjectileBase::AProjectileBase()
 void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
-
+	Deactivate();
 	_collider->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnProjectileOverlap);
 
 }
@@ -40,12 +40,29 @@ void AProjectileBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	MeshRotating(DeltaTime);
+	if (_bisFire == false)
+		return;
+	if (CheckDistance())
+	{
+		Deactivate();
+	}
+
+}
+
+void AProjectileBase::ProjectileFire(FVector Start, FVector direction)
+{
+	SetStartPos(Start);
+	FireDirection(direction);
+	Activate();
 }
 
 void AProjectileBase::FireDirection(const FVector& direction)
 {
+	
 	SetActorRotation(direction.ToOrientationQuat());
-	_projectileComponent->Velocity = GetActorRotation().Vector() * _projectileComponent->InitialSpeed;
+	SetStartPos(GetActorLocation());
+	_projectileComponent->Velocity = GetActorForwardVector() * _projectileComponent->InitialSpeed;
 }
 
 void AProjectileBase::OnProjectileOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult)
@@ -54,6 +71,8 @@ void AProjectileBase::OnProjectileOverlap(UPrimitiveComponent* OverlappedCompone
 		return;
 
 	ACharacterBase* targetCharacter = Cast<ACharacterBase>(OtherActor);
+	if (targetCharacter == nullptr)
+		return;
 	if (targetCharacter->GetChannel() == _owner->GetChannel())
 		return;
 
@@ -62,9 +81,7 @@ void AProjectileBase::OnProjectileOverlap(UPrimitiveComponent* OverlappedCompone
 	{
 		FDamageEvent dEvent;
 		victim->TakeDamage(_damage, dEvent, _owner->GetController(), _owner);
-
-		SetActorHiddenInGame(true);
-		SetActorEnableCollision(false);
+		//Deactivate();
 	}
 }
 
@@ -77,5 +94,47 @@ void AProjectileBase::SetOwner(ACharacterBase* owner)
 	}
 
 	_owner = owner;
+}
+
+void AProjectileBase::Activate()
+{
+
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
+	_bisFire = true;
+}
+
+void AProjectileBase::Deactivate()
+{
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	_bisFire = false;
+}
+
+void AProjectileBase::SetStartPos(FVector start)
+{
+
+	_startPos = start;
+	SetActorLocation(_startPos);
+}
+
+bool AProjectileBase::CheckDistance()
+{
+	if (_maxDistance == 0.0f)
+		return false;
+
+	float dist = (GetActorLocation() - _startPos).Length();
+	if (dist < _maxDistance)
+		return false;
+
+	return true;
+}
+
+void AProjectileBase::MeshRotating(float deltaTime)
+{
+	FRotator temp = _collider->GetRelativeRotation();
+	temp += _rotating * deltaTime * _rotateSpeed;
+	_collider->SetRelativeRotation(temp);
+
 }
 

@@ -130,7 +130,6 @@ void ASkillBase::SkillHit()
 
 void ASkillBase::SkillTick()
 {
-	UE_LOG(LogTemp, Error, TEXT("SkillTick"));
 	
 	if (CheckSection())
 	{
