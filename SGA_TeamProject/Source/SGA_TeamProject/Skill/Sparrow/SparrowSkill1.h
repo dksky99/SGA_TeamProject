@@ -39,4 +39,9 @@ private:
 	float _delayTime = 1.0f;
 	float _radius = 300.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AEffectBase> _effectClass;
+
+	UPROPERTY()
+	TArray<class AEffectBase*> _effects;
 };

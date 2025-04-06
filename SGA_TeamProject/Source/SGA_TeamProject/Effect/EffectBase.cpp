@@ -56,6 +56,16 @@ void AEffectBase::Stop()
 void AEffectBase::Play(FVector pos)
 {
 	SetActorLocation(pos);
+	UE_LOG(LogTemp, Warning, TEXT("[EffectBase] Playing at: %s"), *pos.ToString());
+
+	if (_particleComponent->Template)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[EffectBase] Template Set: %s"), *_particleComponent->Template->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("[EffectBase] Template NOT SET!"));
+	}
 	_particleComponent->Activate(true);
 }
 

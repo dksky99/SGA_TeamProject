@@ -69,10 +69,15 @@ void AProjectileBase::OnProjectileOverlap(UPrimitiveComponent* OverlappedCompone
 {
 	if (_owner == nullptr)
 		return;
+	if (OtherActor == this)
+		return;
 
 	ACharacterBase* targetCharacter = Cast<ACharacterBase>(OtherActor);
 	if (targetCharacter == nullptr)
 		return;
+	if (targetCharacter == _owner)
+		return;
+
 	if (targetCharacter->GetChannel() == _owner->GetChannel())
 		return;
 
@@ -81,7 +86,7 @@ void AProjectileBase::OnProjectileOverlap(UPrimitiveComponent* OverlappedCompone
 	{
 		FDamageEvent dEvent;
 		victim->TakeDamage(_damage, dEvent, _owner->GetController(), _owner);
-		//Deactivate();
+		Deactivate();
 	}
 }
 

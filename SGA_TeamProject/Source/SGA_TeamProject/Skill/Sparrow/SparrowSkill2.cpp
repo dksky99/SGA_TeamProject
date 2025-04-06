@@ -10,6 +10,7 @@
 
 #include "Components/DecalComponent.h"
 #include "Materials/MaterialInterface.h"
+#include "../../Object/ProjectileBase.h"
 void ASparrowSkill2::BeginPlay()
 {
 	Super::BeginPlay();
@@ -32,6 +33,16 @@ void ASparrowSkill2::BeginPlay()
 	_playSections.Add(temp5);
 
 	_decalComponent->DecalSize = FVector(_attackRange * 0.5, _attackRadius, 5.0f);
+
+
+
+	for (int i = 0; i < 5; i++)
+	{
+		auto projectile = GetWorld()->SpawnActor<AProjectileBase>(_projectileClass);
+
+		_projectiles.Add(projectile);
+	}
+
 }
 
 void ASparrowSkill2::SkillHit()
@@ -79,88 +90,26 @@ void ASparrowSkill2::AITargeting(ACharacterBase* target)
 
 }
 
+void ASparrowSkill2::SetOwner(ACharacterBase* owner)
+{
+	Super::SetOwner(owner);
+}
+
 void ASparrowSkill2::Section1()
 {
-	FHitResult hitResult;
-	FCollisionQueryParams params(NAME_None, false, this);
+	_curFire = _curFire % _projectiles.Num();
 
-	float attackRange = _attackRange;
-	float attackRadius = _attackRadius;
-	FVector fwd = _owner->GetActorForwardVector();
-	FQuat qRot = FQuat::FindBetweenVectors(FVector::UpVector, fwd);
-	FVector start = _owner->GetMesh()->GetSocketLocation(TEXT("FirePos"));
+	int32 dmg = _owner->GetStatComponent()->GetAtk();
+	_projectiles[_curFire]->SetOwner(_owner);
+	_projectiles[_curFire]->SetDamage(dmg);
 
-	FVector end = start + fwd * attackRange;
-	FVector center = start + (end - start) * 0.5;
+	_projectiles[_curFire++]->ProjectileFire(_owner->GetMesh()->GetSocketLocation(TEXT("FirePos")), GetActorForwardVector());
 
-	bool bResult = GetWorld()->SweepSingleByChannel(
-		OUT hitResult,
-		start,
-		end,
-		FQuat::Identity,
-		_owner->GetChannel(),
-		FCollisionShape::MakeCapsule(attackRadius, attackRange * 0.5f),
-		params
-	);
-
-	FColor drawColor = FColor::Green;
-	if (bResult && hitResult.GetActor()->IsValidLowLevel())
-	{
-		drawColor = FColor::Red;
-
-
-		ACharacterBase* victim = Cast<ACharacterBase>(hitResult.GetActor());
-
-		FDamageEvent damageEvent;
-		int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 + 5;
-		victim->TakeDamage(dmg, damageEvent, _owner->Controller, _owner);
-
-
-	}
-
-	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
 	
 }
 
 void ASparrowSkill2::Section2()
 {
-	FHitResult hitResult;
-	FCollisionQueryParams params(NAME_None, false, this);
-
-	float attackRange = _attackRange;
-	float attackRadius = _attackRadius;
-	FVector fwd = _owner->GetActorForwardVector();
-	FQuat qRot = FQuat::FindBetweenVectors(FVector::UpVector, fwd);
-
-	FVector start = _owner->GetMesh()->GetSocketLocation(TEXT("FirePos"));
-	FVector end = start + fwd * attackRange;
-	FVector center = start + (end - start) * 0.5;
-
-	bool bResult = GetWorld()->SweepSingleByChannel(
-		OUT hitResult,
-		start,
-		end,
-		FQuat::Identity,
-		_owner->GetChannel(),
-		FCollisionShape::MakeCapsule(attackRadius, attackRange * 0.5f),
-		params
-	);
-
-	FColor drawColor = FColor::Green;
-	if (bResult && hitResult.GetActor()->IsValidLowLevel())
-	{
-		drawColor = FColor::Red;
-
-
-		ACharacterBase* victim = Cast<ACharacterBase>(hitResult.GetActor());
-
-		FDamageEvent damageEvent;
-		int32 dmg = _owner->GetStatComponent()->GetAtk() * 2 + 10;
-		victim->TakeDamage(dmg, damageEvent, _owner->Controller, _owner);
-
-
-	}
-
-	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
+	Section1();
 	SkillEnd();
 }
