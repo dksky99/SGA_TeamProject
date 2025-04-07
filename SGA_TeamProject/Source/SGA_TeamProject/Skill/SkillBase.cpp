@@ -120,7 +120,7 @@ void ASkillBase::SKillBegin()
 
 void ASkillBase::SkillHit()
 {
-	UE_LOG(LogTemp, Error, TEXT("SkillDefaultHit"));
+	//UE_LOG(LogTemp, Error, TEXT("SkillDefaultHit"));
 	_state=ESkillState::Playing;
 	DrawingFinish();
 	_curSection = 0;

@@ -5,6 +5,7 @@
 
 void ASparrowSkill2::BeginPlay()
 {
+	Super::BeginPlay();
 }
 
 void ASparrowSkill2::SkillHit()
