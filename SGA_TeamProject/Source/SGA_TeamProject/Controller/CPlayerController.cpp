@@ -92,14 +92,36 @@ void ACPlayerController::OnUnPossess()
 
 void ACPlayerController::ShowUI()
 {
-
 	bShowMouseCursor = true;
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
+
+	// 카메라 회전 방지 (Pawn이 회전하지 않도록)
+	if (GetPawn())
+	{
+		GetPawn()->bUseControllerRotationYaw = false;
+	}
+
+	FInputModeGameAndUI inputMode;
+	inputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	inputMode.SetHideCursorDuringCapture(false);
+
+	SetInputMode(inputMode);
 }
 
 void ACPlayerController::HideUI()
 {
-
 	bShowMouseCursor = false;
+	bEnableClickEvents = false;
+	bEnableMouseOverEvents = false;
+
+	// 다시 카메라 회전 가능하게 복구
+	if (GetPawn())
+	{
+		GetPawn()->bUseControllerRotationYaw = true;
+	}
+
+	SetInputMode(FInputModeGameOnly());
 }
 
 void ACPlayerController::CharacterChange()
