@@ -99,7 +99,7 @@ void ASparrowSkill1::Section1()
 	TArray <FHitResult> hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
-	float attackRadius = 100;
+	float attackRadius = 200;
 	FVector fwd = GetActorForwardVector();
 	FVector start = _loc + fwd * attackRadius;
 	FVector end = _loc - fwd * attackRadius ;
@@ -129,7 +129,7 @@ void ASparrowSkill1::Section1()
 				ACharacterBase* victim = Cast<ACharacterBase>(hit.GetActor());
 
 				FDamageEvent damageEvent;
-				int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 + 10;
+				int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 ;
 				victim->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 
 
@@ -150,59 +150,7 @@ void ASparrowSkill1::Section2()
 	TArray <FHitResult> hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
-	float attackRadius = 150;
-	FVector fwd = GetActorForwardVector();
-	FVector start = _loc + fwd * attackRadius;
-	FVector end = _loc - fwd * attackRadius;
-	FVector center = _loc;
-	FQuat qRot = FQuat::FindBetweenVectors(start, end);
-
-	bool bResult = GetWorld()->SweepMultiByChannel(
-		OUT hitResult,
-		start,
-		end,
-		FQuat::Identity,
-		_owner->GetChannel(),
-		FCollisionShape::MakeSphere(attackRadius),
-		params
-	);
-
-	FColor drawColor = FColor::Green;
-	if (bResult)
-	{
-		drawColor = FColor::Red;
-		for (auto hit : hitResult)
-		{
-			if (hit.GetActor()->IsValidLowLevel())
-			{
-
-
-				ACharacterBase* victim = Cast<ACharacterBase>(hit.GetActor());
-
-				FDamageEvent damageEvent;
-				int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 + 15;
-				victim->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
-
-
-			}
-
-		}
-
-	}
-	_effects[1]->Play(_loc);
-
-
-
-	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
-
-}
-
-void ASparrowSkill1::Section3()
-{
-	TArray <FHitResult> hitResult;
-	FCollisionQueryParams params(NAME_None, false, this);
-
-	float attackRadius = 200;
+	float attackRadius = 300;
 	FVector fwd = GetActorForwardVector();
 	FVector start = _loc + fwd * attackRadius;
 	FVector end = _loc - fwd * attackRadius;
@@ -233,6 +181,58 @@ void ASparrowSkill1::Section3()
 
 				FDamageEvent damageEvent;
 				int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 + 5;
+				victim->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
+
+
+			}
+
+		}
+
+	}
+	_effects[1]->Play(_loc);
+
+
+
+	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
+
+}
+
+void ASparrowSkill1::Section3()
+{
+	TArray <FHitResult> hitResult;
+	FCollisionQueryParams params(NAME_None, false, this);
+
+	float attackRadius = 400;
+	FVector fwd = GetActorForwardVector();
+	FVector start = _loc + fwd * attackRadius;
+	FVector end = _loc - fwd * attackRadius;
+	FVector center = _loc;
+	FQuat qRot = FQuat::FindBetweenVectors(start, end);
+
+	bool bResult = GetWorld()->SweepMultiByChannel(
+		OUT hitResult,
+		start,
+		end,
+		FQuat::Identity,
+		_owner->GetChannel(),
+		FCollisionShape::MakeSphere(attackRadius),
+		params
+	);
+
+	FColor drawColor = FColor::Green;
+	if (bResult)
+	{
+		drawColor = FColor::Red;
+		for (auto hit : hitResult)
+		{
+			if (hit.GetActor()->IsValidLowLevel())
+			{
+
+
+				ACharacterBase* victim = Cast<ACharacterBase>(hit.GetActor());
+
+				FDamageEvent damageEvent;
+				int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 + 10;
 				victim->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 
 
