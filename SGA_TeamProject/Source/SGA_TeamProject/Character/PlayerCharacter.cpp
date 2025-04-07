@@ -276,7 +276,7 @@ void APlayerCharacter::NPCInteract(const FInputActionValue& value)
 
 		if (result == false)
 		{
-			DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
+			//DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
 			return;
 		}
 
@@ -286,13 +286,13 @@ void APlayerCharacter::NPCInteract(const FInputActionValue& value)
 			if (NPC && NPC->IsValidLowLevel())
 			{
 				NPC->Interact();
-				DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Green, false, 0.3f);
+				//DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Green, false, 0.3f);
 				UE_LOG(LogTemp, Log, TEXT("NPC"));
 				return;
 			}
 		}
 
-		DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
+		//DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
 		return;
 	}
 }

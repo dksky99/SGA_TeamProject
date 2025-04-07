@@ -324,7 +324,7 @@ void ACharacterBase::AttackHit()
 
 	}
 
-	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
+	//DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
 
 }
 

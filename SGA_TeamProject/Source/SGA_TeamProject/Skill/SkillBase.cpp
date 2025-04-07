@@ -25,7 +25,7 @@ ASkillBase::ASkillBase()
 	_decalComponent->SetVisibility(false);
 	_splineComponent->SetVisibility(false);
 
-	_decalComponent->SetRelativeLocation(FVector(0, 0, -88));
+	_decalComponent->SetRelativeLocation(FVector(0, 0, 0));
 }
 
 // Called when the game starts or when spawned
@@ -176,7 +176,7 @@ void ASkillBase::SetLocOfFloor()
 	FVector loc = _loc;
 	loc=H_Relation::FindFloorFromLoc(this, 1000, true, loc);
 	if (loc != FVector::ZeroVector)
-		_loc == loc;
+		_loc = loc;
 
 	UE_LOG(LogTemp, Error, TEXT("Drawing: %f %f %f"),_loc.X,_loc.Y,_loc.Z);
 }

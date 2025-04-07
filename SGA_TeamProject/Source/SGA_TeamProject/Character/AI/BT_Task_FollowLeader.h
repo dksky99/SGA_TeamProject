@@ -14,7 +14,11 @@ class SGA_TEAMPROJECT_API UBT_Task_FollowLeader : public UBTTaskNode
 {
 	GENERATED_BODY()
 public:
+	UBT_Task_FollowLeader();
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+	virtual void OnGameplayTaskActivated(UGameplayTask& Task) override {}
 
 	
 };

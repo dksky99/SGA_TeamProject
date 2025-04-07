@@ -65,20 +65,10 @@ FVector H_Relation::FindFloorFromLoc(AActor* user,float maxDistance, bool useAno
 
     if (bHit)
     {
-        // 디버그 라인 그리기 (빨간색, 1초 유지)
-        DrawDebugLine(
-            user->GetWorld(),
-            Start,
-            End,
-            FColor::Red,
-            false,      // 지속 여부: false면 Duration동안만 표시됨
-            1.0f,       // Duration
-            0,          // Depth Priority
-            1.0f        // Thickness
-        );
+       
 
         UE_LOG(LogTemp, Error, TEXT("Collision Target %s"), *(HitResult.GetActor()->GetName()));
-        return HitResult.Location; // 충돌한 위치 반환 (땅 좌표)
+        return HitResult.ImpactPoint; // 충돌한 위치 반환 (땅 좌표)
         
     }
 

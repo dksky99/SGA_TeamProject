@@ -5,51 +5,72 @@
 #include "../../Controller/CAIController.h"
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
-
 #include "../CharacterBase.h"
+#include "../../Helper/H_Relation.h"
 
 
+UBT_Task_FollowLeader::UBT_Task_FollowLeader()
+{
+
+	NodeName = TEXT("Move To Leader ");
+	bNotifyTick = true;
+}
 
 EBTNodeResult::Type UBT_Task_FollowLeader::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 
 	EBTNodeResult::Type result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
+	//현재 빙의된 Pawn 찾기
+	auto currentPawn = Cast<ACharacterBase>(OwnerComp.GetAIOwner()->GetPawn());
 
-	auto  curPawn = Cast<ACharacterBase>(OwnerComp.GetAIOwner()->GetPawn());
-
-	if (curPawn->IsValidLowLevel() == false)
+	auto leader = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Leader"))));
+	//실패 반환
+	if (currentPawn->IsValidLowLevel() == false)
 		return EBTNodeResult::Failed;
 
-	float detectRadius = curPawn->GetDetectRange();
-
-
-	//현재 리더 찾기
-	auto leader = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Leader"))));
-
-	//실패 반환
 	if (leader->IsValidLowLevel() == false)
 		return EBTNodeResult::Failed;
 
 
 
-	FVector pos = leader->GetActorLocation();
+	OwnerComp.GetAIOwner()->MoveToActor(leader, 200.0f, true);
 
-	//NavMesh 찾기
-	auto naviSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
 
-	if (naviSystem->IsValidLowLevel() == false)
-		return EBTNodeResult::Failed;
 
-	//반환받을 랜덤한 위치.
-	FNavLocation randLocation;
-	//일정 반경안의 랜덤한 지점을 가져오는 함수
-	if (naviSystem->GetRandomPointInNavigableRadius(pos,detectRadius , randLocation))
+	return EBTNodeResult::InProgress;
+
+	//현재 리더 찾기
+}
+
+void UBT_Task_FollowLeader::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
+
+	AAIController* AIController = OwnerComp.GetAIOwner();
+	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
+
+	if (!AIController || !BlackboardComp)
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(FName(TEXT("RandPos")), randLocation);
-
-		return EBTNodeResult::Succeeded;
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
 	}
 
-	return EBTNodeResult::Failed;
+	//현재 빙의된 Pawn 찾기
+	auto currentPawn = Cast<ACharacterBase>(OwnerComp.GetAIOwner()->GetPawn());
+
+	auto leader = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Leader"))));
+	//실패 반환
+	if (currentPawn->IsValidLowLevel() == false || leader->IsValidLowLevel() == false)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
+	float Distance = FVector::Dist(leader->GetActorLocation(), currentPawn->GetActorLocation());
+
+	if (Distance <= currentPawn->GetDetectRange() * 0.5f)
+	{
+		AIController->StopMovement();
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
+
 }

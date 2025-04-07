@@ -141,7 +141,7 @@ void ASparrowSkill1::Section1()
 	_effects[0]->Play(_loc);
 
 
-	DrawDebugSphere(GetWorld(), center, attackRadius ,32 , drawColor, false, 3.0f);
+	//DrawDebugSphere(GetWorld(), center, attackRadius ,32 , drawColor, false, 3.0f);
 
 }
 
@@ -193,7 +193,7 @@ void ASparrowSkill1::Section2()
 
 
 
-	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
+	//DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
 
 }
 
@@ -244,7 +244,7 @@ void ASparrowSkill1::Section3()
 
 	_effects[2]->Play(_loc);
 
-	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
+	//DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
 
 	SkillEnd();
 }
