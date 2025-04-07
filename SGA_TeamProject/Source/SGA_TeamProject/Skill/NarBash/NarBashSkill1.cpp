@@ -127,7 +127,7 @@ void ANarBashSkill1::Section1()
 
 
 
-	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
+	//DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
 
 }
 
@@ -190,5 +190,5 @@ void ANarBashSkill1::SpawnArea()
 
 
 
-	DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
+	//DrawDebugSphere(GetWorld(), center, attackRadius, 32, drawColor, false, 3.0f);
 }

@@ -79,7 +79,7 @@ void AGruxSkill2::MultiHit(int32 damageScale, int32 baseDamage)
 		}
 	}
 
-	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
+	//DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
 }
 
 void AGruxSkill2::DrawSkillAiming()

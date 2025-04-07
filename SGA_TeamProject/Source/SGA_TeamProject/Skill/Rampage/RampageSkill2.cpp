@@ -126,7 +126,7 @@ void ARampageSkill2::Section1()
 		}
 	}
 
-	DrawDebugSphere(GetWorld(), _loc, attackRadius, 32, drawColor, false, 3.0f);
+	//DrawDebugSphere(GetWorld(), _loc, attackRadius, 32, drawColor, false, 3.0f);
 }
 
 void ARampageSkill2::Section2()
@@ -191,7 +191,7 @@ void ARampageSkill2::Section2()
 		}
 	}
 
-	DrawDebugSphere(GetWorld(), _loc, attackRadius, 32, drawColor, false, 3.0f);
+	//DrawDebugSphere(GetWorld(), _loc, attackRadius, 32, drawColor, false, 3.0f);
 }
 
 void ARampageSkill2::Section3()
@@ -256,6 +256,6 @@ void ARampageSkill2::Section3()
 		}
 	}
 
-	DrawDebugSphere(GetWorld(), _loc, attackRadius, 32, drawColor, false, 3.0f);
+	//DrawDebugSphere(GetWorld(), _loc, attackRadius, 32, drawColor, false, 3.0f);
 	SkillEnd();
 }

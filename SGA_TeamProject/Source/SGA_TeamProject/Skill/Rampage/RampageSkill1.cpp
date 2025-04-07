@@ -137,7 +137,7 @@ void ARampageSkill1::Section1()
 		}
 	}
 
-	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
+	//DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
 }
 
 void ARampageSkill1::Section2()
@@ -203,7 +203,7 @@ void ARampageSkill1::Section2()
 		}
 	}
 
-	DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
+	//DrawDebugCapsule(GetWorld(), center, attackRange * 0.5, attackRadius, qRot, drawColor, false, 3.0f);
 	SkillEnd();
 }
 

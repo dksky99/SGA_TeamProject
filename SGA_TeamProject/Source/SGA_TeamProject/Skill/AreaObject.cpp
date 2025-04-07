@@ -31,6 +31,11 @@ void AAreaObject::BeginPlay()
 
 	_effect->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	_effect->Stop();
+
+	FVector curScale = GetActorScale();
+	curScale.X = 0.0f;
+	curScale.Y = 0.0f;
+	SetActorScale3D(curScale);
 }
 
 void AAreaObject::Tick(float DeltaTime)
