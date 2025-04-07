@@ -74,6 +74,8 @@ void ACPlayerController::BeginPlay()
 	{
 		_partyListWidget->AddToViewport();
 	}
+
+	Cast<ACharacterBase>(GetPawn())->SetCamp_Player();
 }
 
 void ACPlayerController::OnPossess(APawn* pawn)
