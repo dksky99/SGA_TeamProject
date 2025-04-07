@@ -13,7 +13,7 @@ UInvenComponent::UInvenComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	_items.SetNum(9);
-	_gold = 0;
+	_gold = 1000;
 }
 
 
