@@ -8,6 +8,12 @@
 #include "../CharacterBase.h"
 #include "../../Helper/H_Relation.h"
 
+UBT_Task_MoveToEffectiveRange::UBT_Task_MoveToEffectiveRange()
+{
+	NodeName = TEXT("Move To Target With Stop Radius");
+	bNotifyTick = true;
+}
+
 EBTNodeResult::Type UBT_Task_MoveToEffectiveRange::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type result = Super::ExecuteTask(OwnerComp, NodeMemory);
@@ -20,26 +26,44 @@ EBTNodeResult::Type UBT_Task_MoveToEffectiveRange::ExecuteTask(UBehaviorTreeComp
 	if (currentPawn->IsValidLowLevel() == false)
 		return EBTNodeResult::Failed;
 
-	float range = currentPawn->GetAttackRange()*0.75;
-	FVector loc = H_Relation::LocOfDistanceFromTarget(currentPawn, remain, range);
-
-	//NavMesh 찾기
-	auto naviSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
-
-	if (naviSystem->IsValidLowLevel() == false)
+	if(remain->IsValidLowLevel()==false)
 		return EBTNodeResult::Failed;
+		
 
-	//반환받을 랜덤한 위치.
-	FNavLocation randLocation;
-	//일정 반경안의 랜덤한 지점을 가져오는 함수
-	if (naviSystem->GetRandomPointInNavigableRadius(loc, 20.0f, randLocation))
+
+	OwnerComp.GetAIOwner()->MoveToActor(remain,20.0f,true);
+
+
+
+	return EBTNodeResult::InProgress;
+}
+
+void UBT_Task_MoveToEffectiveRange::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
+	AAIController* AIController = OwnerComp.GetAIOwner();
+	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
+
+	if (!AIController || !BlackboardComp)
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(FName(TEXT("RandPos")), randLocation);
-
-		return EBTNodeResult::Succeeded;
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
 	}
 
+	//현재 빙의된 Pawn 찾기
+	auto currentPawn = Cast<ACharacterBase>(OwnerComp.GetAIOwner()->GetPawn());
 
+	AActor* remain = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
+	//실패 반환
+	if (currentPawn->IsValidLowLevel() == false || remain->IsValidLowLevel() == false)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
+	float Distance = FVector::Dist(remain->GetActorLocation(), currentPawn->GetActorLocation());
 
-	return EBTNodeResult::Failed;
+	if (Distance <= currentPawn->GetAttackRange()*0.8f)
+	{
+		AIController->StopMovement();
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
 }
