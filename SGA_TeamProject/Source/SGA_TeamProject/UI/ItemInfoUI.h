@@ -16,7 +16,7 @@ class SGA_TEAMPROJECT_API UItemInfoUI : public UUserWidget
 	
 public:
 	void SetDefault();
-	void SetItemInfo(struct FItemData data);
+	void SetItemInfo(const struct FItemData& data);
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))

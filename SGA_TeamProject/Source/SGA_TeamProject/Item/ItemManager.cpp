@@ -80,6 +80,7 @@ void AItemManager::SpawnItem(int32 id, FVector pos)
 	{
 		item->Activate();
 		item->SetActorLocation(pos);
+		item->SetActorRotation(FRotator::ZeroRotator);
 		UE_LOG(LogTemp, Error, TEXT("Item Spawn"));
 	}
 }

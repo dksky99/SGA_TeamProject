@@ -10,11 +10,14 @@
 
 void UItemInfoUI::SetDefault()
 {
+	if (!Text) return;
 	Text->SetText(FText::FromString(TEXT("")));
+
+	if (!Image) return;
 	Image->SetBrushFromTexture(_defaultTexture);
 }
 
-void UItemInfoUI::SetItemInfo(FItemData data)
+void UItemInfoUI::SetItemInfo(const FItemData& data)
 {
 	UEnum* enumType = FindObject<UEnum>(ANY_PACKAGE, TEXT("ItemType"), true);
 	FString itemType = enumType->GetNameStringByIndex((int32)data.type);
@@ -35,5 +38,6 @@ void UItemInfoUI::SetItemInfo(FItemData data)
 	Text->SetText(FText::FromString(text));
 
 	UTexture2D* itemIcon = data.icon.LoadSynchronous();
+	if (!Image || itemIcon) return;
 	Image->SetBrushFromTexture(itemIcon);
 }

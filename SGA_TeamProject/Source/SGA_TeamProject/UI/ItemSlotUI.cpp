@@ -31,7 +31,8 @@ void UItemSlotUI::SetItem(const FItemSlotData& item)
 void UItemSlotUI::SetItem(const FItemData& item)
 {
 	UTexture2D* image = item.icon.LoadSynchronous();
-	Image->SetBrushFromTexture(image);
+	if (image)
+		Image->SetBrushFromTexture(image);
 
 	if (_widget->IsA<UInvenUI>() || _widget->IsA<UEquipUI>())
 	{

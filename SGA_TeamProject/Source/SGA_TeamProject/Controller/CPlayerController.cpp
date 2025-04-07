@@ -188,21 +188,24 @@ void ACPlayerController::CharacterChange()
 
 void ACPlayerController::DropItemByClick()
 {
+	auto player = Cast<APlayerCharacter>(GetPawn());
+	if (!player || !player->IsAlive())
+		return;
+
 	int32 index = -1;
 	if (_invenWidget)
 		index = _invenWidget->_curIndex;
 
 	auto dropItem = _invenComponent->RemoveItem(index);
-
-	auto player = Cast<ACharacterBase>(GetPawn());
-	if (player)
-	{
-		player->DropItem(dropItem.id);
-	}
+	player->DropItem(dropItem.id);
 }
 
 void ACPlayerController::UseItemByClick()
 {
+	auto player = Cast<APlayerCharacter>(GetPawn());
+	if (!player || !player->IsAlive())
+		return;
+
 	int32 index = -1;
 	if (_invenWidget)
 		index = _invenWidget->_curIndex;
@@ -214,12 +217,11 @@ void ACPlayerController::UseItemByClick()
 	_invenComponent->RemoveItem(index);
 	auto useItem = ITEM_M->GetItem(useItemData.id);
 
-	auto player = Cast<APlayerCharacter>(GetPawn());
-	if (player && useItem && useItem->GetData().type == ItemType::EQUIPMENT)
+	if (useItem && useItem->GetData().type == ItemType::EQUIPMENT)
 	{
 		_invenComponent->EquipItem(player, useItem, index);
 	}
-	else if (player && useItem)
+	else if (useItem)
 	{
 		useItem->UseItem(player);
 	}
@@ -227,6 +229,10 @@ void ACPlayerController::UseItemByClick()
 
 void ACPlayerController::UnequipItemByClick()
 {
+	auto player = Cast<APlayerCharacter>(GetPawn());
+	if (!player || !player->IsAlive())
+		return;
+
 	int32 index = -1;
 	if (_equipWidget)
 		index = _equipWidget->_curIndex;
@@ -234,9 +240,8 @@ void ACPlayerController::UnequipItemByClick()
 	if (index == -1)
 		return;
 
-	auto player = Cast<APlayerCharacter>(GetPawn());
 	auto item = _equipWidget->_equipItems[index];
-	if (player && item)
+	if (item)
 	{
 		_invenComponent->UnequipItem(player, item);
 	}
