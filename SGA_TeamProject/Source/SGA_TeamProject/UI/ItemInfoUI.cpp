@@ -19,13 +19,15 @@ void UItemInfoUI::SetDefault()
 
 void UItemInfoUI::SetItemInfo(const FItemData& data)
 {
-	UEnum* enumType = FindObject<UEnum>(ANY_PACKAGE, TEXT("ItemType"), true);
-	FString itemType = enumType->GetNameStringByIndex((int32)data.type);
 	FString itemName = data.name.ToString();
-	FString text = FString::Printf(TEXT("%s\nItemType : %s\nItemID : %d"), *itemName, *itemType, data.id);
+	FString text = FString::Printf(TEXT("%s"), *itemName);
 
 	if (data.type == ItemType::EQUIPMENT)
 	{
+		UEnum* enumType = FindObject<UEnum>(ANY_PACKAGE, TEXT("EquipSlot"), true);
+		FString itemType = enumType->GetNameStringByIndex((int32)data.equipSlot);
+		text += FString::Printf(TEXT("\n%s"), *itemType);
+
 		if (data.hp != 0)
 			text += FString::Printf(TEXT("\nHP : +%d"), data.hp);
 		if (data.atk != 0)
@@ -33,11 +35,20 @@ void UItemInfoUI::SetItemInfo(const FItemData& data)
 		if (data.speed != 0.0f)
 			text += FString::Printf(TEXT("\nSpeed : +%f"), data.speed);
 	}
+	else
+	{
+		UEnum* enumType = FindObject<UEnum>(ANY_PACKAGE, TEXT("ItemType"), true);
+		FString itemType = enumType->GetNameStringByIndex((int32)data.type);
+		text += FString::Printf(TEXT("\n%s"), *itemType);
+
+		if (data.type == ItemType::POTION && data.heal != 0)
+			text += FString::Printf(TEXT("\nHP : +%d"), data.heal);
+	}
 	
 	if (!Text) return;
 	Text->SetText(FText::FromString(text));
 
-	UTexture2D* itemIcon = data.icon.LoadSynchronous();
+	UTexture2D* itemIcon = data.icon.Get();
 	if (!Image || !itemIcon) return;
-	Image->SetBrushFromTexture(itemIcon);
+		Image->SetBrushFromTexture(itemIcon);
 }

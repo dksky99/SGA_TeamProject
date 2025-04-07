@@ -16,7 +16,7 @@ void UPartySlotUI::Setup(ACharacterBase* character)
 		return;
 
 	_character = character;
-	Name->SetText(FText::FromString(character->GetName()));
+	Name->SetText(character->GetCharacterName());
 
 	if (character->GetStatComponent())
 	{

@@ -30,7 +30,7 @@ void UItemSlotUI::SetItem(const FItemSlotData& item)
 
 void UItemSlotUI::SetItem(const FItemData& item)
 {
-	UTexture2D* image = item.icon.LoadSynchronous();
+	UTexture2D* image = item.icon.Get();
 	if (image)
 		Image->SetBrushFromTexture(image);
 

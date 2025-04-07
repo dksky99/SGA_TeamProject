@@ -112,6 +112,8 @@ public:
 	ETargettingType GetDefaultTargetType() { return _defaultTargetType; }
 	bool GetTargetChangeFrequently() { return _targetChangeFrequently; }
 
+	FText GetCharacterName() { return _name; }
+
 protected:
 
 	//UPROPERTY()
@@ -158,6 +160,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* _hpBarWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	FText _name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category ="Camp",meta=(AllowPrivateAccess ="true"))
 	ECamp _camp = ECamp::None;

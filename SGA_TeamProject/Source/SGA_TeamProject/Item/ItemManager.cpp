@@ -31,6 +31,9 @@ void AItemManager::BeginPlay()
 			if (!row->itemClass)
 				continue;
 
+			if (!row->icon.IsValid())
+				row->icon.LoadSynchronous();
+
 			_itemPool.Add(row->id);
 			
 			for (int i = 0; i < itemPoolCount; i++)

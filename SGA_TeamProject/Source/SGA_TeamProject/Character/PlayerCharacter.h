@@ -93,5 +93,5 @@ protected:
 
 	bool _isInvenOpen = false;
 	bool _isNPCInteract = false;
-	
+
 };

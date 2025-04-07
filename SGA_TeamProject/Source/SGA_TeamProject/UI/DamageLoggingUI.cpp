@@ -17,7 +17,7 @@ void UDamageLoggingUI::UpdateList(TArray<TPair<class ACharacterBase*, int32>> da
 		auto textBlock = NewObject<UTextBlock>(this, UTextBlock::StaticClass());
 		if (textBlock)
 		{
-			FString text = FString::Printf(TEXT("%s : %d"), *entry.Key->GetName(), entry.Value);
+			FString text = FString::Printf(TEXT("%s : %d"), *entry.Key->GetCharacterName().ToString(), entry.Value);
 			textBlock->SetText(FText::FromString(text));
 
 			List->AddChild(textBlock);
