@@ -458,6 +458,8 @@ void ACharacterBase::SetCamp_None()
 	_camp = ECamp::None;
 	_channel = ECC_GameTraceChannel2;
 	UE_LOG(LogTemp, Log, TEXT(" SetCamp_None %d"),(int32)(_channel));
+
+	bUseControllerRotationYaw = true;
 }
 
 void ACharacterBase::SetCamp_Player()
@@ -471,6 +473,7 @@ void ACharacterBase::SetCamp_Player()
 	_camp = ECamp::Player;
 	_channel = ECC_GameTraceChannel7;
 	UE_LOG(LogTemp, Log, TEXT(" SetCamp_Player %d"),(int32)(_channel));
+	bUseControllerRotationYaw = false;
 	
 }
 
@@ -480,6 +483,7 @@ void ACharacterBase::SetCamp_Ally()
 	_camp = ECamp::Ally;
 	_channel = ECC_GameTraceChannel7;
 	UE_LOG(LogTemp, Log, TEXT(" SetCamp_Ally %d"),(int32)(_channel));
+	bUseControllerRotationYaw = true;
 }
 
 void ACharacterBase::SetCamp_Enemy()
@@ -488,6 +492,7 @@ void ACharacterBase::SetCamp_Enemy()
 	_camp = ECamp::Enemy;
 	_channel = ECC_GameTraceChannel8;
 	UE_LOG(LogTemp, Log, TEXT(" ECC_GameTraceChannel9 %d"),(int32)(_channel));
+	bUseControllerRotationYaw = true;
 }
 
 UDamageLoggingComponent* ACharacterBase::GetLogComponent()
