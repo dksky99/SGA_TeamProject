@@ -49,7 +49,6 @@ void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 			reset = true;
 		OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), nullptr);
 
-		OwnerComp.GetBlackboardComponent()->SetValueAsFloat(FName(TEXT("DistanceToTarget")), -1.0f);
 		//만약 자신이 Follow하는 캐릭터가 있을경우 거리가 일정이상 멀어지면 따라감.
 		
 		auto leader = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Leader"))));
@@ -77,14 +76,8 @@ void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 				if (curPawn->GetTargetChangeFrequently() == false)
 				{
 					OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), col.GetActor());
-					float dist = curPawn->GetDistanceTo(col.GetActor());
-
-					OwnerComp.GetBlackboardComponent()->SetValueAsFloat(FName(TEXT("DistanceToTarget")),dist );
 
 					DrawDebugSphere(GetWorld(), pos, detectRadius, 12, FColor::Red, false, 0.3f);
-
-					if (reset)
-						OwnerComp.RestartTree();
 					return;
 				}
 
@@ -99,9 +92,6 @@ void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 	remain=H_Targetting::Targetting(curPawn->GetTargetType(), curPawn->GetDefaultTargetType(), arr, remain, curPawn);
 	
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Target")), remain);
-	float dist = curPawn->GetDistanceTo(remain);
-
-	OwnerComp.GetBlackboardComponent()->SetValueAsFloat(FName(TEXT("DistanceToTarget")), dist);
 
 	DrawDebugSphere(GetWorld(), pos, detectRadius, 12, FColor::Red, false, 0.3f);
 

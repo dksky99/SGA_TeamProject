@@ -19,7 +19,7 @@ bool UBT_Deco_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& Owne
 	if (curPawn->IsValidLowLevel() == false || target->IsValidLowLevel() == false)
 		return false;
 
-	if (H_Relation::IsInDistance(curPawn,target,curPawn->GetAttackRange()*0.8,0.0f  ))
+	if (H_Relation::IsInDistance(curPawn,target,curPawn->GetAttackRange()*0.8,100.0f  ))
 		return true;
 
 	return false;
