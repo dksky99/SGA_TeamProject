@@ -39,6 +39,9 @@ struct FItemData : public FTableRowBase
 	ItemType type = ItemType::NONE;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 heal;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EquipSlot equipSlot = EquipSlot::NONE;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

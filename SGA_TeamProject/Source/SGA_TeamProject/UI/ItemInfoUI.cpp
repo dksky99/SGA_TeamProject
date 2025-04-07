@@ -38,6 +38,6 @@ void UItemInfoUI::SetItemInfo(const FItemData& data)
 	Text->SetText(FText::FromString(text));
 
 	UTexture2D* itemIcon = data.icon.LoadSynchronous();
-	if (!Image || itemIcon) return;
+	if (!Image || !itemIcon) return;
 	Image->SetBrushFromTexture(itemIcon);
 }

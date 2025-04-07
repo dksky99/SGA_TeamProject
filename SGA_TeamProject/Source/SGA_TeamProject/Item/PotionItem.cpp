@@ -10,5 +10,6 @@ APotionItem::APotionItem()
 
 void APotionItem::UseItem(APlayerCharacter* player)
 {
-	player->AddHp(10);
+	if (player->IsAlive())
+		player->AddHp(GetData().heal);
 }

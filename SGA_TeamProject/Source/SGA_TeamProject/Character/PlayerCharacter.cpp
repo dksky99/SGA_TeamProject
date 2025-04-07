@@ -97,7 +97,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::Move(const FInputActionValue& value)
 {
-	if (_statComponent->IsDead())
+	if (_statComponent->IsDead() || _isNPCInteract)
 		return;
 
 	FVector2D moveVector = value.Get<FVector2D>();
@@ -154,7 +154,7 @@ void APlayerCharacter::Look(const FInputActionValue& value)
 
 void APlayerCharacter::TryJump(const FInputActionValue& value)
 {
-	if (_isUnable)
+	if (_isUnable || _isNPCInteract)
 		return;
 	if (value.Get<bool>())
 	{
@@ -168,7 +168,7 @@ void APlayerCharacter::Attack(const FInputActionValue& value)
 	if (_isAttack)
 		return;
 
-	if (_isUnable)
+	if (_isUnable || _isNPCInteract)
 		return;
 	bool isPress = value.Get<bool>();
 	if (isPress)
@@ -181,29 +181,40 @@ void APlayerCharacter::Attack(const FInputActionValue& value)
 
 void APlayerCharacter::Abillity1_Press(const FInputActionValue& value)
 {
+	if (_isUnable || _isNPCInteract)
+		return;
+
 	TryAbility1Aiming();
 }
 
 void APlayerCharacter::Abillity1_Release(const FInputActionValue& value)
 {
+	if (_isUnable || _isNPCInteract)
+		return;
+
 	TryAbility1();
 }
 
 void APlayerCharacter::Abillity2_Press(const FInputActionValue& value)
 {
-	
+	if (_isUnable || _isNPCInteract)
+		return;
+
 	TryAbility2Aiming();
 }
 
 
 void APlayerCharacter::Abillity2_Release(const FInputActionValue& value)
 {
+	if (_isUnable || _isNPCInteract)
+		return;
+
 	TryAbility2();
 }
 
 void APlayerCharacter::DropItemByKey(const FInputActionValue& value)
 {
-	if (_isUnable)
+	if (_isUnable || _isNPCInteract)
 		return;
 
 	bool isPress = value.Get<bool>();
@@ -219,7 +230,7 @@ void APlayerCharacter::DropItemByKey(const FInputActionValue& value)
 
 void APlayerCharacter::InvenOpen(const FInputActionValue& value)
 {
-	if (_isUnable)
+	if (_isUnable || _isNPCInteract)
 		return;
 
 	bool isPress = value.Get<bool>();
@@ -288,6 +299,8 @@ void APlayerCharacter::NPCInteract(const FInputActionValue& value)
 				NPC->Interact();
 				//DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Green, false, 0.3f);
 				UE_LOG(LogTemp, Log, TEXT("NPC"));
+
+				_isNPCInteract = !_isNPCInteract;
 				return;
 			}
 		}

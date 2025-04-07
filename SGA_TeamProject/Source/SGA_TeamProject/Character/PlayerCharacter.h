@@ -92,5 +92,6 @@ protected:
 	class USpringArmComponent* _springArm;
 
 	bool _isInvenOpen = false;
+	bool _isNPCInteract = false;
 	
 };
