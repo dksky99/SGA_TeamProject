@@ -106,7 +106,7 @@ void ARampageSkill2::Section1()
 			{
 				FDamageEvent damageEvent;
 				int32 dmg = _owner->GetStatComponent()->GetAtk() * 2 + 10;
-				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), this);
+				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 				
 				if (_hitEffect)
 				{
@@ -171,7 +171,7 @@ void ARampageSkill2::Section2()
 			{
 				FDamageEvent damageEvent;
 				int32 dmg = _owner->GetStatComponent()->GetAtk() * 3 + 10;
-				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), this);
+				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 			
 				if (_hitEffect)
 				{
@@ -236,7 +236,7 @@ void ARampageSkill2::Section3()
 			{
 				FDamageEvent damageEvent;
 				int32 dmg = _owner->GetStatComponent()->GetAtk() * 5 + 10;
-				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), this);
+				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 			
 				if (_hitEffect)
 				{
