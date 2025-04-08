@@ -20,12 +20,14 @@ EBTNodeResult::Type UBT_Task_MoveToEffectiveRange::ExecuteTask(UBehaviorTreeComp
 
 	//현재 빙의된 Pawn 찾기
 	auto currentPawn = Cast<ACharacterBase>(OwnerComp.GetAIOwner()->GetPawn());
-
+	
 	AActor* remain = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Target"))));
 	//실패 반환
 	if (currentPawn->IsValidLowLevel() == false)
 		return EBTNodeResult::Failed;
 
+	if (currentPawn->IsAttack())
+		return EBTNodeResult::Failed;
 	if(remain->IsValidLowLevel()==false)
 		return EBTNodeResult::Failed;
 		
@@ -56,6 +58,13 @@ void UBT_Task_MoveToEffectiveRange::TickTask(UBehaviorTreeComponent& OwnerComp, 
 	//실패 반환
 	if (currentPawn->IsValidLowLevel() == false || remain->IsValidLowLevel() == false)
 	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
+
+	if (currentPawn->IsAttack())
+	{
+
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
