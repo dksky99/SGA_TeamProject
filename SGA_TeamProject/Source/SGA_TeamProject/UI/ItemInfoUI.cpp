@@ -48,7 +48,16 @@ void UItemInfoUI::SetItemInfo(const FItemData& data)
 	if (!Text) return;
 	Text->SetText(FText::FromString(text));
 
-	UTexture2D* itemIcon = data.icon.Get();
-	if (!Image || !itemIcon) return;
-		Image->SetBrushFromTexture(itemIcon);
+	if (data.icon.IsValid())
+	{
+		UTexture2D* itemIcon = data.icon.Get();
+		if (itemIcon && Image)
+			Image->SetBrushFromTexture(itemIcon);
+	}
+	else if (!data.icon.IsNull())
+	{
+		UTexture2D* itemIcon = data.icon.LoadSynchronous();
+		if (itemIcon && Image)
+			Image->SetBrushFromTexture(itemIcon);
+	}
 }

@@ -6,6 +6,8 @@
 #include "Components/CapsuleComponent.h"
 
 #include "../Controller/CPlayerController.h"
+#include "../CGameInstance.h"
+#include "ItemManager.h"
 
 // Sets default values
 AItemBase::AItemBase()
@@ -33,6 +35,12 @@ void AItemBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	auto gameInstance = Cast<UCGameInstance>(GetWorld()->GetGameInstance());
+	if (!_dataIsSet && gameInstance)
+	{
+		const auto data = gameInstance->GetItemData_ID(GetData().id);
+		SetData(data);
+	}
 }
 
 // Called every frame
@@ -71,5 +79,15 @@ void AItemBase::OnCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 			character->AddItem(this);
 		}
 	}
+}
+
+void AItemBase::SetData(const FItemData& itemData)
+{
+	_itemData = itemData;
+
+	if (!itemData.icon.IsValid())
+		itemData.icon.LoadSynchronous();
+
+	_dataIsSet = true;
 }
 
