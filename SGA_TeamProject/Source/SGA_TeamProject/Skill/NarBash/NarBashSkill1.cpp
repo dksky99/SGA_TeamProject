@@ -116,7 +116,7 @@ void ANarBashSkill1::Section1()
 
 				FDamageEvent damageEvent;
 				int32 dmg = _owner->GetStatComponent()->GetAtk() * 1 + 10;
-				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), this);
+				hit.GetActor()->TakeDamage(dmg, damageEvent, _owner->GetController(), _owner);
 
 
 			}
