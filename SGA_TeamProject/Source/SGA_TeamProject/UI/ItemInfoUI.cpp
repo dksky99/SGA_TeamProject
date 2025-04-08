@@ -48,6 +48,8 @@ void UItemInfoUI::SetItemInfo(const FItemData& data)
 	if (!Text) return;
 	Text->SetText(FText::FromString(text));
 
+	if (data.icon.IsNull()) return;
+
 	if (data.icon.IsValid())
 	{
 		UTexture2D* itemIcon = data.icon.Get();
