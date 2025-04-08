@@ -82,7 +82,7 @@ void ANarBashSkill1::AITargeting(ACharacterBase* target)
 
 void ANarBashSkill1::Section1()
 {
-
+	_curAttack = _curAttack%_areas.Num();
 	TArray <FHitResult> hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
@@ -137,11 +137,12 @@ void ANarBashSkill1::Section2()
 	SkillEnd();
 	_curAttack = 0;
 	_curSpawn = 0;
+	_curSection = 0;
 }
 
 void ANarBashSkill1::SpawnArea()
 {
-
+	_curSpawn=_curSpawn%_areas.Num();
 	TArray <FHitResult> hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
@@ -186,7 +187,13 @@ void ANarBashSkill1::SpawnArea()
 		_areas[_curSpawn++]->Play(_loc);
 
 	}
-	
+	else
+	{
+
+		_loc = _owner->GetActorLocation();
+		SetLocOfFloor();
+		_areas[_curSpawn++]->Play(_loc);
+	}
 
 
 
