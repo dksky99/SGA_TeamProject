@@ -32,12 +32,15 @@ public:
 
 private:
 	// Stat
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UDataTable* _statTable;
 
 	// Item
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UDataTable* _itemTable;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AItemManager> _itemManagerClass;
 
 	UPROPERTY()
 	class AItemManager* _itemManager;

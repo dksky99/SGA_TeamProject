@@ -31,9 +31,6 @@ void AItemManager::BeginPlay()
 			if (!row->itemClass)
 				continue;
 
-			if (!row->icon.IsValid())
-				row->icon.LoadSynchronous();
-
 			_itemPool.Add(row->id);
 			
 			for (int i = 0; i < itemPoolCount; i++)
@@ -86,5 +83,15 @@ void AItemManager::SpawnItem(int32 id, FVector pos)
 		item->SetActorRotation(FRotator::ZeroRotator);
 		UE_LOG(LogTemp, Error, TEXT("Item Spawn"));
 	}
+}
+
+UTexture2D* AItemManager::GetIcon(int32 id)
+{
+	if (auto icon = _iconMap.Find(id))
+	{
+		return *icon;
+	}
+
+	return nullptr;
 }
 

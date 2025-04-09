@@ -6,7 +6,9 @@
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
 
+#include "../CGameInstance.h"
 #include "../Item/ItemBase.h"
+#include "../Item/ItemManager.h"
 
 void UItemInfoUI::SetDefault()
 {
@@ -45,21 +47,9 @@ void UItemInfoUI::SetItemInfo(const FItemData& data)
 			text += FString::Printf(TEXT("\nHP : +%d"), data.heal);
 	}
 	
-	if (!Text) return;
 	Text->SetText(FText::FromString(text));
 
-	if (data.icon.IsNull()) return;
-
-	if (data.icon.IsValid())
-	{
-		UTexture2D* itemIcon = data.icon.Get();
-		if (itemIcon && Image)
-			Image->SetBrushFromTexture(itemIcon);
-	}
-	else if (!data.icon.IsNull())
-	{
-		UTexture2D* itemIcon = data.icon.LoadSynchronous();
-		if (itemIcon && Image)
-			Image->SetBrushFromTexture(itemIcon);
-	}
+	UTexture2D* image = ITEM_M->GetIcon(data.id);
+	if (image)
+		Image->SetBrushFromTexture(image);
 }

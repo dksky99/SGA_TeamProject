@@ -9,9 +9,11 @@
 #include "InvenUI.h"
 #include "ShopUI.h"
 #include "EquipUI.h"
-
 #include "ItemInfoUI.h"
+
+#include "../CGameInstance.h"
 #include "../Character/InvenComponent.h"
+#include "../Item/ItemManager.h"
 
 void UItemSlotUI::SetDefault()
 {
@@ -30,18 +32,9 @@ void UItemSlotUI::SetItem(const FItemSlotData& item)
 
 void UItemSlotUI::SetItem(const FItemData& item)
 {
-	if (item.icon.IsValid())
-	{
-		UTexture2D* itemIcon = item.icon.Get();
-		if (itemIcon && Image)
-			Image->SetBrushFromTexture(itemIcon);
-	}
-	else if (!item.icon.IsNull())
-	{
-		UTexture2D* itemIcon = item.icon.LoadSynchronous();
-		if (itemIcon && Image)
-			Image->SetBrushFromTexture(itemIcon);
-	}
+	UTexture2D* image = ITEM_M->GetIcon(item.id);
+	if (image)
+		Image->SetBrushFromTexture(image);
 
 	if (_widget->IsA<UInvenUI>() || _widget->IsA<UEquipUI>())
 	{

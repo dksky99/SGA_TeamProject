@@ -34,14 +34,14 @@ void ANPCBase::PostInitializeComponents()
 		UE_LOG(LogTemp, Log, TEXT("Inven Widget Created"));
 	}
 
-	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	/*if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
 	{
 		ACPlayerController* MyController = Cast<ACPlayerController>(PlayerController);
 		if (MyController && MyController->GetInvenComponent())
 		{
 			_invenComponent = MyController->GetInvenComponent();
 		}
-	}
+	}*/
 }
 
 void ANPCBase::InitializeShop()
@@ -69,6 +69,15 @@ void ANPCBase::BeginPlay()
 	_animInstance = Cast<UCharacterAnimInstance>(GetMesh()->GetAnimInstance());
 	if (_animInstance == nullptr)
 		UE_LOG(LogTemp, Error, TEXT("AnimInstace did not Set"));
+
+	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	{
+		ACPlayerController* MyController = Cast<ACPlayerController>(PlayerController);
+		if (MyController && MyController->GetInvenComponent())
+		{
+			_invenComponent = MyController->GetInvenComponent();
+		}
+	}
 
 	auto shopUI = Cast<UShopUI>(_shopWidget);
 	if (shopUI)
@@ -155,6 +164,8 @@ void ANPCBase::ItemBuy()
 
 		if (item.price > _invenComponent->GetGold())
 			return;
+
+		if (_invenComponent->IsFull()) return;
 
 		_shopComponent->RemoveItem(index);
 		_invenComponent->AddItem(item);

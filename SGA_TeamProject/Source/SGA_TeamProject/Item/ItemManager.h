@@ -36,10 +36,15 @@ public:
 	AItemBase* GetItem(int32 id);
 	void SpawnItem(int32 id, FVector pos);
 
+	UTexture2D* GetIcon(int32 id);
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TMap<int32, FCItems> _itemPool;
 
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	TMap<int32, TObjectPtr<UTexture2D>> _iconMap;
+
 	UPROPERTY(EditAnywhere)
-	int32 itemPoolCount = 30; // 각 종류당 풀 개수
+	int32 itemPoolCount = 20; // 각 종류당 풀 개수
 };

@@ -11,27 +11,16 @@
 
 UCGameInstance::UCGameInstance()
 {
-	static::ConstructorHelpers::FObjectFinder<UDataTable> statTable(TEXT("/Script/Engine.DataTable'/Game/Data/CharacterStatTable.CharacterStatTable'"));
-
-	if (statTable.Succeeded())
-	{
-		_statTable = statTable.Object;
-	}
-
-	static::ConstructorHelpers::FObjectFinder<UDataTable> itemTable(TEXT("/Script/Engine.DataTable'/Game/Data/ItemDataTable.ItemDataTable'"));
-
-	if (itemTable.Succeeded())
-	{
-		_itemTable = itemTable.Object;
-	}
 }
 
 void UCGameInstance::Init()
 {
 	Super::Init();
 
-	_itemManager = GetWorld()->SpawnActor<AItemManager>(FVector::ZeroVector, FRotator::ZeroRotator);
-
+	if (_itemManagerClass)
+	{
+		_itemManager = GetWorld()->SpawnActor<AItemManager>(_itemManagerClass, FVector::ZeroVector, FRotator::ZeroRotator);
+	}
 }
 
 FCharacterStatData UCGameInstance::GetStat_Level(int32 level)
