@@ -26,7 +26,7 @@ bool UEquipUI::Initialize()
 		auto slot = Cast<UItemSlotUI>(widget);
 		if (slot)
 		{
-			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetIndex);
+			slot->_itemSlotButton->OnClicked.AddDynamic(slot, &UItemSlotUI::SetIndex);
 			slot->_widget = this;
 			slot->_buttonIndex = index;
 

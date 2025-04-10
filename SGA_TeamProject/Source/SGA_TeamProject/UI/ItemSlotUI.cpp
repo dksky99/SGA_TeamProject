@@ -17,15 +17,15 @@
 
 void UItemSlotUI::SetDefault()
 {
-	Count->SetText(FText::FromString(TEXT("")));
-	Image->SetBrushFromTexture(_defaultTexture);
+	_itemSlotCount->SetText(FText::FromString(TEXT("")));
+	_itemSlotImage->SetBrushFromTexture(_defaultTexture);
 	SetToolTip(nullptr);
 }
 
 void UItemSlotUI::SetItem(const FItemSlotData& item)
 {
 	FString text = FString::Printf(TEXT("%d"), item.count);
-	Count->SetText(FText::FromString(text));
+	_itemSlotCount->SetText(FText::FromString(text));
 
 	SetItem(item.itemData);
 }
@@ -34,7 +34,7 @@ void UItemSlotUI::SetItem(const FItemData& item)
 {
 	UTexture2D* image = ITEM_M->GetIcon(item.id);
 	if (image)
-		Image->SetBrushFromTexture(image);
+		_itemSlotImage->SetBrushFromTexture(image);
 
 	if (_widget->IsA<UInvenUI>() || _widget->IsA<UEquipUI>())
 	{

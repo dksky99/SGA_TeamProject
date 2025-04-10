@@ -43,7 +43,7 @@ private:
 	TMap<int32, FCItems> _itemPool;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	TMap<int32, TObjectPtr<UTexture2D>> _iconMap;
+	TMap<int32, UTexture2D*> _iconMap;
 
 	UPROPERTY(EditAnywhere)
 	int32 itemPoolCount = 20; // 각 종류당 풀 개수

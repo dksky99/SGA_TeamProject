@@ -12,11 +12,11 @@
 
 void UItemInfoUI::SetDefault()
 {
-	if (!Text) return;
-	Text->SetText(FText::FromString(TEXT("")));
+	if (!_itemInfoText) return;
+	_itemInfoText->SetText(FText::FromString(TEXT("")));
 
-	if (!Image) return;
-	Image->SetBrushFromTexture(_defaultTexture);
+	if (!_itemInfoImage) return;
+	_itemInfoImage->SetBrushFromTexture(_defaultTexture);
 }
 
 void UItemInfoUI::SetItemInfo(const FItemData& data)
@@ -47,9 +47,29 @@ void UItemInfoUI::SetItemInfo(const FItemData& data)
 			text += FString::Printf(TEXT("\nHP : +%d"), data.heal);
 	}
 	
-	Text->SetText(FText::FromString(text));
+	if(_itemInfoText->IsValidLowLevel())
+		_itemInfoText->SetText(FText::FromString(text));
+	else
+		UE_LOG(LogTemp, Error, TEXT("_itemInfoText Error"));
 
-	UTexture2D* image = ITEM_M->GetIcon(data.id);
-	if (image)
-		Image->SetBrushFromTexture(image);
+	auto instance = Cast<UCGameInstance>(GetGameInstance());
+	if (instance)
+	{
+		if (_itemManager == nullptr)
+		{
+			_itemManager = instance->ItemManager();
+		}
+		
+		auto image = _itemManager->GetIcon(data.id);
+		if (image)
+			_itemInfoImage->SetBrushFromTexture(image);
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("image Error"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Instance Error"));
+	}
 }

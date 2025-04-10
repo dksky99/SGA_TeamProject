@@ -29,8 +29,8 @@ bool UShopUI::Initialize()
 		auto slot = Cast<UItemSlotUI>(widget);
 		if (slot)
 		{
-			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetShop_ShopIndex);
-			slot->Button->OnClicked.AddDynamic(this, &UShopUI::SetShopItemInfo);
+			slot->_itemSlotButton->OnClicked.AddDynamic(slot, &UItemSlotUI::SetShop_ShopIndex);
+			slot->_itemSlotButton->OnClicked.AddDynamic(this, &UShopUI::SetShopItemInfo);
 			slot->_widget = this;
 			slot->_buttonIndex = index;
 
@@ -48,8 +48,8 @@ bool UShopUI::Initialize()
 		auto slot = Cast<UItemSlotUI>(widget);
 		if (slot)
 		{
-			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetShop_InvenIndex);
-			slot->Button->OnClicked.AddDynamic(this, &UShopUI::SetInvenItemInfo);
+			slot->_itemSlotButton->OnClicked.AddDynamic(slot, &UItemSlotUI::SetShop_InvenIndex);
+			slot->_itemSlotButton->OnClicked.AddDynamic(this, &UShopUI::SetInvenItemInfo);
 			slot->_widget = this;
 			slot->_buttonIndex = index;
 

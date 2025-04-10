@@ -24,7 +24,7 @@ bool UInvenUI::Initialize()
 		auto slot = Cast<UItemSlotUI>(widget);
 		if (slot)
 		{
-			slot->Button->OnClicked.AddDynamic(slot, &UItemSlotUI::SetIndex);
+			slot->_itemSlotButton->OnClicked.AddDynamic(slot, &UItemSlotUI::SetIndex);
 			slot->_widget = this;
 			slot->_buttonIndex = index;
 
@@ -33,7 +33,8 @@ bool UInvenUI::Initialize()
 				auto toolTip = CreateWidget<UItemInfoUI>(GetWorld(), _toolTipClass);
 
 				slot->_toolTip = toolTip;
-				//slot->SetToolTip(nullptr);
+		/*		slot->_toolTip->AddToViewport();
+				slot->_toolTip->SetVisibility(ESlateVisibility::Collapsed)*/;
 			}
 
 			_itemSlots.Add(slot);

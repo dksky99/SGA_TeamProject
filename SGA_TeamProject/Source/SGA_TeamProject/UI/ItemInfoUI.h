@@ -20,12 +20,15 @@ public:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UImage* Image;
+	class UImage* _itemInfoImage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* Text;
+	class UTextBlock* _itemInfoText;
 
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	UTexture2D* _defaultTexture;
+
+	UPROPERTY()
+	class AItemManager* _itemManager;
 };

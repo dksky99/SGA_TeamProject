@@ -85,9 +85,6 @@ void AItemBase::SetData(const FItemData& itemData)
 {
 	_itemData = itemData;
 
-	if (!itemData.icon.IsValid())
-		itemData.icon.LoadSynchronous();
-
 	_dataIsSet = true;
 }
 

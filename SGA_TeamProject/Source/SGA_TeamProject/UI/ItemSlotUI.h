@@ -31,13 +31,13 @@ public:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UButton* Button;
+	class UButton* _itemSlotButton;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* Count;
+	class UTextBlock* _itemSlotCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	class UImage* Image;
+	class UImage* _itemSlotImage;
 
 	class UItemInfoUI* _toolTip;
 
