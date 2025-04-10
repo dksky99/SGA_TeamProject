@@ -39,8 +39,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UImage* _itemSlotImage;
 
+	UPROPERTY()
 	class UItemInfoUI* _toolTip;
 
+	UPROPERTY()
 	class UUserWidget* _widget;
 
 	int32 _buttonIndex;
