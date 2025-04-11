@@ -31,17 +31,7 @@ void ANPCBase::PostInitializeComponents()
 	if (_shopWidgetClass)
 	{
 		_shopWidget = CreateWidget<UUserWidget>(GetWorld(), _shopWidgetClass);
-		UE_LOG(LogTemp, Log, TEXT("Inven Widget Created"));
 	}
-
-	/*if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
-	{
-		ACPlayerController* MyController = Cast<ACPlayerController>(PlayerController);
-		if (MyController && MyController->GetInvenComponent())
-		{
-			_invenComponent = MyController->GetInvenComponent();
-		}
-	}*/
 }
 
 void ANPCBase::InitializeShop()
@@ -198,7 +188,6 @@ void ANPCBase::ItemSell()
 		}
 		else
 		{
-			_shopComponent->AddItem(item);
 			_invenComponent->SetGold(_invenComponent->GetGold() + (item.price / 2));
 		}
 

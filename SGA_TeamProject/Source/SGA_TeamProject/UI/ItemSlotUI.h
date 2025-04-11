@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/UniformGridPanel.h"
+#include "Components/Button.h"
 #include "ItemSlotUI.generated.h"
 
 /**

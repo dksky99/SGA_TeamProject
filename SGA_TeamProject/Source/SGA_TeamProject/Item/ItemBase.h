@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "ItemDataTable.h"
 #include "../Character/PlayerCharacter.h"
+#include "../CGameInstance.h"
 #include "ItemBase.generated.h"
 
 UCLASS(Abstract)

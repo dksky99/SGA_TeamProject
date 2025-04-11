@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
+#include "Components/Image.h"
 #include "ItemInfoUI.generated.h"
 
 /**
@@ -28,7 +30,4 @@ public:
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	UTexture2D* _defaultTexture;
-
-	UPROPERTY()
-	class AItemManager* _itemManager;
 };

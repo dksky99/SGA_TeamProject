@@ -29,18 +29,11 @@
 #include "SkillComponent.h"
 #include "DamageLoggingComponent.h"
 #include "../Controller/CPlayerController.h"
-#include "Blueprint/UserWidget.h"
-
-#include "InvenComponent.h"
-#include "../UI/InvenUI.h"
 
 #include "NPCBase.h"
-#include "../Item/ItemBase.h"
 #include "../Item/ItemManager.h"
 
 #include "../Helper/H_Targetting.h"
-
-#include "../UI/PartyListUI.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -186,6 +179,10 @@ void ACharacterBase::Dead()
 		DropRandomItem();
 	}
 
+	auto player = Cast<APlayerCharacter>(this);
+	if (player)
+		player->NPCInteract();
+
 	if (Controller)
 		Controller->UnPossess();
 	this->SetActorEnableCollision(false);
@@ -205,7 +202,7 @@ void ACharacterBase::TryAttack()
 		return;
 
 	_isAttack = true;
-	UE_LOG(LogTemp, Log, TEXT(" curAttack %d"), _curAttackSection);
+	//UE_LOG(LogTemp, Log, TEXT(" curAttack %d"), _curAttackSection);
 	if (_animInstance)
 	{
 		_animInstance->PlayAnimMontage(_attackAnimMontage);
@@ -457,7 +454,7 @@ void ACharacterBase::SetCamp_None()
 	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Character")));
 	_camp = ECamp::None;
 	_channel = ECC_GameTraceChannel2;
-	UE_LOG(LogTemp, Log, TEXT(" SetCamp_None %d"),(int32)(_channel));
+	//UE_LOG(LogTemp, Log, TEXT(" SetCamp_None %d"),(int32)(_channel));
 
 	bUseControllerRotationYaw = true;
 }
@@ -472,7 +469,7 @@ void ACharacterBase::SetCamp_Player()
 
 	_camp = ECamp::Player;
 	_channel = ECC_GameTraceChannel7;
-	UE_LOG(LogTemp, Log, TEXT(" SetCamp_Player %d"),(int32)(_channel));
+	//UE_LOG(LogTemp, Log, TEXT(" SetCamp_Player %d"),(int32)(_channel));
 	bUseControllerRotationYaw = false;
 	
 }
@@ -482,7 +479,7 @@ void ACharacterBase::SetCamp_Ally()
 	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Ally")));
 	_camp = ECamp::Ally;
 	_channel = ECC_GameTraceChannel7;
-	UE_LOG(LogTemp, Log, TEXT(" SetCamp_Ally %d"),(int32)(_channel));
+	//UE_LOG(LogTemp, Log, TEXT(" SetCamp_Ally %d"),(int32)(_channel));
 	bUseControllerRotationYaw = true;
 }
 
@@ -491,7 +488,7 @@ void ACharacterBase::SetCamp_Enemy()
 	GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Enemy")));
 	_camp = ECamp::Enemy;
 	_channel = ECC_GameTraceChannel8;
-	UE_LOG(LogTemp, Log, TEXT(" ECC_GameTraceChannel9 %d"),(int32)(_channel));
+	//UE_LOG(LogTemp, Log, TEXT(" ECC_GameTraceChannel9 %d"),(int32)(_channel));
 	bUseControllerRotationYaw = true;
 }
 

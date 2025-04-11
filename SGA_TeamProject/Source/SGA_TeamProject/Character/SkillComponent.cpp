@@ -62,7 +62,7 @@ bool USkillComponent::PlaySkill1()
 
 	if (_manager == nullptr)
 		return false;
-	UE_LOG(LogTemp, Log, TEXT(" Ability1"));
+	//UE_LOG(LogTemp, Log, TEXT(" Ability1"));
 	if (_animInstance)
 	{
 		if (_manager->SkillRelease(1))
@@ -126,7 +126,7 @@ bool USkillComponent::PlaySkill2()
 		return false;
 	if (_manager == nullptr)
 		return false;
-	UE_LOG(LogTemp, Log, TEXT(" Ability1"));
+	//UE_LOG(LogTemp, Log, TEXT(" Ability1"));
 	if (_animInstance)
 	{
 		if (_manager->SkillRelease(2))

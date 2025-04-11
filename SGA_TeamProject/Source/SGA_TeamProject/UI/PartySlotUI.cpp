@@ -39,5 +39,4 @@ void UPartySlotUI::UpdateSlot(bool isPlayer)
 void UPartySlotUI::SetHpBarValue(float ratio)
 {
 	HPBar->SetPercent(ratio);
-	UE_LOG(LogTemp, Warning, TEXT("Character has been Damaged"));
 }

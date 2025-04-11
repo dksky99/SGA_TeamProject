@@ -51,7 +51,6 @@ void ARampageSkill1::DrawSkillAiming()
 	_loc = start + (end - start) * 0.5f;
 	SetLocOfFloor();
 
-	UE_LOG(LogTemp, Error, TEXT("drawSkill"));
 	SetActorLocation(_loc);
 	SetActorRotation(_rot);
 }
@@ -70,7 +69,6 @@ void ARampageSkill1::AITargeting(ACharacterBase* target)
 void ARampageSkill1::SkillHit()
 {
 	Super::SkillHit();
-	UE_LOG(LogTemp, Error, TEXT("Skill1Hit"));
 
 }
 

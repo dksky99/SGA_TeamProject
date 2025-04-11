@@ -55,7 +55,8 @@ public:
 	void InvenOpen(const  FInputActionValue& value);
 
 	UFUNCTION()
-	void NPCInteract(const  FInputActionValue& value);
+	void NPCInteractByKey(const  FInputActionValue& value);
+	void NPCInteract();
 
 	void AddItem(class AItemBase* item);
 

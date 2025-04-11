@@ -3,11 +3,6 @@
 
 #include "ItemInfoUI.h"
 
-#include "Components/TextBlock.h"
-#include "Components/Image.h"
-
-#include "../CGameInstance.h"
-#include "../Item/ItemBase.h"
 #include "../Item/ItemManager.h"
 
 void UItemInfoUI::SetDefault()
@@ -47,29 +42,9 @@ void UItemInfoUI::SetItemInfo(const FItemData& data)
 			text += FString::Printf(TEXT("\nHP : +%d"), data.heal);
 	}
 	
-	if(_itemInfoText->IsValidLowLevel())
-		_itemInfoText->SetText(FText::FromString(text));
-	else
-		UE_LOG(LogTemp, Error, TEXT("_itemInfoText Error"));
-
-	auto instance = Cast<UCGameInstance>(GetGameInstance());
-	if (instance)
-	{
-		if (_itemManager == nullptr)
-		{
-			_itemManager = instance->ItemManager();
-		}
-		
-		auto image = _itemManager->GetIcon(data.id);
-		if (image)
-			_itemInfoImage->SetBrushFromTexture(image);
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("image Error"));
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Instance Error"));
-	}
+	_itemInfoText->SetText(FText::FromString(text));
+	
+	UTexture2D* image = ITEM_M->GetIcon(data.id);
+	if (image)
+		_itemInfoImage->SetBrushFromTexture(image);
 }

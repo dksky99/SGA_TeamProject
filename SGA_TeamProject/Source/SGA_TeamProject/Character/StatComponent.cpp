@@ -62,7 +62,7 @@ int32 UStatComponent::AddCurHp(float amount, AActor* causer)
 
 
 
-	UE_LOG(LogTemp, Log, TEXT(" Name :%s ,HP : %df"), *(GetOwner()->GetName()), _curHp);
+	//UE_LOG(LogTemp, Log, TEXT(" Name :%s ,HP : %df"), *(GetOwner()->GetName()), _curHp);
 
 	float ratio = _curHp / (float)_maxHp;
 	if (_hpChanged.IsBound())
@@ -80,7 +80,7 @@ void UStatComponent::AddExp(int32 value)
 
 bool UStatComponent::CheckLevelUp()
 {
-	UE_LOG(LogTemp, Log, TEXT(" Check Level Up"));
+	//UE_LOG(LogTemp, Log, TEXT(" Check Level Up"));
 	if (_maxExp <= _curExp)
 	{
 		_curExp -= _maxExp;
@@ -96,6 +96,6 @@ void UStatComponent::LevelUp()
 	_level += 1;
 	GetData(_level);
 
-	UE_LOG(LogTemp, Log, TEXT(" Level Up"));
+	//UE_LOG(LogTemp, Log, TEXT(" Level Up"));
 }
 

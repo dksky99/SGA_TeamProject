@@ -67,7 +67,7 @@ void ASparrowSkill2::DrawSkillAiming()
 	_loc = start + (end - start) * 0.5f;
 	SetLocOfFloor();
 
-	UE_LOG(LogTemp, Error, TEXT("drawSkill"));
+	//UE_LOG(LogTemp, Error, TEXT("drawSkill"));
 	SetActorLocation(_loc);
 	SetActorRotation(_rot);
 }

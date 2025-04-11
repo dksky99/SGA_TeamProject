@@ -41,7 +41,7 @@ void UTeamManager::BeginPlay()
 		_camp.AddUnique(character);
 		_teamChanged.Broadcast(character);
 		_characterChanged.Broadcast(character);
-		UE_LOG(LogTemp, Error, TEXT("Add Player"));
+		//UE_LOG(LogTemp, Error, TEXT("Add Player"));
 	}
 }
 
@@ -105,7 +105,7 @@ ACharacterBase* UTeamManager::FindCharacter()
 				{
 					_camp.AddUnique(targetCharacter);
 					_teamChanged.Broadcast(targetCharacter);
-					UE_LOG(LogTemp, Error, TEXT("%s : %d"), *targetCharacter->GetName(), _camp.Num());
+					//UE_LOG(LogTemp, Error, TEXT("%s : %d"), *targetCharacter->GetName(), _camp.Num());
 
 					SetLeader(targetCharacter);
 					

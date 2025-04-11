@@ -3,15 +3,11 @@
 
 #include "ItemSlotUI.h"
 
-#include "Components/Image.h"
-#include "Components/TextBlock.h"
-
 #include "InvenUI.h"
 #include "ShopUI.h"
 #include "EquipUI.h"
 #include "ItemInfoUI.h"
 
-#include "../CGameInstance.h"
 #include "../Character/InvenComponent.h"
 #include "../Item/ItemManager.h"
 

@@ -13,7 +13,7 @@
 void AGrayStoneSkill2::SkillHit()
 {
 	Super::SkillHit();
-	UE_LOG(LogTemp, Error, TEXT("Skill1Hit"));
+	//UE_LOG(LogTemp, Error, TEXT("Skill1Hit"));
 
 
 	FHitResult hitResult;
@@ -65,7 +65,7 @@ void AGrayStoneSkill2::DrawSkillAiming()
 	_loc = start + (end - start) * 0.5f;
 	SetLocOfFloor();
 
-	UE_LOG(LogTemp, Error, TEXT("drawSkill"));
+	//UE_LOG(LogTemp, Error, TEXT("drawSkill"));
 	SetActorLocation(_loc);
 	SetActorRotation(_rot);
 }
@@ -84,7 +84,7 @@ void AGrayStoneSkill2::AITargeting(ACharacterBase* target)
 	_loc = start + (end - start) * 0.5f;
 	SetLocOfFloor();
 
-	UE_LOG(LogTemp, Error, TEXT("drawSkill"));
+	//UE_LOG(LogTemp, Error, TEXT("drawSkill"));
 	SetActorLocation(_loc);
 	SetActorRotation(_rot);
 

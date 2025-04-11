@@ -63,13 +63,13 @@ void UInvenComponent::AddItem(FItemData item, int32 count, int32 index)
 	if (index == -1)
 	{
 		// 아이템이 장비가 아닐 경우 (장비는 겹치지 않게 저장)
-		//if (item.type != ItemType::EQUIPMENT)
-		//{
+		if (item.type != ItemType::EQUIPMENT)
+		{
 			index = _items.IndexOfByPredicate([item](const FItemSlotData& slot) -> bool
 				{
 					return slot.itemData.id == item.id;
 				});
-		//}
+		}
 
 		// 인벤에 해당 아이템 없을 경우
 		if (index == INDEX_NONE)

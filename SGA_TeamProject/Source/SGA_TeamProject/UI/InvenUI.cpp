@@ -3,14 +3,9 @@
 
 #include "InvenUI.h"
 
-#include "Components/UniformGridPanel.h"
-#include "Components/Image.h"
-#include "Components/TextBlock.h"
-#include "Components/Button.h"
-
+#include "../Character/InvenComponent.h"
 #include "ItemSlotUI.h"
 #include "ItemInfoUI.h"
-#include "../Character/InvenComponent.h"
 
 bool UInvenUI::Initialize()
 {

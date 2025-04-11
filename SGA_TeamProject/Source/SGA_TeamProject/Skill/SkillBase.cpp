@@ -38,7 +38,7 @@ void ASkillBase::BeginPlay()
 
 void ASkillBase::StartAiming()
 {
-	UE_LOG(LogTemp, Error, TEXT("AimingStart"));
+	//UE_LOG(LogTemp, Error, TEXT("AimingStart"));
 	_state = ESkillState::Aiming;
 	DrawingStart();
 }
@@ -52,7 +52,7 @@ void ASkillBase::AITargeting(ACharacterBase* target)
 
 void ASkillBase::StartPreCaution()
 {
-	UE_LOG(LogTemp, Error, TEXT("PrecautionStart"));
+	//UE_LOG(LogTemp, Error, TEXT("PrecautionStart"));
 	_state = ESkillState::Precaution;
 	DrawingStart();
 }
@@ -102,12 +102,12 @@ void ASkillBase::Tick(float DeltaTime)
 
 void ASkillBase::DrawSkillAiming()
 {
-	UE_LOG(LogTemp, Error, TEXT("Aiming"));
+	//UE_LOG(LogTemp, Error, TEXT("Aiming"));
 }
 
 void ASkillBase::DrawSkillPrecaution()
 {
-	UE_LOG(LogTemp, Error, TEXT("Precaution"));
+	//UE_LOG(LogTemp, Error, TEXT("Precaution"));
 }
 
 void ASkillBase::SKillBegin()
@@ -178,7 +178,7 @@ void ASkillBase::SetLocOfFloor()
 	if (loc != FVector::ZeroVector)
 		_loc = loc;
 
-	UE_LOG(LogTemp, Error, TEXT("Drawing: %f %f %f"),_loc.X,_loc.Y,_loc.Z);
+	//UE_LOG(LogTemp, Error, TEXT("Drawing: %f %f %f"),_loc.X,_loc.Y,_loc.Z);
 }
 
 void ASkillBase::TimeFlow(float DeltaTime)

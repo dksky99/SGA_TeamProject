@@ -8,7 +8,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 
-
 #include "Components/CapsuleComponent.h"
 #include "Components/Button.h"
 
@@ -84,7 +83,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		enhancedInputComponent->BindAction(_attackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Attack);
 		enhancedInputComponent->BindAction(_itemDropAction, ETriggerEvent::Triggered, this, &APlayerCharacter::DropItemByKey);
 		enhancedInputComponent->BindAction(_invenAction, ETriggerEvent::Triggered, this, &APlayerCharacter::InvenOpen);
-		enhancedInputComponent->BindAction(_NPCAction, ETriggerEvent::Triggered, this, &APlayerCharacter::NPCInteract);
+		enhancedInputComponent->BindAction(_NPCAction, ETriggerEvent::Triggered, this, &APlayerCharacter::NPCInteractByKey);
 		enhancedInputComponent->BindAction(_ability1Action, ETriggerEvent::Started, this, &APlayerCharacter::Abillity1_Press);
 		enhancedInputComponent->BindAction(_ability1Action, ETriggerEvent::Completed, this, &APlayerCharacter::Abillity1_Release);
 		enhancedInputComponent->BindAction(_ability2Action, ETriggerEvent::Started, this, &APlayerCharacter::Abillity2_Press);
@@ -158,7 +157,6 @@ void APlayerCharacter::TryJump(const FInputActionValue& value)
 		return;
 	if (value.Get<bool>())
 	{
-		UE_LOG(LogTemp, Log, TEXT(" Jump Test"));
 		Jump();
 	}
 }
@@ -224,8 +222,6 @@ void APlayerCharacter::DropItemByKey(const FInputActionValue& value)
 		auto dropItem = INVEN_COMP->RemoveItem();
 		DropItem(dropItem.id);
 	}
-
-	UE_LOG(LogTemp, Log, TEXT("Drop Empty Space"));
 }
 
 void APlayerCharacter::InvenOpen(const FInputActionValue& value)
@@ -256,11 +252,9 @@ void APlayerCharacter::InvenOpen(const FInputActionValue& value)
 
 		_isInvenOpen = !_isInvenOpen;
 	}
-
-	UE_LOG(LogTemp, Log, TEXT("Inven Open"));
 }
 
-void APlayerCharacter::NPCInteract(const FInputActionValue& value)
+void APlayerCharacter::NPCInteractByKey(const FInputActionValue& value)
 {
 	if (_isAttack)
 		return;
@@ -271,43 +265,49 @@ void APlayerCharacter::NPCInteract(const FInputActionValue& value)
 	bool isPress = value.Get<bool>();
 	if (isPress)
 	{
-		float sphereRadius = 500.0f;
-		FVector pos = GetActorLocation();
+		NPCInteract();
+	}
 
-		TArray<FOverlapResult> overlapResults;
-		FCollisionQueryParams params(NAME_None, false, this);
-		bool result = GetWorld()->OverlapMultiByChannel(
-			overlapResults,
-			pos,
-			FQuat::Identity,
-			ECC_Pawn,
-			FCollisionShape::MakeSphere(sphereRadius),
-			params
-		);
+	return;
+}
 
-		if (result == false)
-		{
-			//DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
-			return;
-		}
+void APlayerCharacter::NPCInteract()
+{
+	float sphereRadius = 500.0f;
+	FVector pos = GetActorLocation();
 
-		for (auto& overlapResult : overlapResults)
-		{
-			auto NPC = Cast<ANPCBase>(overlapResult.GetActor());
-			if (NPC && NPC->IsValidLowLevel())
-			{
-				NPC->Interact();
-				//DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Green, false, 0.3f);
-				UE_LOG(LogTemp, Log, TEXT("NPC"));
+	TArray<FOverlapResult> overlapResults;
+	FCollisionQueryParams params(NAME_None, false, this);
+	bool result = GetWorld()->OverlapMultiByChannel(
+		overlapResults,
+		pos,
+		FQuat::Identity,
+		ECC_Pawn,
+		FCollisionShape::MakeSphere(sphereRadius),
+		params
+	);
 
-				_isNPCInteract = !_isNPCInteract;
-				return;
-			}
-		}
-
+	if (result == false)
+	{
 		//DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
 		return;
 	}
+
+	for (auto& overlapResult : overlapResults)
+	{
+		auto NPC = Cast<ANPCBase>(overlapResult.GetActor());
+		if (NPC && NPC->IsValidLowLevel())
+		{
+			NPC->Interact();
+			//DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Green, false, 0.3f);
+
+			_isNPCInteract = !_isNPCInteract;
+			return;
+		}
+	}
+
+	//DrawDebugSphere(GetWorld(), pos, sphereRadius, 12, FColor::Red, false, 0.3f);
+	return;
 }
 
 void APlayerCharacter::AddItem(AItemBase* item)

@@ -128,7 +128,7 @@ void ACPlayerController::HideUI()
 
 void ACPlayerController::CharacterChange()
 {
-	UE_LOG(LogTemp, Warning, TEXT("CharacterChange : %d"), _curPlayerIndex);
+	//UE_LOG(LogTemp, Warning, TEXT("CharacterChange : %d"), _curPlayerIndex);
 
 	ACharacterBase* playerCharacter = Cast<ACharacterBase>(GetPawn());
 	if (!playerCharacter) return;

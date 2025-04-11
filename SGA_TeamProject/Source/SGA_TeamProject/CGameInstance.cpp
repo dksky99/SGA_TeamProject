@@ -3,10 +3,7 @@
 
 #include "CGameInstance.h"
 
-#include "Engine/DataTable.h"
 #include "Character/StatComponent.h"
-
-#include "Item/ItemDataTable.h"
 #include "Item/ItemManager.h"
 
 UCGameInstance::UCGameInstance()

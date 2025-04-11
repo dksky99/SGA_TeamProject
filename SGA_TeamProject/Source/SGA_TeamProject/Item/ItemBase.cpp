@@ -4,10 +4,7 @@
 #include "ItemBase.h"
 
 #include "Components/CapsuleComponent.h"
-
 #include "../Controller/CPlayerController.h"
-#include "../CGameInstance.h"
-#include "ItemManager.h"
 
 // Sets default values
 AItemBase::AItemBase()

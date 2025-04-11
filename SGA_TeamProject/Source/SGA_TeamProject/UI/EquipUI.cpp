@@ -3,14 +3,7 @@
 
 #include "EquipUI.h"
 
-#include "Components/UniformGridPanel.h"
-#include "Components/Image.h"
-#include "Components/TextBlock.h"
-#include "Components/Button.h"
-
-#include "../Character/PlayerCharacter.h"
 #include "../Item/ItemBase.h"
-
 #include "ItemSlotUI.h"
 #include "ItemInfoUI.h"
 

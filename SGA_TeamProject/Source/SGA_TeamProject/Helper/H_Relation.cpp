@@ -67,11 +67,11 @@ FVector H_Relation::FindFloorFromLoc(AActor* user,float maxDistance, bool useAno
     {
        
 
-        UE_LOG(LogTemp, Error, TEXT("Collision Target %s"), *(HitResult.GetActor()->GetName()));
+       // UE_LOG(LogTemp, Error, TEXT("Collision Target %s"), *(HitResult.GetActor()->GetName()));
         return HitResult.ImpactPoint; // 충돌한 위치 반환 (땅 좌표)
         
     }
 
-        UE_LOG(LogTemp, Error, TEXT("Collision Target None"));
+       // UE_LOG(LogTemp, Error, TEXT("Collision Target None"));
     return FVector::ZeroVector; // 충돌이 없으면 (0,0,0) 반환
 }
