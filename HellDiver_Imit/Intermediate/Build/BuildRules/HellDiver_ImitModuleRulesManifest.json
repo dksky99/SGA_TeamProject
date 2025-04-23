@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"D:\\Git\\SGA_TeamProject\\HellDiver_Imit\\Source\\HellDiver_Imit\\HellDiver_Imit.Build.cs",
+		"D:\\Git\\SGA_TeamProject\\HellDiver_Imit\\Source\\HellDiver_Imit.Target.cs",
+		"D:\\Git\\SGA_TeamProject\\HellDiver_Imit\\Source\\HellDiver_ImitEditor.Target.cs"
+	],
+	"EngineVersion": "5.4.4"
+}

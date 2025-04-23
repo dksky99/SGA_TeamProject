@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "HellDiver_Imit",
+			"Path": "..\\Source\\HellDiver_Imit.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "HellDiver_ImitEditor",
+			"Path": "..\\Source\\HellDiver_ImitEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
